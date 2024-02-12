@@ -1,13 +1,5 @@
+#import ProductDto from "./product.graphqls"
 type Query {
-   findAllUsers: [UserDTO]
-}
-
-
-
-type UserDTO {
-   id: ID!,
-   name: String,
-   mail: String,
-   password: String,
-   phone: String
+   findProductById(id: ID!): ProductDTO
+   findProductsByMerchantSlug(slug: String!, pagina: Int!): [ProductDTO]
 }
