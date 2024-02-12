@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.controller.dto.ProductDTO;
 import us.kanddys.laia.exception.ProductNotFoundException;
-import us.kanddys.laia.model.Product;
+import us.kanddys.laia.exception.utils.ExcepcionMessage;
 import us.kanddys.laia.repository.ProductCriteriaRepository;
 import us.kanddys.laia.repository.ProductRepository;
 import us.kanddys.laia.services.ProductService;
@@ -36,10 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
    @Override
    public ProductDTO getProductById(Long id) throws ProductNotFoundException {
-      Product product = productRepository.findById(id).orElse(null);
-      if (product == null)
-         throw new ProductNotFoundException("El producto con id " + id + " no existe");
-      return new ProductDTO(product);
+      return new ProductDTO(productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(ExcepcionMessage.PRODUCT_NOT_FOUND)));
    }
-
 }

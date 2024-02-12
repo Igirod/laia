@@ -1,5 +1,4 @@
-#import ProductDto from "./product.graphqls"
-type Query {
-   findProductById(id: ID!): ProductDTO
-   findProductsByMerchantSlug(slug: String!, pagina: Int!): [ProductDTO]
+#import "./product.graphqls"
+schema {
+   query: Query
 }

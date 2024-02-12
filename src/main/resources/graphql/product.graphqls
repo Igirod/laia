@@ -6,3 +6,8 @@ type ProductDTO {
    description: String
    frontPage: String
 }
+
+type Query {
+   findProductById(id: ID!): ProductDTO
+   findProductsByMerchantSlug(slug: String!, pagina: Int!): [ProductDTO]
+}

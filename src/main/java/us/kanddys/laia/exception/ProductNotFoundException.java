@@ -6,7 +6,7 @@ package us.kanddys.laia.exception;
  * @author Igirod0
  * @version 1.0.0
  */
-public class ProductNotFoundException extends Exception {
+public class ProductNotFoundException extends RuntimeException {
    public ProductNotFoundException(String message) {
       super(message);
    }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import us.kanddys.laia.controller.dto.ProductDTO;
-import us.kanddys.laia.exception.ProductNotFoundException;
 import us.kanddys.laia.services.ProductService;
 
 @Controller
@@ -26,7 +25,7 @@ public class ShopController {
    }
 
    @QueryMapping("findProductById")
-   public ProductDTO getProductById(@Argument(name = "id") Long id) throws ProductNotFoundException {
+   public ProductDTO getProductById(@Argument(name = "id") Long id) {
       return productService.getProductById(id);
    }
 }

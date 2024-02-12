@@ -8,5 +8,5 @@ package us.kanddys.laia.exception.utils;
  */
 public class ExcepcionMessage {
    
-   public static final String PRODUCT_NOT_FOUND = "No se ha encontrado el producto.";
+   public static final String PRODUCT_NOT_FOUND = "El producto buscado no existe.";
 }
