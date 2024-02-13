@@ -35,5 +35,5 @@ public interface ProductService {
     * @return ProductDTO
     * @throws ProductNotFoundException 
     */
-   public ProductDTO getProductById(Long id) throws ProductNotFoundException;
+   public ProductDTO getProductById(Long id) throws ProductNotFoundException;  
 }

@@ -18,4 +18,6 @@ public interface ImageProductJpaRepository extends JpaRepository<ImageProduct, L
     * @return List<ImageProduct>
     */
    List<ImageProduct> findByProductId(Long productId);
+
+   List<ImageProduct> findAllByProductId(Long productId);
 }

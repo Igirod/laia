@@ -10,4 +10,5 @@ type ProductDTO {
 type Query {
    findProductById(id: ID!): ProductDTO
    findProductsByMerchantSlug(slug: String!, pagina: Int!): [ProductDTO]
+   getConnection(message: String!): String
 }
