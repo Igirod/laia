@@ -16,7 +16,7 @@ import lombok.Data;
  * @version 1.0.0
  */
 @Entity
-@Table(name = "PRODUCTS")
+@Table(name = "products")
 @Data
 @AllArgsConstructor
 public class Product {
