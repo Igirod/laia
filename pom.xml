@@ -11,7 +11,7 @@
 	<groupId>us.kanddys</groupId>
 	<artifactId>laia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>laia</name>
 	<description>Springboot Project with GraphQL</description>
 	<properties>
