@@ -1,0 +1,6 @@
+type ProductDetail {
+      id: ID!
+      title: String
+      description: String
+      image: String
+}

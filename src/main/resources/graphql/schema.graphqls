@@ -1,4 +1,5 @@
-#import "./product.graphqls"
-schema {
+#import "./ecommerce/ecommerce.graphqls"
+
+type schema {
    query: Query
 }
