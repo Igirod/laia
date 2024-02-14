@@ -10,7 +10,7 @@ import us.kanddys.laia.modules.ecommerce.model.Product;
  * Esta clase representa un data transfer object (DTO) de un producto.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Data
 @AllArgsConstructor
@@ -24,9 +24,9 @@ public class ProductDTO {
    @JsonProperty
    private Integer stock;
    @JsonProperty
-   private String description;
-   @JsonProperty
    private String frontPage;
+   @JsonProperty
+   private Long merchantId;
 
    public ProductDTO() {
    }
@@ -35,7 +35,7 @@ public class ProductDTO {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     */
    public ProductDTO(Product product) {
       super();
@@ -43,7 +43,7 @@ public class ProductDTO {
       this.title = (product.getTitle() != null) ? product.getTitle() : null;
       this.price = (product.getPrice() != null) ? product.getPrice() : null;
       this.stock = (product.getStock() != null) ? product.getStock() : null;
-      this.description = (product.getDescription() != null) ? product.getDescription() : null;
       this.frontPage = (product.getFrontPage() != null) ? product.getFrontPage().toString() : null;
+      this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
    }
 }

@@ -13,7 +13,7 @@ import lombok.Data;
  * Esta clase representa un producto.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Entity
 @Table(name = "products")
@@ -30,10 +30,10 @@ public class Product {
    private Double price;
    @Column(name = "stock")
    private Integer stock;
-   @Column(name = "description")
-   private String description;
    @Column(name = "front_page")
    private byte[] frontPage;
+   @Column(name = "merchant_id")
+   private Long merchantId;
 
    public Product() {
    }

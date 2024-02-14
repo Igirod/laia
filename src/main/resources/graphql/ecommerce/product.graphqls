@@ -3,6 +3,6 @@ type ProductDTO {
    title: String
    price: Float
    stock: Int
-   description: String
    frontPage: String
+   merchantId: Int
 }
