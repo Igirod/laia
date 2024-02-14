@@ -13,7 +13,7 @@ import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeShipment;
 
 @Entity
-@Table(name = "merchants")
+@Table(name = "MERCHANTS")
 @Data
 @AllArgsConstructor
 public class Merchant {
