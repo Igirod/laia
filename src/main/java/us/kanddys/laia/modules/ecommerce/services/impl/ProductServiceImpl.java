@@ -17,7 +17,7 @@ import us.kanddys.laia.modules.ecommerce.services.ProductService;
  * Esta clase implementa las obligaciones de ProductService.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,12 +27,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private ProductRepository productRepository;
-
-   @Override
-   public List<ProductDTO> getProductsByMerchantSlug(String slug, Integer page) {
-      return productCriteriaRepository.findProductsByMerchantSlug(slug, page).stream().map(ProductDTO::new)
-            .collect(Collectors.toList());
-   }
 
    @Override
    public ProductDTO getProductById(Long productId) throws ProductNotFoundException {

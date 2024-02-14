@@ -18,7 +18,7 @@ public class ProductDTO {
    @JsonProperty
    private Long id;
    @JsonProperty
-   private String title;
+   private String name;
    @JsonProperty
    private Double price;
    @JsonProperty
@@ -40,7 +40,7 @@ public class ProductDTO {
    public ProductDTO(Product product) {
       super();
       this.id = (product.getId() != null) ? product.getId() : null;
-      this.title = (product.getTitle() != null) ? product.getTitle() : null;
+      this.name = (product.getName() != null) ? product.getName() : null;
       this.price = (product.getPrice() != null) ? product.getPrice() : null;
       this.stock = (product.getStock() != null) ? product.getStock() : null;
       this.frontPage = (product.getFrontPage() != null) ? product.getFrontPage().toString() : null;

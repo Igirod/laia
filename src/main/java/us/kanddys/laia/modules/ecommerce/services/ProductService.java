@@ -10,21 +10,9 @@ import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
  * clase ProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public interface ProductService {
-
-   /**
-    * Este método se encarga de obtener todos los productos pertenecientes
-    * a un vendedor.
-    * 
-    * @author Igirod0
-    * @version 1.0.0
-    * @param slug
-    * @param page
-    * @return List<ProductDTO>
-    */
-   List<ProductDTO> getProductsByMerchantSlug(String slug, Integer page);
 
    /**
     * Este método se encarga de obtener un producto por su id.

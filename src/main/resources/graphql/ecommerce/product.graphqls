@@ -1,6 +1,6 @@
 type ProductDTO {
    id: ID!
-   title: String
+   name: String
    price: Float
    stock: Int
    frontPage: String
