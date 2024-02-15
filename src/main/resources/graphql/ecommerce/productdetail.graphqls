@@ -1,5 +1,6 @@
-type ProductDetail {
+type ProductDetailDTO {
       id: ID!
+      productId: ID
       title: String
       description: String
       image: String

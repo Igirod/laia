@@ -1,3 +1,5 @@
+#import "./ecommerce/productdetail.graphqls"
+
 type ProductDTO {
    id: ID!
    name: String
@@ -5,4 +7,5 @@ type ProductDTO {
    stock: Int
    frontPage: String
    merchantId: Int
+   productsDetails: [ProductDetailDTO]
 }

@@ -1,7 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 

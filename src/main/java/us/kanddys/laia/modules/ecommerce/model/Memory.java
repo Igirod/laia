@@ -1,45 +1,27 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * Esta clase representa un producto.
- * 
- * @author Igirod0
- * @version 1.0.2
- */
 @Entity
-@Table(name = "products")
+@Table(name = "memories")
 @Data
 @AllArgsConstructor
-public class Product {
+public class Memory {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "name")
-   private String name;
-   @Column(name = "price")
-   private Double price;
-   @Column(name = "stock")
-   private Integer stock;
-   @Column(name = "front_page")
-   private byte[] frontPage;
+   @Column(name = "memory")
+   private String memory;
    @Column(name = "merchant_id")
    private Long merchantId;
-   @OneToMany(mappedBy = "productId")
-   private List<ProductDetail> productDetail;
 
-   public Product() {
-   }
+   public Memory() {}
 }
