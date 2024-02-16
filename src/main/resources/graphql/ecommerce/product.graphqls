@@ -5,4 +5,5 @@ type ProductDTO {
    stock: Int
    frontPage: String
    merchantId: Int
+   status: Int
 }

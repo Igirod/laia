@@ -7,7 +7,7 @@
 type Query {
    findMerchantBySlug(slug: String!): MerchantDTO
    findProductById(productId: ID!): ProductDTO
-   findProductsPaginated(page: Int!): [ProductDTO]
+   findProductsPaginated(page: Int!, status: Int): [ProductDTO]
    findProductDetailsByProductId(productId: ID!): [ProductDetailDTO]
    findMerchantById(merchantId: ID!): MerchantDTO
    findPaymentsPaginated(page: Int!): [PaymentDTO]

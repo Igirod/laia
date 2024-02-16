@@ -34,6 +34,8 @@ public class Product {
    private byte[] frontPage;
    @Column(name = "merchant_id")
    private Long merchantId;
+   @Column(name = "status")
+   private Integer status;
    
    public Product() {
    }

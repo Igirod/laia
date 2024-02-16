@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
@@ -32,7 +33,8 @@ public interface ProductService {
     * @author Igirod
     * @version 1.0.0
     * @param page
+    * @param status Optional
     * @return List<ProductDTO>
     */
-   public List<ProductDTO> getProducts(Integer page);
+   public List<ProductDTO> getProductsPaginated(Integer page, Optional<Integer> status);
 }

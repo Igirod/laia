@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class ProductServiceImpl implements ProductService {
    }
 
    @Override
-   public List<ProductDTO> getProducts(Integer page) {
-      return productCriteriaRepository.findProducts(page).stream().map(t -> {
+   public List<ProductDTO> getProductsPaginated(Integer page, Optional<Integer> status) {
+      return productCriteriaRepository.findProductsPaginated(page, status).stream().map(t -> {
          try {
             return new ProductDTO(t);
          } catch (IOException e) {

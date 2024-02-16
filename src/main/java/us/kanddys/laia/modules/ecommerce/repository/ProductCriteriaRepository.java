@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -30,10 +31,12 @@ public class ProductCriteriaRepository {
             .setFirstResult((page - 1) * 10).getResultList();
    }
 
-   public List<Product> findProducts(Integer page) {
+   public List<Product> findProductsPaginated(Integer page, Optional<Integer> status) {
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Product> cQueryproduct = cBuilder.createQuery(Product.class);
       Root<Product> rProduct = cQueryproduct.from(Product.class);
+      if (status.isPresent())
+         cQueryproduct.where(cBuilder.equal(rProduct.get("status"), status.get()));
       cQueryproduct.select(rProduct);
       return entityManager.createQuery(cQueryproduct).setMaxResults(10)
             .setFirstResult((page - 1) * 10).getResultList();

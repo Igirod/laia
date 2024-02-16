@@ -33,6 +33,8 @@ public class ProductDTO {
    private String frontPage;
    @JsonProperty
    private Long merchantId;
+   @JsonProperty
+   private Integer status;
 
    public ProductDTO() {
    }
@@ -42,7 +44,7 @@ public class ProductDTO {
     *
     * @author Igirod0
     * @version 1.0.1
-    * @throws IOException 
+    * @throws IOException
     */
    public ProductDTO(Product product) throws IOException {
       super();
@@ -50,7 +52,10 @@ public class ProductDTO {
       this.name = (product.getName() != null) ? product.getName() : null;
       this.price = (product.getPrice() != null) ? product.getPrice() : null;
       this.stock = (product.getStock() != null) ? product.getStock() : null;
-      this.frontPage = (product.getFrontPage() != null) ? StreamUtils.copyToString(new ByteArrayInputStream(product.getFrontPage()), StandardCharsets.UTF_8) : null;
+      this.frontPage = (product.getFrontPage() != null)
+            ? StreamUtils.copyToString(new ByteArrayInputStream(product.getFrontPage()), StandardCharsets.UTF_8)
+            : null;
       this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
+      this.status = (product.getStatus() != null) ? product.getStatus() : null;
    }
 }

@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -22,7 +23,7 @@ public class ProductController {
    }
 
    @QueryMapping("findProductsPaginated")
-   public List<ProductDTO> getProducts(@Argument(name = "page") Integer page) {
-      return productService.getProducts(page);
+   public List<ProductDTO> getProductsPaginated(@Argument(name = "page") Integer page, @Argument(name = "status") Optional<Integer> status) {
+      return productService.getProductsPaginated(page, status);
    }
 }
