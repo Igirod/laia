@@ -2,6 +2,7 @@
 #import "./ecommerce/productdetail.graphqls"
 #import "./ecommerce/merchant.graphqls"
 #import "./ecommerce/payment.graphqls"
+#import "./ecommerce/imageproduct.graphqls"
 
 type Query {
    findMerchantBySlug(slug: String!): MerchantDTO
@@ -10,4 +11,5 @@ type Query {
    findProductDetailsByProductId(productId: ID!): [ProductDetailDTO]
    findMerchantById(merchantId: ID!): MerchantDTO
    findPaymentsPaginated(page: Int!): [PaymentDTO]
+   findImagesProductsByProductId(productId: ID!): [ImageProductDTO]
 }

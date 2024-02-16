@@ -10,31 +10,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Esta clase representa un producto.
+ * Esta clase representa una imagen de un producto.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.0
  */
 @Entity
-@Table(name = "products")
+@Table(name = "images_products")
 @Data
 @AllArgsConstructor
-public class Product {
+public class ImageProduct {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "name")
-   private String name;
-   @Column(name = "price")
-   private Double price;
-   @Column(name = "stock")
-   private Integer stock;
-   @Column(name = "front_page")
-   private byte[] frontPage;
-   @Column(name = "merchant_id")
-   private Long merchantId;
-   
-   public Product() {
+   @Column(name = "product_id")
+   private Long productId;
+   @Column(name = "image")
+   private byte[] image;
+
+   public ImageProduct() {
    }
 }

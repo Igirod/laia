@@ -1,0 +1,5 @@
+type ImageProductDTO {
+   id: ID!
+   productId: Int
+   image: String
+}	
