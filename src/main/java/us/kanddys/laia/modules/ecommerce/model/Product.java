@@ -37,9 +37,7 @@ public class Product {
    private byte[] frontPage;
    @Column(name = "merchant_id")
    private Long merchantId;
-   @OneToMany(mappedBy = "productId")
-   private List<ProductDetail> productDetail;
-
+   
    public Product() {
    }
 }

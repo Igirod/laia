@@ -16,4 +16,14 @@ public interface MerchantService {
     * @return MerchantDTO
     */
    public MerchantDTO findMerchantBySlug(String slug);
+
+   /**
+    * Este método tiene la obligación de buscar un comerciante por su id.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param merchantId
+    * @return MerchantDTO
+    */
+   public MerchantDTO findMerchantById(Long merchantId);
 }

@@ -21,4 +21,8 @@ public class MerchantController {
       return merchantService.findMerchantBySlug(slug);
    }
 
+   @QueryMapping("findMerchantById")
+   public MerchantDTO getMerchantById(@Argument Long merchantId) {
+      return merchantService.findMerchantById(merchantId);
+   }
 }

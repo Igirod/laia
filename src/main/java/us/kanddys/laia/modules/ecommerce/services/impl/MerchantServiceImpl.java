@@ -27,4 +27,9 @@ public class MerchantServiceImpl implements MerchantService {
             .orElseThrow(() -> new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND));
    }
 
+   @Override
+   public MerchantDTO findMerchantById(Long merchantId) {
+      return merchantJpaRepository.findById(merchantId).map(MerchantDTO::new)
+            .orElseThrow(() -> new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND));
+   }
 }

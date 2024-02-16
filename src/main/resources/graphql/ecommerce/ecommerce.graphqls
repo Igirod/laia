@@ -1,12 +1,11 @@
 #import "./ecommerce/product.graphqls"
 #import "./ecommerce/productdetail.graphqls"
 #import "./ecommerce/merchant.graphqls"
-#import "./ecommerce/productdetail.graphqls"
 
 type Query {
    findMerchantBySlug(slug: String!): MerchantDTO
    findProductById(productId: ID!): ProductDTO
    findProductsPaginated(page: Int!): [ProductDTO]
-   findProductDetails(productId: Int!): [ProductDetailDTO]
    findProductDetailsByProductId(productId: ID!): [ProductDetailDTO]
+   findMerchantById(merchantId: ID!): MerchantDTO
 }

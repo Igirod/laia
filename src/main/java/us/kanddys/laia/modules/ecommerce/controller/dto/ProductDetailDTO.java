@@ -16,33 +16,37 @@ import us.kanddys.laia.modules.ecommerce.model.ProductDetail;
  * Esta clase representa el detalle de un producto.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Data
 @AllArgsConstructor
 public class ProductDetailDTO {
-   @JsonProperty("id")
+   @JsonProperty
    private Long id;
-   @JsonProperty("title")
+   @JsonProperty
+   private Long productId;
+   @JsonProperty
    private String title;
-   @JsonProperty("description")
+   @JsonProperty
    private String description;
-   @JsonProperty("image")
+   @JsonProperty
    private String image;
 
-   public ProductDetailDTO() {}
+   public ProductDetailDTO() {
+   }
 
    /**
     * Constructor personalizado se implementa en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @throws IOException
     */
    public ProductDetailDTO(ProductDetail productDetail) throws IOException {
       this.id = (productDetail.getId() == null) ? null : productDetail.getId();
       this.title = (productDetail.getTitle() != null) ? productDetail.getTitle() : null;
       this.description = (productDetail.getDescription() != null) ? productDetail.getDescription() : null;
+      this.productId = (productDetail.getProductId() != null) ? productDetail.getProductId() : null;
       this.image = (productDetail.getImage() != null)
             ? StreamUtils.copyToString(new ByteArrayInputStream(productDetail.getImage()), StandardCharsets.UTF_8)
             : null;

@@ -18,7 +18,7 @@ public class ProductDetailController {
    @Autowired
    private ProductDetailService productDetailService;
 
-   @QueryMapping("findProductDetails")
+   @QueryMapping("findProductDetailsByProductId")
    public List<ProductDetailDTO> getProductDetails(@Argument(name = "productId") Long productId) {
       return productDetailService.getProductDetailsByProductId(productId);
    }
