@@ -1,0 +1,21 @@
+type InvoiceDTO {
+   id: ID!
+   merchantId: Int
+   merchantEmail: String
+   userEmail: String
+   paymentId: Int
+   code: String
+   shoppingCartId: Int
+   reservation: String
+   total: Float
+   message: Boolean
+   status: InvoiceStatus
+   voucher: String
+   note: String
+}
+
+enum InvoiceStatus {
+   INITIAL,
+   PENDING,
+   COMPLETE
+}

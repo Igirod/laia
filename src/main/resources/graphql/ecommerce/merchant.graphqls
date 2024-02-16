@@ -1,6 +1,6 @@
 type MerchantDTO {
    id: ID!
-   userId: Int,
+   email: String
    slug: String
    message: String
    typeShipment: TypeShipment
@@ -9,4 +9,5 @@ type MerchantDTO {
 enum TypeShipment {
    DELIVERY
    PICKUP
+   PICKUP/DELIVERY
 }

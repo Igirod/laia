@@ -3,6 +3,7 @@
 #import "./ecommerce/merchant.graphqls"
 #import "./ecommerce/payment.graphqls"
 #import "./ecommerce/imageproduct.graphqls"
+#import "./ecommerce/invoice.graphqls"
 
 type Query {
    findMerchantBySlug(slug: String!): MerchantDTO
@@ -12,4 +13,8 @@ type Query {
    findMerchantById(merchantId: ID!): MerchantDTO
    findPaymentsPaginated(page: Int!): [PaymentDTO]
    findImagesProductsByProductId(productId: ID!): [ImageProductDTO]
+}
+
+type Mutation {
+   createInvoice(invoice: InvoiceInput!): InvoiceDTO
 }

@@ -19,7 +19,7 @@ public class MerchantDTO {
    @JsonProperty
    private Long id;
    @JsonProperty
-   private Long userId;
+   private String email;
    @JsonProperty
    private String slug;
    @JsonProperty
@@ -40,7 +40,7 @@ public class MerchantDTO {
    public MerchantDTO(Merchant merchant) {
       super();
       this.id = (merchant.getId() == null) ? null : merchant.getId();
-      this.userId = (merchant.getUserId() == null) ? null : merchant.getUserId();
+      this.email = (merchant.getEmail() == null) ? null : merchant.getEmail();
       this.slug = (merchant.getSlug() == null) ? null : merchant.getSlug();
       this.message = (merchant.getMessage() == null) ? null : merchant.getMessage();
       this.typeShipment = (merchant.getTypeShipment() == null) ? null : merchant.getTypeShipment();

@@ -10,4 +10,5 @@ public class ExceptionMessage {
    
    public static final String PRODUCT_NOT_FOUND = "El producto buscado no existe.";
    public static final String MERCHANT_NOT_FOUND = "El comerciante buscado no existe.";
+   public static final String INVOICE_NOT_FOUND = "La factura buscada no existe.";
 }
