@@ -15,7 +15,6 @@ import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceUtils;
 
 /**
  * Esta clase representa una factura.
@@ -76,7 +75,7 @@ public class Invoice {
       this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
       this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
-      this.code = (invoice.getCode() == null) ? InvoiceUtils.generateInvoiceCode(invoice.getMerchantId())
+      this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
       this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();
       this.reservation = (invoice.getReservation() == null) ? null

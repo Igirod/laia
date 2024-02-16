@@ -36,5 +36,4 @@ public class InvoiceController {
       return invoiceService.updateInvoice(invoiceDTO);
    }
 
-
 }

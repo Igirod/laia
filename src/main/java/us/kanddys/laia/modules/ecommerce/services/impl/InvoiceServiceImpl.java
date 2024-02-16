@@ -18,6 +18,7 @@ import us.kanddys.laia.modules.ecommerce.model.Invoice;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
+import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 
 /**
@@ -35,6 +36,9 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Autowired
    private InvoiceJpaRepository invoiceJpaRepository;
 
+   @Autowired
+   private InvoiceCodeService invoiceCodeService;
+
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantEmailPaginated(Integer page, String merchantEmail,
          Optional<String> userEmail, Optional<InvoiceStatus> status) {
@@ -51,7 +55,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Override
    public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO) {
       try {
-         return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(invoiceDTO)));
+         return invoiceCodeService
+               .generateInvoiceCode(new InvoiceDTO(invoiceJpaRepository.save(new Invoice(invoiceDTO))));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       } catch (ParseException e) {

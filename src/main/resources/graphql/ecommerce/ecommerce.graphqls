@@ -16,5 +16,6 @@ type Query {
 }
 
 type Mutation {
-   createInvoice(invoice: InvoiceInput!): InvoiceDTO
+   createInvoice(invoice: InvoiceDTO!): InvoiceDTO
+   updateInvoice(invoice: InvoiceDTO!): InvoiceDTO
 }
