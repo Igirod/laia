@@ -1,0 +1,10 @@
+type PaymentDTO {
+   id: ID!
+   typePayment: TypePayment
+   title: String
+   cvu: String
+}
+
+enum TypePayment {
+   BT
+}
