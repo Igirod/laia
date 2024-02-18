@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Product;
+import us.kanddys.laia.modules.ecommerce.model.Utils.ProductCheckStock;
 
 /**
  * Esta clase representa un data transfer object (DTO) de un producto.
@@ -56,6 +57,6 @@ public class ProductDTO {
             ? StreamUtils.copyToString(new ByteArrayInputStream(product.getFrontPage()), StandardCharsets.UTF_8)
             : null;
       this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
-      this.status = (product.getStatus() != null) ? product.getStatus() : null;
+      this.status = (product.getStatus() != null) ? ProductCheckStock.returnStatusByStock(stock) : null;
    }
 }
