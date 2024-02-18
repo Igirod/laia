@@ -19,7 +19,7 @@ input InvoiceInputDTO {
    merchantId: Int!
    merchantEmail: String!
    userEmail: String!
-   paymentId: Int!
+   paymentId: Int
    code: String
    shoppingCartId: Int!
    reservation: String

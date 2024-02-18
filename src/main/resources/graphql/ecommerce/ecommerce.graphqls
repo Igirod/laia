@@ -13,4 +13,10 @@ type Query {
    findMerchantById(merchantId: ID!): MerchantDTO
    findPaymentsPaginated(page: Int!): [PaymentDTO]
    findImagesProductsByProductId(productId: ID!): [ImageProductDTO]
+   findInvoicesByMerchantIdAndOptionalParamsPaginated(page: Int!, merchantId: ID!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
+}
+
+type Mutation {
+   createInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
+   updateInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
 }

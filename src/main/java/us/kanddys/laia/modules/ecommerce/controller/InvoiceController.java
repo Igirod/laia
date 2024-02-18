@@ -20,11 +20,11 @@ public class InvoiceController {
    @Autowired
    private InvoiceService invoiceService;
 
-   @QueryMapping("findInvoicesByMerchantEmailPaginated")
-   public List<InvoiceDTO> getInvoicesByMerchantEmailPaginated(Integer page, String merchantEmail,
+   @QueryMapping("findInvoicesByMerchantIdAndOptionalParamsPaginated")
+   public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
          Optional<String> userEmail,
          Optional<InvoiceStatus> status) {
-      return invoiceService.findInvoicesByMerchantEmailPaginated(page, merchantEmail, userEmail, status);
+      return invoiceService.findInvoicesByMerchantIdAndOptionalParamsPaginated(page, merchantId, userEmail, status);
    }
 
    @MutationMapping("createInvoice")

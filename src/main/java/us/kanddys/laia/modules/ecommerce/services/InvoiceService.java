@@ -15,14 +15,14 @@ public interface InvoiceService {
     * parámetros opcionales.
     *
     * @author Igirod
-    * @version 1.0.0
+    * @version 1.0.1
     * @param page
-    * @param merchantEmail
+    * @param merchantId
     * @param userEmail
     * @param status
     * @return InvoiceDTO
     */
-   public List<InvoiceDTO> findInvoicesByMerchantEmailPaginated(Integer page, String merchantEmail,
+   public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
          Optional<String> userEmail,
          Optional<InvoiceStatus> status);
 
