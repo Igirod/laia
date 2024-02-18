@@ -14,8 +14,3 @@ type Query {
    findPaymentsPaginated(page: Int!): [PaymentDTO]
    findImagesProductsByProductId(productId: ID!): [ImageProductDTO]
 }
-
-type Mutation {
-   createInvoice(invoice: InvoiceDTO!): InvoiceDTO
-   updateInvoice(invoice: InvoiceDTO!): InvoiceDTO
-}

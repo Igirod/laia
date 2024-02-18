@@ -7,7 +7,7 @@ type MerchantDTO {
 }
 
 enum TypeShipment {
-   DELIVERY
-   PICKUP
-   PICKUP/DELIVERY
+   DELIVERY,
+   PICKUP,
+   PICKUP_DELIVERY
 }
