@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 public interface InvoiceService {
@@ -29,19 +30,19 @@ public interface InvoiceService {
     * Este método se encarga de crear una factura.
     *
     * @author Igirod0
-    * @version 1.0.0
-    * @param invoiceDTO
+    * @version 1.0.1
+    * @param inovoiceInputDTO
     * @return InvoiceDTO
     */
-   public InvoiceDTO createInvoice(InvoiceDTO invoiceDTO);
+   public InvoiceDTO createInvoice(InvoiceInputDTO inovoiceInputDTO);
 
    /**
     * Este método se encarga de actualizar una factura.
     *
     * @author Igirod0
-    * @version 1.0.0
-    * @param invoiceDTO
+    * @version 1.0.1
+    * @param invoiceInputDTO
     * @return InvoiceDTO
     */
-   public InvoiceDTO updateInvoice(InvoiceDTO invoiceDTO);
+   public InvoiceDTO updateInvoice(InvoiceInputDTO invoiceInputDTO);
 }

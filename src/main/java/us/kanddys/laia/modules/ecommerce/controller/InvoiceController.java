@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 
@@ -27,13 +28,13 @@ public class InvoiceController {
    }
 
    @MutationMapping("createInvoice")
-   public InvoiceDTO createInvoice(@Argument InvoiceDTO invoiceDTO) {
-      return invoiceService.createInvoice(invoiceDTO);
+   public InvoiceDTO createInvoice(@Argument InvoiceInputDTO invoiceInputDTO) {
+      return invoiceService.createInvoice(invoiceInputDTO);
    }
 
    @MutationMapping("updateInvoice")
-   public InvoiceDTO updateInvoice(@Argument InvoiceDTO invoiceDTO) {
-      return invoiceService.updateInvoice(invoiceDTO);
+   public InvoiceDTO updateInvoice(@Argument InvoiceInputDTO invoiceInputDTO) {
+      return invoiceService.updateInvoice(invoiceInputDTO);
    }
 
 }
