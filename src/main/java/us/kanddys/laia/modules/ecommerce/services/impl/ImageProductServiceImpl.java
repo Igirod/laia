@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ImageProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ImageProductInputDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.repository.ImageProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
@@ -34,5 +36,16 @@ public class ImageProductServiceImpl implements ImageProductService {
          }
       }).collect(Collectors.toList());
    }
+
+	@Override
+	public ImageProductDTO uploadImageProduct(ImageProductDTO imageProductDTO) {
+      try {
+         var contentByte = content.getBytes();
+      } catch (IOException e) {
+         throw new IOJavaException(e.getMessage());
+      }
+      imageProductJpaRepository.save(new ImageProductDTO(null, , imageName))
+      
+	}
 
 }

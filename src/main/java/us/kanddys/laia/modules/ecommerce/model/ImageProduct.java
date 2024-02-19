@@ -28,6 +28,8 @@ public class ImageProduct {
    private Long productId;
    @Column(name = "image")
    private byte[] image;
+   @Column(name = "name")
+   private String name;
 
    public ImageProduct() {
    }
