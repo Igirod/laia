@@ -1,5 +1,5 @@
 type ImageProductDTO {
-   id: ID!
+   id: Int!
    productId: Int
    image: String
 }	

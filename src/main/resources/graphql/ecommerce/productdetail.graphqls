@@ -1,5 +1,5 @@
 type ProductDetailDTO {
-      id: ID!
+      id: Int!
       productId: Int
       title: String
       description: String
