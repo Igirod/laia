@@ -9,6 +9,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
+import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 
 @Controller
@@ -17,13 +18,21 @@ public class ProductController {
    @Autowired
    private ProductService productService;
 
-   @QueryMapping("findProductById")
+   @QueryMapping("productId")
    public ProductDTO getProductById(@Argument(name = "productId") Long productId) {
       return productService.getProductById(productId);
    }
 
-   @QueryMapping("findProductsPaginated")
-   public List<ProductDTO> getProductsPaginated(@Argument(name = "page") Integer page, @Argument(name = "status") Optional<Integer> status) {
-      return productService.getProductsPaginated(page, status);
+   @QueryMapping("products")
+   public List<ProductDTO> getProductsPaginated(@Argument(name = "page") Integer page,
+         @Argument(name = "merchantId") Long merchantId,
+         @Argument(name = "status") Optional<Integer> status) {
+      return productService.getProductsPaginated(page, merchantId, status);
+   }
+
+   @QueryMapping("productsTf")
+   public List<ProductDTO> getProductsByFilterPaginated(@Argument(name = "page") Integer page,
+         @Argument(name = "typeFilter") TypeFilter typeFilter) {
+      return productService.getProductsByTypeFilterPaginated(page, typeFilter);
    }
 }

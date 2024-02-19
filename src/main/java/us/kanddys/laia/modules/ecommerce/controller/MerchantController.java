@@ -14,12 +14,12 @@ public class MerchantController {
    @Autowired
    private MerchantService merchantService;
 
-   @QueryMapping("findMerchantBySlug")
+   @QueryMapping("merchantS")
    public MerchantDTO getMerchantBySlug(@Argument String slug) {
       return merchantService.findMerchantBySlug(slug);
    }
 
-   @QueryMapping("findMerchantById")
+   @QueryMapping("merchantId")
    public MerchantDTO getMerchantById(@Argument Long merchantId) {
       return merchantService.findMerchantById(merchantId);
    }

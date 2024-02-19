@@ -1,9 +1,17 @@
 type ProductDTO {
    id: ID!
-   name: String
+   title: String
    price: Float
    stock: Int
    frontPage: String
    merchantId: Int
    status: Int
+   createAt: String
+}
+
+enum TypeFilter {
+   CHEAP,
+   EXPENSIVE,
+   NEW,
+   RELEVANT
 }

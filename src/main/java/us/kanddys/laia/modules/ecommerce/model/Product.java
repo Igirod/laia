@@ -1,10 +1,14 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +28,8 @@ public class Product {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "name")
-   private String name;
+   @Column(name = "title")
+   private String title;
    @Column(name = "price")
    private Double price;
    @Column(name = "stock")
@@ -36,7 +40,11 @@ public class Product {
    private Long merchantId;
    @Column(name = "status")
    private Integer status;
-   
+   @Column(name = "created_at")
+   private Date createdAt;
+   @OneToMany(mappedBy = "product")
+   private List<ShoppingCartProduct> shoppingCartProducts;
+
    public Product() {
    }
 }

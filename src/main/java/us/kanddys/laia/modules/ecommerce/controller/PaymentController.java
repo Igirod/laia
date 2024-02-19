@@ -16,7 +16,7 @@ public class PaymentController {
    @Autowired
    private PaymentService paymentService;
 
-   @QueryMapping("findPaymentsPaginated")
+   @QueryMapping("payments")
    public List<PaymentDTO> findPaymentsPaginated(@Argument Integer page) {
       return paymentService.findPaymentsPaginated(page);
    }

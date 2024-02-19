@@ -5,13 +5,14 @@ import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
+import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la
  * clase ProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface ProductService {
 
@@ -22,19 +23,32 @@ public interface ProductService {
     * @version 1.0.0
     * @param id
     * @return ProductDTO
-    * @throws ProductNotFoundException 
+    * @throws ProductNotFoundException
     */
-   public ProductDTO getProductById(Long id) throws ProductNotFoundException;  
+   public ProductDTO getProductById(Long id) throws ProductNotFoundException;
 
    /**
     * Este método se encarga de obtener todos los productos con un
     * paginado de diez productos por página.
     *
     * @author Igirod
-    * @version 1.0.0
+    * @version 1.0.1
     * @param page
+    * @param merchantId
     * @param status Optional
     * @return List<ProductDTO>
     */
-   public List<ProductDTO> getProductsPaginated(Integer page, Optional<Integer> status);
+   public List<ProductDTO> getProductsPaginated(Integer page, Long merchantId, Optional<Integer> status);
+
+   /**
+    * Este método se encarga de obtener todos los productos segun
+    * el tipo de filtrado con un paginado de diez productos por página.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param page
+    * @param typeFilter
+    * @return List<ProductDTO>
+    */
+   public List<ProductDTO> getProductsByTypeFilterPaginated(Integer page, TypeFilter typeFilter);
 }

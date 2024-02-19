@@ -25,6 +25,19 @@ public class DateUtils {
    }
 
    /**
+    * Convierte una fecha a una cadena de texto en el formato yyyy-MM-dd HH:mm:ss.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param date
+    * @return String
+    */
+   public static String convertDateToString(Date date) {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      return dateFormat.format(date);
+   }
+
+   /**
     * Este método tiene la obligacion de devolver el String de la fecha actual
     * con el formato yyyy-MM-dd.
     *

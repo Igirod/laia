@@ -6,17 +6,18 @@
 #import "./ecommerce/invoice.graphqls"
 
 type Query {
-   findMerchantBySlug(slug: String!): MerchantDTO
-   findProductById(productId: ID!): ProductDTO
-   findProductsPaginated(page: Int!, status: Int): [ProductDTO]
-   findProductDetailsByProductId(productId: ID!): [ProductDetailDTO]
-   findMerchantById(merchantId: ID!): MerchantDTO
-   findPaymentsPaginated(page: Int!): [PaymentDTO]
-   findImagesProductsByProductId(productId: ID!): [ImageProductDTO]
-   findInvoicesByMerchantIdAndOptionalParamsPaginated(page: Int!, merchantId: ID!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
+   merchantS(slug: String!): MerchantDTO
+   productId(productId: ID!): ProductDTO
+   products(page: Int!, merchantId: ID!, status: Int): [ProductDTO]
+   productDId(productId: ID!): [ProductDetailDTO]
+   merchantId(merchantId: ID!): MerchantDTO
+   payments(page: Int!): [PaymentDTO]
+   imagesPId(productId: ID!): [ImageProductDTO]
+   invoices(page: Int!, merchantId: ID!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
+   productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
 }
 
 type Mutation {
-   createInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
-   updateInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
+   cInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
+   uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
 }

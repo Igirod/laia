@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +31,8 @@ public class ShoppingCart {
    private Long merchantId;
    @Column(name = "user_id")
    private Long userId;
+   @Column(name = "createAt")
+   private Date createAt;
 
    public ShoppingCart() {}
 }

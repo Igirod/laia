@@ -16,7 +16,7 @@ public class ImageProductController {
    @Autowired
    private ImageProductService imageProductService;
 
-   @QueryMapping("findImagesProductsByProductId")
+   @QueryMapping("imagesPId")
    public List<ImageProductDTO> getImagesProductsByProductId(@Argument Long productId) {
       return imageProductService.findImagesProductsByProductId(productId);
    }
