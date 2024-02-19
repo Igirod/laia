@@ -21,4 +21,6 @@ public class ImageProductInputDTO {
    private MultipartFile image;
    @JsonProperty
    private Long productId;
+   @JsonProperty
+   private String imageName;
 }

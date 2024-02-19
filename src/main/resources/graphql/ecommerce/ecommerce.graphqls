@@ -20,5 +20,4 @@ type Query {
 type Mutation {
    cInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
-   cIProduct(InovoiceInputProductDTO: InovoiceInputProductDTO!): InvoiceProductDTO
 }
