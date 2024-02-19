@@ -1,5 +1,5 @@
 type MerchantDTO {
-   id: ID!
+   id: Int!
    email: String
    slug: String
    message: String
