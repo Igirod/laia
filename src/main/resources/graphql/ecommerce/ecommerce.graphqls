@@ -7,14 +7,15 @@
 
 type Query {
    merchantS(slug: String!): MerchantDTO
-   productId(productId: ID!): ProductDTO
+   productId(productId: Int!): ProductDTO
    products(page: Int!, merchantId: ID!, status: Int): [ProductDTO]
-   productDId(productId: ID!): [ProductDetailDTO]
-   merchantId(merchantId: ID!): MerchantDTO
+   productDId(productId: Int!): [ProductDetailDTO]
+   merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!): [PaymentDTO]
-   imagesPId(productId: ID!): [ImageProductDTO]
-   invoices(page: Int!, merchantId: ID!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
+   imagesPId(productId: Int!): [ImageProductDTO]
+   invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
+   productDSId(productId: Int!): ProductDetailShortDTO
 }
 
 type Mutation {

@@ -1,5 +1,5 @@
 type PaymentDTO {
-   id: ID!
+   id: Int!
    typePayment: TypePayment
    title: String
    cvu: String

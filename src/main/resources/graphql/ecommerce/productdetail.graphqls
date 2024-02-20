@@ -1,7 +1,15 @@
+#import "./ecommerce/imageproduct.graphqls"
+
 type ProductDetailDTO {
-      id: ID!
+      id: Int!
       productId: Int
       title: String
       description: String
       image: String
+}
+
+type ProductDetailShortDTO {
+   productId: Int!,
+   stock: Int
+   images: [ImageProductDTO]
 }
