@@ -14,18 +14,10 @@ public interface FirebaseStorageService {
    /**
     * Este método tiene la obligación de subir un archivo a Firebase Storage.
     * 
-    * @param file
-    * @param path
+    * @author Igirod
+    * @version 1.0.0
+    * @param multipartFile
     * @return String
     */
-   public String uploadFile(MultipartFile multipartFile, String imageName);
-
-   /**
-    * Este método tiene la obligación de obtener la URL de un archivo de Firebase
-    * Storage.
-    * 
-    * @param path
-    * @return String
-    */
-   public String getFileUrl(String path);
+   public String uploadFile(MultipartFile multipartFile);
 }

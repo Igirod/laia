@@ -26,10 +26,8 @@ public class ImageProduct {
    private Long id;
    @Column(name = "product_id")
    private Long productId;
-   @Column(name = "image")
-   private byte[] image;
-   @Column(name = "name")
-   private String name;
+   @Column(name = "url")
+   private String url;
 
    public ImageProduct() {
    }

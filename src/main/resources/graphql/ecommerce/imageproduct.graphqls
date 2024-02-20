@@ -1,5 +1,5 @@
 type ImageProductDTO {
    id: Int!
    productId: Int
-   image: String
+   url: String
 }
