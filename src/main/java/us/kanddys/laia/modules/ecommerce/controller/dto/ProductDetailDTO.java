@@ -1,11 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.springframework.util.StreamUtils;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;

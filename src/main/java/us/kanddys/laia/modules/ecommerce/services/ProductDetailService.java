@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailShortDTO;
 
 /**
  * Esta clase contiene las obligaciones que debe implementar
@@ -40,4 +41,14 @@ public interface ProductDetailService {
    public ProductDetailDTO createProductDetail(Optional<String> title, Optional<MultipartFile> frontPage,
          Long productId,
          Optional<String> description);
+
+   /**
+    * Este método se encarga de obtener el detalle acortado de un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return ProductDetailShortDTO
+    */
+   public ProductDetailShortDTO getProductDetailShort(Long productId);
 }

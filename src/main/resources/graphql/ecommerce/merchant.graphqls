@@ -2,7 +2,7 @@ type MerchantDTO {
    id: Int!
    email: String
    slug: String
-   message: String
+   message: Int
    typeShipment: TypeShipment
 }
 

@@ -11,12 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailShortDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.ProductDetail;
 import us.kanddys.laia.modules.ecommerce.repository.ProductDetailJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductDetailShortJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
@@ -37,6 +39,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
    @Autowired
    private ProductJpaRepository productJpaRepository;
+
+   @Autowired
+   private ProductDetailShortJpaRepository productDetailShortJpaRepository;
 
    @Override
    public List<ProductDetailDTO> getProductDetailsByProductId(Long productId) {
@@ -61,5 +66,10 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }
+   }
+   @Override
+   public ProductDetailShortDTO getProductDetailShort(Long productId) {
+      return new ProductDetailShortDTO(productDetailShortJpaRepository.findProductDetailsByProductId(productId)
+            .orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND)));
    }
 }
