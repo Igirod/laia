@@ -1,6 +1,5 @@
 package us.kanddys.laia.modules.ecommerce.services;
-
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 
 /**
  * Esta interfaz contiene las obligaciones que debe implementar la clase
@@ -14,8 +13,8 @@ public interface InvoiceCodeService {
    /**
     * Este método se encarga de generar un código de factura.
     * 
-    * @param invoiceDTO
-    * @return InvoiceDTO
+    * @param invoiceInputDTO
+    * @return InvoiceInputDTO
     */
-   public InvoiceDTO generateInvoiceCode(InvoiceDTO invoiceDTO);
+   public InvoiceInputDTO generateInvoiceCode(InvoiceInputDTO invoiceDTO);
 }
