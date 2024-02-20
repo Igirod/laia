@@ -8,7 +8,7 @@
 type Query {
    merchantS(slug: String!): MerchantDTO
    productId(productId: Int!): ProductDTO
-   products(page: Int!, merchantId: ID!, status: Int): [ProductDTO]
+   products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
    productDId(productId: Int!): [ProductDetailDTO]
    merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!): [PaymentDTO]

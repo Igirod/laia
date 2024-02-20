@@ -21,9 +21,9 @@ public class InvoiceController {
    private InvoiceService invoiceService;
 
    @QueryMapping("invoices")
-   public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
-         Optional<String> userEmail,
-         Optional<InvoiceStatus> status) {
+   public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(@Argument Integer page, @Argument Long merchantId,
+         @Argument Optional<String> userEmail,
+         @Argument Optional<InvoiceStatus> status) {
       return invoiceService.findInvoicesByMerchantIdAndOptionalParamsPaginated(page, merchantId, userEmail, status);
    }
 

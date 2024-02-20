@@ -12,12 +12,12 @@ import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 
 @Controller
 public class ImageProductController {
-
+   
    @Autowired
    private ImageProductService imageProductService;
 
    @QueryMapping("imagesPId")
-   public List<ImageProductDTO> getImagesProductsByProductId(@Argument Long productId) {
-      return imageProductService.findImagesProductsByProductId(productId);
+   public List<ImageProductDTO> getImagesProductByProductId(@Argument Long productId) {
+      return imageProductService.findImagesProductByProductId(productId);
    }
 }

@@ -1,13 +1,9 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.io.IOException;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.model.ProductDetailShort;
 
 /**
@@ -20,11 +16,11 @@ import us.kanddys.laia.modules.ecommerce.model.ProductDetailShort;
 @AllArgsConstructor
 @Data
 public class ProductDetailShortDTO {
-   @JsonProperty("id")
+   @JsonProperty
    private Long productId;
-   @JsonProperty("stock")
+   @JsonProperty
    private Integer stock;
-   @JsonProperty("images")
+   @JsonProperty
    private List<ImageProductDTO> images;
 
    public ProductDetailShortDTO() {
@@ -40,12 +36,7 @@ public class ProductDetailShortDTO {
    public ProductDetailShortDTO(ProductDetailShort productDetailShort) {
       this.productId = (productDetailShort.getProductId() == null) ? null : productDetailShort.getProductId();
       this.stock = (productDetailShort.getStock() == null) ? null : productDetailShort.getStock();
-      this.images = (productDetailShort.getImages() == null) ? null : productDetailShort.getImages().stream().map(t -> {
-         try {
-            return new ImageProductDTO(t);
-         } catch (IOException e) {
-            throw new IOJavaException(e.getMessage());
-         }
-      }).toList();
+      this.images = (productDetailShort.getImages() == null) ? null
+            : productDetailShort.getImages().stream().map(ImageProductDTO::new).toList();
    }
 }

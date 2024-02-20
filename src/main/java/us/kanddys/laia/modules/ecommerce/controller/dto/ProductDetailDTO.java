@@ -1,11 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.springframework.util.StreamUtils;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +25,7 @@ public class ProductDetailDTO {
    @JsonProperty
    private String description;
    @JsonProperty
-   private String image;
+   private String url;
 
    public ProductDetailDTO() {
    }
@@ -47,8 +42,6 @@ public class ProductDetailDTO {
       this.title = (productDetail.getTitle() != null) ? productDetail.getTitle() : null;
       this.description = (productDetail.getDescription() != null) ? productDetail.getDescription() : null;
       this.productId = (productDetail.getProductId() != null) ? productDetail.getProductId() : null;
-      this.image = (productDetail.getImage() != null)
-            ? StreamUtils.copyToString(new ByteArrayInputStream(productDetail.getImage()), StandardCharsets.UTF_8)
-            : null;
+      this.url = (productDetail.getUrl() != null) ? productDetail.getUrl() : null;
    }
 }

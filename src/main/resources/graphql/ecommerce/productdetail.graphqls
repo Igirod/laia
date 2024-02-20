@@ -5,11 +5,11 @@ type ProductDetailDTO {
       productId: Int
       title: String
       description: String
-      image: String
+      url: String
 }
 
 type ProductDetailShortDTO {
-   productId: Int!,
+   productId: Int!
    stock: Int
    images: [ImageProductDTO]
 }
