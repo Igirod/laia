@@ -1,6 +1,9 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailDTO;
 
@@ -22,4 +25,19 @@ public interface ProductDetailService {
     * @return List<ProductDetailDTO>
     */
    List<ProductDetailDTO> getProductDetailsByProductId(Long productId);
+
+   /**
+    * Este método crea un nuevo detalle de producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param description
+    * @param frontPage
+    * @param productId
+    * @param title
+    * @return ProductDetailDTO
+    */
+   public ProductDetailDTO createProductDetail(Optional<String> title, Optional<MultipartFile> frontPage,
+         Long productId,
+         Optional<String> description);
 }
