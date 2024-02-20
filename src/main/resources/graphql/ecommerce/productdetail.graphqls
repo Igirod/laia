@@ -3,5 +3,5 @@ type ProductDetailDTO {
       productId: Int
       title: String
       description: String
-      image: String
+      url: String
 }
