@@ -143,5 +143,4 @@ public class Invoice {
       this.voucher = (invoice.getVoucher().getBytes() == null) ? null : invoice.getVoucher().getBytes();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
    }
-
 }

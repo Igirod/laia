@@ -4,6 +4,7 @@
 #import "./ecommerce/payment.graphqls"
 #import "./ecommerce/imageproduct.graphqls"
 #import "./ecommerce/invoice.graphqls"
+#import "./ecommerce/user.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
