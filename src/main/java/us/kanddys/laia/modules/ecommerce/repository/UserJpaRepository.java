@@ -9,6 +9,6 @@ import us.kanddys.laia.modules.ecommerce.model.User;
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, Long> {
 
-   @Query(value = "SELECT id FROM users WHERE user_email = :userEmail", nativeQuery = true)
+   @Query(value = "SELECT id FROM users WHERE email = :userEmail", nativeQuery = true)
    public Long existByUserEmail(String userEmail);
 }

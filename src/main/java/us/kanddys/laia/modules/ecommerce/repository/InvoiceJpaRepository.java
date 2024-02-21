@@ -10,6 +10,6 @@ import us.kanddys.laia.modules.ecommerce.model.Invoice;
 @Repository
 public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
 
-   @Query(value = "SELECT MAX(id) FROM invoices WHERE merchant_id = :merchantId AND status IN ('PENDING', 'COMPLETE')", nativeQuery = true)
+   @Query(value = "SELECT MAX(id) FROM invoices WHERE mer_id = :merchantId AND status IN ('PENDING', 'COMPLETE')", nativeQuery = true)
    public Long findMaxInvoiceIdByMerchantIdAndStatus(@Param("merchantId") Long merchantId);
 }

@@ -63,8 +63,8 @@ public class InvoiceServiceImpl implements InvoiceService {
       if (invoiceCheckService.checkInvoiceData(invoiceInputDTO.getMerchantId(), invoiceInputDTO.getShoppingCartId(),
             invoiceInputDTO.getUserEmail())) {
          try {
-            return invoiceCodeService
-                  .generateInvoiceCode(new InvoiceDTO(invoiceJpaRepository.save(new Invoice(invoiceInputDTO))));
+            return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(invoiceCodeService
+                  .generateInvoiceCode(invoiceInputDTO))));
          } catch (IOException e) {
             throw new IOJavaException(e.getMessage());
          } catch (ParseException e) {

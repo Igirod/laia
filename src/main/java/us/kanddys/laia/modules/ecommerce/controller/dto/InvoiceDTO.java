@@ -1,11 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.springframework.util.StreamUtils;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -63,6 +58,7 @@ public class InvoiceDTO {
    public InvoiceDTO(Invoice invoice) throws IOException {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
+      this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
       this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
       this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
@@ -72,8 +68,7 @@ public class InvoiceDTO {
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus().toString() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher() == null) ? null
-            : StreamUtils.copyToString(new ByteArrayInputStream(invoice.getVoucher()), StandardCharsets.UTF_8);
+      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = invoice.getNote();
    }
 }

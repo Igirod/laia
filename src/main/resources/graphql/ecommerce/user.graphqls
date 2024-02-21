@@ -1,0 +1,8 @@
+type UserDTO {
+   id: Int!
+   name: String
+   email: String
+   password: String
+   phone: String
+   image: String
+}

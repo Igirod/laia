@@ -32,7 +32,7 @@ public class Invoice {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "merchant_id")
+   @Column(name = "mer_id")
    private Long merchantId;
    @Column(name = "mer_email")
    private String merchantEmail;
@@ -54,7 +54,7 @@ public class Invoice {
    @Column(name = "status")
    private InvoiceStatus status;
    @Column(name = "voucher")
-   private byte[] voucher;
+   private String voucher;
    @Column(name = "note")
    private String note;
 
@@ -84,7 +84,7 @@ public class Invoice {
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher().getBytes() == null) ? null : invoice.getVoucher().getBytes();
+      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
    }
 
@@ -113,7 +113,7 @@ public class Invoice {
       this.total = invoiceDTO.getTotal() != null ? invoiceDTO.getTotal() : this.total;
       this.message = invoiceDTO.getMessage() != null ? invoiceDTO.getMessage() : this.message;
       this.status = invoiceDTO.getStatus() != null ? invoiceDTO.getStatus() : this.status;
-      this.voucher = invoiceDTO.getVoucher() != null ? invoiceDTO.getVoucher().getBytes() : this.voucher;
+      this.voucher = invoiceDTO.getVoucher() != null ? invoiceDTO.getVoucher() : this.voucher;
       this.note = invoiceDTO.getNote() != null ? invoiceDTO.getNote() : this.note;
    }
 
@@ -140,8 +140,7 @@ public class Invoice {
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher().getBytes() == null) ? null : invoice.getVoucher().getBytes();
+      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
    }
-
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -33,6 +34,8 @@ public class ShoppingCart {
    private Long userId;
    @Column(name = "createAt")
    private Date createAt;
+   @Transient
+   private Integer count;
 
    public ShoppingCart() {}
 }

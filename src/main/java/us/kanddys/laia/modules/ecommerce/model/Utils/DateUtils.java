@@ -46,6 +46,6 @@ public class DateUtils {
     * @return String
     */
    public static String getCurrentDateString() {
-      return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+      return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
    }
 }

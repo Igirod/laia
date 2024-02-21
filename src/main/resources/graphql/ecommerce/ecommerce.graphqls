@@ -4,6 +4,9 @@
 #import "./ecommerce/payment.graphqls"
 #import "./ecommerce/imageproduct.graphqls"
 #import "./ecommerce/invoice.graphqls"
+#import "./ecommerce/user.graphqls"
+#import "./ecommerce/shoppingcart.graphqls"
+#import "./ecommerce/shoppingcartproduct.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
@@ -16,9 +19,11 @@ type Query {
    invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
+   gCart(merchantId: Int!, userId: Int!): ShoppingCartDTO
 }
 
 type Mutation {
    cInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
+   aSCartP(shoppingCartId: Int!, productId: Int!) : ShoppingCartProductDTO
 }
