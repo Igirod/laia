@@ -1,0 +1,11 @@
+type ShoppingCartProductDTO {
+   productId: Int
+   shoppingCartId: Int
+   quantity: Int
+}
+
+input ShoppingCartProductInputDTO {
+   productId: Int
+   shoppingCartId: Int
+   quantity: Int
+}

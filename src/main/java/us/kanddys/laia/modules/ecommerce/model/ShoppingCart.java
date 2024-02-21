@@ -33,6 +33,8 @@ public class ShoppingCart {
    private Long userId;
    @Column(name = "createAt")
    private Date createAt;
+   @Column(name = "count")
+   private Integer count;
 
    public ShoppingCart() {}
 }
