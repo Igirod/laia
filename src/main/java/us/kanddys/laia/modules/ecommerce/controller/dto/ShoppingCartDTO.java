@@ -38,13 +38,13 @@ public class ShoppingCartDTO {
     * @version 1.0.0
     * @param shoppingCart
     */
-   public ShoppingCartDTO(ShoppingCart shoppingCart) {
+   public ShoppingCartDTO(ShoppingCart shoppingCart, Integer count) {
       super();
       this.id = (shoppingCart.getId() == null) ? null : shoppingCart.getId();
       this.merchantId = (shoppingCart.getMerchantId() == null) ? null : shoppingCart.getMerchantId();
       this.userId = (shoppingCart.getUserId() == null) ? null : shoppingCart.getUserId();
-      this.count = (shoppingCart.getCount() == null) ? null : shoppingCart.getCount();
       this.createAt = (shoppingCart.getCreateAt() == null) ? null
             : DateUtils.convertDateToString(shoppingCart.getCreateAt());
+      this.count = (count == null) ? 0 : count;
    }
 }
