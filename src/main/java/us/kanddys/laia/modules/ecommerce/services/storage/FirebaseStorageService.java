@@ -17,7 +17,8 @@ public interface FirebaseStorageService {
     * @author Igirod
     * @version 1.0.0
     * @param multipartFile
+    * @param aspectRatio11
     * @return String
     */
-   public String uploadFile(MultipartFile multipartFile);
+   public String uploadImage(MultipartFile multipartFile, Boolean aspectRatio11);
 }

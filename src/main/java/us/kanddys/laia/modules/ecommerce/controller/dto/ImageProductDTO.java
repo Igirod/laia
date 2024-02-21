@@ -22,6 +22,8 @@ public class ImageProductDTO {
    private Long productId;
    @JsonProperty
    private String url;
+   @JsonProperty
+   private String url169;
 
    public ImageProductDTO() {
    }

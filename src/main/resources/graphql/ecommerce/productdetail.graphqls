@@ -6,6 +6,7 @@ type ProductDetailDTO {
       title: String
       description: String
       url: String
+      url169: String
 }
 
 type ProductDetailShortDTO {

@@ -5,11 +5,8 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
-
+import java.awt.Color;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,29 +26,47 @@ public class ImageFormatUtils {
     * @param image
     * @return byte[]
     */
-   public static byte[] resizeImage(MultipartFile inputFile) {
+   public static byte[] resizeImage(MultipartFile inputFile, Boolean aspectRatio11) {
       byte[] imageInByte = null;
       try {
          BufferedImage originalImage = ImageIO.read(inputFile.getInputStream());
-         BufferedImage resizedImage = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
-         Graphics2D g = resizedImage.createGraphics();
-         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-         g.drawImage(originalImage, 0, 0, 300, 300, 0, 0, originalImage.getWidth(),
-               originalImage.getHeight(), null);
-         g.dispose();
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         String format = "png";
-         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(format);
-         if (writers.hasNext()) {
-            ImageWriter writer = writers.next();
-            try (ImageOutputStream ios = ImageIO.createImageOutputStream(baos)) {
-               writer.setOutput(ios);
-               writer.write(resizedImage);
-            } finally {
-               writer.dispose();
+         int originalWidth = originalImage.getWidth();
+         int originalHeight = originalImage.getHeight();
+         int newWidth, newHeight;
+
+         // Si aspectRatio11 es verdadero, usamos una relación de aspecto de 1:1, de lo
+         // contrario usamos 16:9
+         if (aspectRatio11) {
+            newWidth = newHeight = 300; // Para una relación de aspecto de 1:1, establecemos las dimensiones a 300x300
+         } else {
+            double aspectRatio = 16.0 / 9.0;
+            double originalAspectRatio = (double) originalWidth / originalHeight;
+
+            if (originalAspectRatio > aspectRatio) {
+               newWidth = 382;
+               newHeight = (int) (newWidth / aspectRatio);
+            } else {
+               newHeight = 215;
+               newWidth = (int) (newHeight * aspectRatio);
             }
          }
-         baos.flush();
+
+         // Crear una nueva imagen con el nuevo ancho y alto
+         BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+         Graphics2D g = resizedImage.createGraphics();
+
+         // Rellenar la imagen con un color transparente
+         g.setColor(new Color(0, 0, 0, 0));
+         g.fillRect(0, 0, newWidth, newHeight);
+
+         // Dibujar la imagen original en el centro de la nueva imagen
+         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+         g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+         g.dispose();
+
+         // Convertir la imagen final a un array de bytes
+         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         ImageIO.write(resizedImage, "png", baos);
          imageInByte = baos.toByteArray();
          baos.close();
       } catch (IOException e) {

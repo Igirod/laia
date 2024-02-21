@@ -26,6 +26,8 @@ public class ProductDetailDTO {
    private String description;
    @JsonProperty
    private String url;
+   @JsonProperty
+   private String url169;
 
    public ProductDetailDTO() {
    }
@@ -43,5 +45,6 @@ public class ProductDetailDTO {
       this.description = (productDetail.getDescription() != null) ? productDetail.getDescription() : null;
       this.productId = (productDetail.getProductId() != null) ? productDetail.getProductId() : null;
       this.url = (productDetail.getUrl() != null) ? productDetail.getUrl() : null;
+      this.url169 = (productDetail.getUrl169() != null) ? productDetail.getUrl169() : null;
    }
 }
