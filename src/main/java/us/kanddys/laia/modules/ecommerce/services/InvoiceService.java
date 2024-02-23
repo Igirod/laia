@@ -9,6 +9,13 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
+/**
+ * Esta interface contiene las obligaciones que debe implementar la 
+ * clase InvoiceServiceImpl.
+ * 
+ * @author Igirod0
+ * @version 1.0.1
+ */
 public interface InvoiceService {
 
    /**
@@ -32,12 +39,11 @@ public interface InvoiceService {
     * Este método se encarga de crear una factura.
     *
     * @author Igirod0
-    * @version 1.0.1
-    * @param userId
+    * @version 1.0.2
     * @param merchantId
     * @return InvoiceDTO
     */
-   public InvoiceDTO createInvoice(Long userId, Long merchantId);
+   public InvoiceDTO createInvoice(Long merchantId);
 
    /**
     * Este método se encarga de actualizar una factura.
