@@ -12,6 +12,6 @@ import us.kanddys.laia.modules.ecommerce.model.InvoiceProductId;
 public interface InvoiceProductJpaRepository extends JpaRepository<InvoiceProduct, InvoiceProductId> {
 
    @Query(value = "SELECT COUNT(*) FROM invoices_products invp WHERE invp.invoice_id = :invoiceId", nativeQuery = true)
-   public Integer countByShoppingCartId(@Param("invoiceId") Long invoiceId);
+   public Integer countByInvoiceId(@Param("invoiceId") Long invoiceId);
 
 }

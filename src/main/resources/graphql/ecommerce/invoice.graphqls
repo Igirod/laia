@@ -11,6 +11,7 @@ type InvoiceDTO {
    status: InvoiceStatus
    voucher: String
    note: String
+   count: Int
 }
 
 input InvoiceInputDTO {
