@@ -42,6 +42,8 @@ public class InvoiceDTO {
    private String voucher;
    @JsonProperty
    private String note;
+   @JsonProperty
+   private Integer count;
 
    public InvoiceDTO() {
    }
@@ -66,6 +68,7 @@ public class InvoiceDTO {
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus().toString() == null) ? null : invoice.getStatus();
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
-      this.note = invoice.getNote();
+      this.note = (invoice.getNote() == null) ? null : invoice.getNote();
+      this.count = (invoice.getCount() == null) ? null : invoice.getCount();
    }
 }
