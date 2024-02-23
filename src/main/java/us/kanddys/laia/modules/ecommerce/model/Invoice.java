@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
@@ -53,6 +54,8 @@ public class Invoice {
    private String voucher;
    @Column(name = "note")
    private String note;
+   @Transient
+   private Integer count;
 
    public Invoice() {
    }
@@ -65,7 +68,7 @@ public class Invoice {
     * @param invoice
     * @throws ParseException
     */
-   public Invoice(InvoiceDTO invoice) throws ParseException {
+   public Invoice(InvoiceDTO invoice, Integer count) throws ParseException {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
       this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
@@ -80,6 +83,7 @@ public class Invoice {
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
+      this.count = (count == null) ? null : count;
    }
 
    /**
@@ -91,7 +95,7 @@ public class Invoice {
     * @param invoiceDTO
     * @throws ParseException
     */
-   public Invoice(Long invoiceId, InvoiceInputDTO invoiceDTO) throws ParseException {
+   public Invoice(Long invoiceId, InvoiceInputDTO invoiceDTO, Integer count) throws ParseException {
       super();
       this.id = invoiceId;
       this.userId = invoiceDTO.getUserId() != null ? invoiceDTO.getUserId() : this.userId;
@@ -106,6 +110,7 @@ public class Invoice {
       this.status = invoiceDTO.getStatus() != null ? invoiceDTO.getStatus() : this.status;
       this.voucher = invoiceDTO.getVoucher() != null ? invoiceDTO.getVoucher() : this.voucher;
       this.note = invoiceDTO.getNote() != null ? invoiceDTO.getNote() : this.note;
+      this.count = (count == null) ? null : count;
    }
 
    /**

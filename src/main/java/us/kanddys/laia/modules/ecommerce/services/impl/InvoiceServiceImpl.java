@@ -22,6 +22,7 @@ import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
@@ -59,6 +60,9 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Autowired
    private UserJpaRepository userJpaRepository;
 
+   @Autowired
+   private InvoiceProductJpaRepository invoiceProductJpaRepository;
+
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
          Optional<String> userEmail, Optional<InvoiceStatus> status) {
@@ -92,7 +96,7 @@ public class InvoiceServiceImpl implements InvoiceService {
          var updateInvoice = invoiceJpaRepository.findById(invoiceInputDTO.getId());
          if (updateInvoice.isPresent()) {
             try {
-               updateInvoice = Optional.of(new Invoice(invoiceInputDTO.getId(), invoiceInputDTO));
+               updateInvoice = Optional.of(new Invoice(invoiceInputDTO.getId(), invoiceInputDTO, invoiceProductJpaRepository.countByInvoiceId(invoiceInputDTO.getId())));
                return Optional.of(new InvoiceDTO(invoiceJpaRepository.save(updateInvoice.get()))).get();
             } catch (ParseException e) {
                throw new RuntimeException(e);
@@ -109,6 +113,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Override
    public InvoiceDTO findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status) {
       var invoice = invoiceJpaRepository.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
+      invoice.setCount(invoiceProductJpaRepository.countByInvoiceId(invoice.getId() == null ? 0 : invoice.getId()));
       if (invoice == null)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       try {
