@@ -36,6 +36,6 @@ type Mutation {
    uInvoicePayment(invoiceId: Int!, paymentId: Int!) : Int
    uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
    dAddress(addressId: Int!) : Int
-   uAddress(addressId: Int!, userId: int, title: String, lng: String, lat: String, direction: String) : Int
+   uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
 }
