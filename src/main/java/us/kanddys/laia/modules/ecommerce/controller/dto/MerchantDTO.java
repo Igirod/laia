@@ -26,6 +26,10 @@ public class MerchantDTO {
    private String message;
    @JsonProperty
    private TypeShipment typeShipment;
+   @JsonProperty
+   private String title;
+   @JsonProperty
+   private String image;
 
    public MerchantDTO() {
    }
@@ -44,5 +48,7 @@ public class MerchantDTO {
       this.slug = (merchant.getSlug() == null) ? null : merchant.getSlug();
       this.message = (merchant.getMessage() == null) ? null : merchant.getMessage();
       this.typeShipment = (merchant.getTypeShipment() == null) ? null : merchant.getTypeShipment();
+      this.title = (merchant.getTitle() == null) ? null : merchant.getTitle();
+      this.image = (merchant.getImage() == null) ? null : merchant.getImage();
    }
 }
