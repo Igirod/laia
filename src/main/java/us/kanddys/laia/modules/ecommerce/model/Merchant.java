@@ -29,6 +29,10 @@ public class Merchant {
    @Enumerated(EnumType.STRING)
    @Column(name = "type_shipment")
    private TypeShipment typeShipment;
+   @Column(name = "title")
+   private String title;
+   @Column(name = "image")
+   private String image;
 
    public Merchant() {}
 }

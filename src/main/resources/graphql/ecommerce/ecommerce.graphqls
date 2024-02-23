@@ -23,6 +23,8 @@ type Query {
    lUser(email: String!, password: String!): Int
    gIProducts(invoiceId: Int!, page: Int!): [InvoiceProductDTO]
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
+   combinedShop(slug: String!, userId: Int): CombinedShopDTO
+   combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
 }
 
 type Mutation {
@@ -39,4 +41,24 @@ type Mutation {
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
    uInvoiceA(invoiceId: Int!, title: String!, direction: String!) : Int
+}
+
+type CombinedShopDTO {
+   merchantId: Int!
+   merchantTitle: String
+   products: [ProductDTO]
+   invoiceId: Int
+   invoiceCount: Int
+}
+
+type CombinedProductDTO {
+   merchantId: Int!
+   merchantTitle: String
+   productId: Int
+   productTitle: String
+   productPrice: Float
+   images: [ImageProductDTO]
+   productStock: Int
+   invoiceId: Int
+   invoiceCount: Int
 }
