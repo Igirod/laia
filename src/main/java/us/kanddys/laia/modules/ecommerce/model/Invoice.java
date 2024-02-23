@@ -40,8 +40,6 @@ public class Invoice {
    private Long paymentId;
    @Column(name = "code")
    private String code;
-   @Column(name = "shopping_cart_id")
-   private Long shoppingCartId;
    @Column(name = "reservation")
    private Date reservation;
    @Column(name = "total")
@@ -75,7 +73,6 @@ public class Invoice {
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
-      this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();
       this.reservation = (invoice.getReservation() == null) ? null
             : DateUtils.convertStringToDate(invoice.getReservation());
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
@@ -101,8 +98,6 @@ public class Invoice {
       this.merchantId = invoiceDTO.getMerchantId() != null ? invoiceDTO.getMerchantId() : this.merchantId;
       this.paymentId = invoiceDTO.getPaymentId() != null ? invoiceDTO.getPaymentId() : this.paymentId;
       this.code = invoiceDTO.getCode() != null ? invoiceDTO.getCode() : this.code;
-      this.shoppingCartId = invoiceDTO.getShoppingCartId() != null ? invoiceDTO.getShoppingCartId()
-            : this.shoppingCartId;
       this.reservation = invoiceDTO.getReservation() != null
             ? DateUtils.convertStringToDate(invoiceDTO.getReservation())
             : this.reservation;

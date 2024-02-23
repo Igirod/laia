@@ -29,8 +29,8 @@ public class InvoiceController {
    }
 
    @MutationMapping("cInvoice")
-   public Long createInvoice(@Argument Long userId, @Argument Long merchantId) {
-      return invoiceService.createInvoice(userId, merchantId).getId();
+   public InvoiceDTO createInvoice(@Argument Long merchantId) {
+      return invoiceService.createInvoice(merchantId);
    }
 
    @MutationMapping("uInvoice")
