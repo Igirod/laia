@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.util.Optional;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,4 +35,25 @@ public class Address {
    private String lat;
    @Column(name = "direction")
    private String direction;
+
+   /**
+    * Constructor personalizado utilizado en diferentes servicios.
+    *
+    * @param userId
+    * @param title
+    * @param userId
+    * @param title
+    * @param lng
+    * @param lat
+    * @param direction
+    */
+   public Address(Long userId, Optional<String> title, Optional<String> lng, Optional<String> lat, Optional<String> direction) {
+      super();
+      this.id = null;
+      this.userId = userId;
+      this.title = title.orElse(null);
+      this.lng = lng.orElse(null);
+      this.lat = lat.orElse(null);
+      this.direction = direction.orElse(null);
+   }
 }
