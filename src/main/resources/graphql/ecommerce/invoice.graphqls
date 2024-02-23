@@ -1,8 +1,7 @@
 type InvoiceDTO {
    id: Int!
-   merchantId: Int
-   merchantEmail: String
-   userEmail: String
+   merchantId: Int!
+   userId: Int!
    paymentId: Int
    code: String
    shoppingCartId: Int
@@ -17,8 +16,7 @@ type InvoiceDTO {
 input InvoiceInputDTO {
    id: Int
    merchantId: Int!
-   merchantEmail: String!
-   userEmail: String!
+   userId : Int!
    paymentId: Int
    code: String
    shoppingCartId: Int!

@@ -19,16 +19,6 @@ public interface InvoiceCheckService {
     */
    public Boolean existsMerchantId(Long merchantId);
    
-   /**
-    * Este método verifica si el id de la factura existe.
-    *  
-    * @author Igirod0
-    * @version 1.0.0
-    * @param userId
-    * @return true si existe y false si no.
-    */
-   public Boolean existsUserEmail(String userEmail);
-   
    /** 
     * Este método verifica si el id del carro de compras existe.
     *
@@ -37,7 +27,7 @@ public interface InvoiceCheckService {
     * @param shoppingCartId
     * @return true si existe y false si no.
     */
-   public Boolean existsShoppingCartId(Long shoppingCartId);
+   public Boolean existInvoiceId(Long shoppingCartId);
 
    /**
     * Este método verifica los datos de la factura para ver si son validos.
@@ -48,7 +38,7 @@ public interface InvoiceCheckService {
     * @param shoppingCartId
     * @param userEmail
     */
-   public Boolean checkInvoiceData(Long merchantId, Long shoppingCartId, String userEmail);
+   public Boolean checkInvoiceData(Long merchantId, Long shoppingCartId);
 
    /**
     * Este método verifica si el id de pago existe.

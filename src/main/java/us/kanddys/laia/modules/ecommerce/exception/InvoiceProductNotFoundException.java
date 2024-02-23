@@ -7,8 +7,8 @@ package us.kanddys.laia.modules.ecommerce.exception;
  * @author Igirod0
  * @version 1.0.0
  */
-public class ShoppingCartNotFoundException extends RuntimeException {
-   public ShoppingCartNotFoundException(String message) {
+public class InvoiceProductNotFoundException extends RuntimeException {
+   public InvoiceProductNotFoundException(String message) {
       super(message);
    }
 }

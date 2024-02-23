@@ -10,6 +10,7 @@ import graphql.GraphQLError;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
+import us.kanddys.laia.modules.ecommerce.exception.InvoiceProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 
@@ -23,22 +24,22 @@ import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-   @GraphQlExceptionHandler
+   @GraphQlExceptionHandler(ProductNotFoundException.class)
    public GraphQLError handleProductNotFoundException(ProductNotFoundException ex) {
       return GraphQLError.newError().message(ex.getMessage()).build();
    }
 
-   @GraphQlExceptionHandler
+   @GraphQlExceptionHandler(IOJavaException.class)
    public GraphQLError handleIOExceptionException(IOJavaException ex) {
       return GraphQLError.newError().message(ex.getMessage()).build();
    }
 
-   @GraphQlExceptionHandler
+   @GraphQlExceptionHandler(InvoiceNotFoundException.class)
    public GraphQLError handleInvoiceNotFoundException(InvoiceNotFoundException ex) {
       return GraphQLError.newError().message(ex.getMessage()).build();
    }
 
-   @GraphQlExceptionHandler
+   @GraphQlExceptionHandler(InvoiceCheckCodeException.class)
    public GraphQLError handleInvoiceCheckServiceException(InvoiceCheckCodeException ex) {
       return GraphQLError.newError().message(ex.getMessage()).build();
    }
@@ -46,5 +47,10 @@ public class GlobalExceptionHandler {
    @ExceptionHandler(ProductNotFoundException.class)
    public ResponseEntity<String> handleProductNotFoundExceptionRest(ProductNotFoundException ex) {
       return new ResponseEntity<>(ExceptionMessage.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+   }
+
+   @GraphQlExceptionHandler(InvoiceProductNotFoundException.class)
+   public GraphQLError handleInvoiceProductNotFoundException(InvoiceProductNotFoundException ex) {
+      return GraphQLError.newError().message(ex.getMessage()).build();
    }
 }

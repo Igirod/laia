@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ShoppingCartProductInputDTO {
+public class InvoiceProductInputDTO {
    @JsonProperty
    private Long shoppingCartId;
    @JsonProperty

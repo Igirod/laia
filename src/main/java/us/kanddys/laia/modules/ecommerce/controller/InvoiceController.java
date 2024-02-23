@@ -21,19 +21,46 @@ public class InvoiceController {
    private InvoiceService invoiceService;
 
    @QueryMapping("invoices")
-   public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(@Argument Integer page, @Argument Long merchantId,
+   public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(@Argument Integer page,
+         @Argument Long merchantId,
          @Argument Optional<String> userEmail,
          @Argument Optional<InvoiceStatus> status) {
       return invoiceService.findInvoicesByMerchantIdAndOptionalParamsPaginated(page, merchantId, userEmail, status);
    }
 
    @MutationMapping("cInvoice")
-   public InvoiceDTO createInvoice(@Argument InvoiceInputDTO invoiceInputDTO) {
-      return invoiceService.createInvoice(invoiceInputDTO);
+   public Long createInvoice(@Argument Long userId, @Argument Long merchantId) {
+      return invoiceService.createInvoice(userId, merchantId).getId();
    }
 
    @MutationMapping("uInvoice")
    public InvoiceDTO updateInvoice(@Argument InvoiceInputDTO invoiceInputDTO) {
       return invoiceService.updateInvoice(invoiceInputDTO);
+   }
+
+   @QueryMapping("gInvoice")
+   public InvoiceDTO getInvoiceByUserIdAndMerchantIdAndStatus(@Argument Long userId, @Argument Long merchantId,
+         @Argument InvoiceStatus status) {
+      return invoiceService.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
+   }
+
+   @MutationMapping("uInvoiceM")
+   public Integer updateInvoiceMessage(@Argument Long invoiceId, @Argument Integer message) {
+      return invoiceService.updateInvoiceMessage(invoiceId, message);
+   }
+
+   @MutationMapping("uInvoicePayment")
+   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId) {
+      return invoiceService.updateInvoicePayment(invoiceId, paymentId);
+   }
+
+   @MutationMapping("uInvoiceN")
+   public Integer updateInvoiceNote(@Argument Long invoiceId, @Argument String note) {
+      return invoiceService.updateInvoiceNote(invoiceId, note);
+   }
+
+   @MutationMapping("uInvoiceS")
+   public Integer updateInvoiceStatus(@Argument Long invoiceId, @Argument InvoiceStatus status) {
+      return invoiceService.updateInvoiceStatus(invoiceId, status);
    }
 }

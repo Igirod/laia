@@ -22,9 +22,7 @@ public class InvoiceDTO {
    @JsonProperty
    private Long merchantId;
    @JsonProperty
-   private String merchantEmail;
-   @JsonProperty
-   private String userEmail;
+   private Long userId;
    @JsonProperty
    private Long paymentId;
    @JsonProperty
@@ -59,8 +57,7 @@ public class InvoiceDTO {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
       this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
-      this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
+      this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null : invoice.getCode();
       this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();

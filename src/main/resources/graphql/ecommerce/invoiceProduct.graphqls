@@ -1,0 +1,14 @@
+#import "./ecommerce/product.graphqls"
+
+type InvoiceProductDTO {
+   productId: Int!
+   invoiceId: Int!
+   quantity: Int
+   product: ProductDTO
+}
+
+input InvoiceProductInputDTO {
+   productId: Int!
+   shoppingCartId: Int!
+   quantity: Int
+}

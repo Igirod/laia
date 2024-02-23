@@ -13,8 +13,8 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import us.kanddys.laia.modules.ecommerce.model.InvoiceProduct;
 import us.kanddys.laia.modules.ecommerce.model.Product;
-import us.kanddys.laia.modules.ecommerce.model.ShoppingCartProduct;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 
 @Repository
@@ -62,12 +62,12 @@ public class ProductCriteriaRepository {
             break;
          case RELEVANT:
             CriteriaQuery<Long> subquery = cBuilder.createQuery(Long.class);
-            Root<ShoppingCartProduct> subRoot = subquery.from(ShoppingCartProduct.class);
+            Root<InvoiceProduct> subRoot = subquery.from(InvoiceProduct.class);
             subquery.select(subRoot.get("id").get("productId"));
             subquery.groupBy(subRoot.get("id").get("productId"));
             subquery.orderBy(cBuilder.desc(cBuilder.sum(subRoot.get("quantity"))));
             cQueryproduct.select(rProduct);
-            Join<Product, ShoppingCartProduct> productShoppingCartJoin = rProduct.join("shoppingCartProducts");
+            Join<Product, InvoiceProduct> productShoppingCartJoin = rProduct.join("invoiceProducts");
             cQueryproduct.groupBy(rProduct.get("id"));
             cQueryproduct.where(rProduct.get("id").in(entityManager.createQuery(subquery)
                   .setFirstResult((page - 1) * 10)

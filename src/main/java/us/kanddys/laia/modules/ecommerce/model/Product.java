@@ -43,7 +43,7 @@ public class Product {
    @Column(name = "created_at")
    private Date createdAt;
    @OneToMany(mappedBy = "product")
-   private List<ShoppingCartProduct> shoppingCartProducts;
+   private List<InvoiceProduct> invoiceProducts;
 
    public Product() {
    }

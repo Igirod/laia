@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.controller.dto.ShoppingCartProductInputDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 
 /**
  * Esta clase representa un producto en el carrito de compras.
@@ -17,20 +17,20 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.ShoppingCartProductInput
  * @version 1.0.1
  */
 @Entity
-@Table(name = "shopping_carts_products")
+@Table(name = "invoices_products")
 @AllArgsConstructor
 @Data
-public class ShoppingCartProduct {
+public class InvoiceProduct {
 
    @EmbeddedId
-   private ShoppingCartProductId id;
+   private InvoiceProductId id;
    @Column(name = "quantity")
    private Integer quantity;
    @ManyToOne
    @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
    private Product product;
 
-   public ShoppingCartProduct() {
+   public InvoiceProduct() {
    }
 
    /**
@@ -38,11 +38,11 @@ public class ShoppingCartProduct {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param shoppingCartProductInputDTO
+    * @param InvoiceProductInputDTO
     */
-   public ShoppingCartProduct(Long shoppingCartId, Long productId) {
+   public InvoiceProduct(Long shoppingCartId, Long invoiceId) {
       super();
-      this.id = new ShoppingCartProductId(shoppingCartId, productId);
+      this.id = new InvoiceProductId(shoppingCartId, invoiceId);
    }
 
    /**
@@ -50,12 +50,12 @@ public class ShoppingCartProduct {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param shoppingCartProductInputDTO
+    * @param InvoiceProductInputDTO
     */
-   public ShoppingCartProduct(ShoppingCartProductInputDTO shoppingCartProductInputDTO) {
+   public InvoiceProduct(InvoiceProductInputDTO InvoiceProductInputDTO) {
       super();
-      this.id = new ShoppingCartProductId(shoppingCartProductInputDTO.getShoppingCartId(),
-            shoppingCartProductInputDTO.getProductId());
-      this.quantity = shoppingCartProductInputDTO.getQuantity();
+      this.id = new InvoiceProductId(InvoiceProductInputDTO.getShoppingCartId(),
+            InvoiceProductInputDTO.getProductId());
+      this.quantity = InvoiceProductInputDTO.getQuantity();
    }
 }
