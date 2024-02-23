@@ -21,9 +21,7 @@ public class InvoiceInputDTO {
    @JsonProperty
    private Long merchantId;
    @JsonProperty
-   private String merchantEmail;
-   @JsonProperty
-   private String userEmail;
+   private Long userId;
    @JsonProperty
    private Long paymentId;
    @JsonProperty

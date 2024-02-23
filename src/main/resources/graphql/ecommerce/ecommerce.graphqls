@@ -5,8 +5,7 @@
 #import "./ecommerce/imageproduct.graphqls"
 #import "./ecommerce/invoice.graphqls"
 #import "./ecommerce/user.graphqls"
-#import "./ecommerce/shoppingcart.graphqls"
-#import "./ecommerce/shoppingcartproduct.graphqls"
+#import "./ecommerce/invoiceproduct.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
@@ -19,11 +18,20 @@ type Query {
    invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
-   gCart(merchantId: Int!, userId: Int!): ShoppingCartDTO
+   gInvoice(userId: Int!, merchantId: Int!, status: InvoiceStatus): InvoiceDTO
+   cUserE(userId: Int!, email: String!, password: String): Int
+   lUser(email: String!, password: String!): Int
+   gIProducts(invoiceId: Int!, page: Int!): [InvoiceProductDTO]
 }
 
 type Mutation {
-   cInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
+   cInvoice(userId: Int!, merchantId: Int): Int
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
-   aSCartP(shoppingCartId: Int!, productId: Int!) : ShoppingCartProductDTO
+   aProductI(shoppingCartId: Int!, productId: Int!) : Int
+   uProductI(shoppingCartId: Int!, productId: Int!, quantity: Int!) : Int
+   uInvoiceM(invoiceId: Int!, message: Int!) : Int
+   uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
+   uInvoiceN(invoiceId: Int!, note: String!) : Int
+   uInvoicePayment(invoiceId: Int!, paymentId: Int!) : Int
+   uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
 }

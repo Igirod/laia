@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
@@ -21,8 +22,10 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
+import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
+import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
 /**
  * Esta clase implementa las obligaciones de la interface InvoiceService.
@@ -40,10 +43,16 @@ public class InvoiceServiceImpl implements InvoiceService {
    private InvoiceJpaRepository invoiceJpaRepository;
 
    @Autowired
+   private InvoiceProductService invoiceProductService;
+
+   @Autowired
    private InvoiceCodeService invoiceCodeService;
 
    @Autowired
    private InvoiceCheckService invoiceCheckService;
+
+   @Autowired 
+   private FirebaseStorageService firebaseStorageService;
 
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
@@ -59,27 +68,21 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public InvoiceDTO createInvoice(InvoiceInputDTO invoiceInputDTO) {
-      if (invoiceCheckService.checkInvoiceData(invoiceInputDTO.getMerchantId(), invoiceInputDTO.getShoppingCartId(),
-            invoiceInputDTO.getUserEmail())) {
-         try {
-            return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(invoiceCodeService
-                  .generateInvoiceCode(invoiceInputDTO))));
-         } catch (IOException e) {
-            throw new IOJavaException(e.getMessage());
-         } catch (ParseException e) {
-            throw new RuntimeException(e);
-         }
-      } else {
-         throw new InvoiceCheckCodeException(ExceptionMessage.INOICE_CHECK_SERVICE);
+   public InvoiceDTO createInvoice(Long userId, Long merchantId) {
+      try {
+         return new InvoiceDTO(invoiceJpaRepository.save(invoiceCodeService
+               .generateInvoiceCode(new Invoice(userId, merchantId))));
+      } catch (IOException e) {
+         throw new IOJavaException(e.getMessage());
+      } catch (ParseException e) {
+         throw new RuntimeException(e);
       }
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public InvoiceDTO updateInvoice(InvoiceInputDTO invoiceInputDTO) {
-      if (invoiceCheckService.checkInvoiceData(invoiceInputDTO.getMerchantId(), invoiceInputDTO.getShoppingCartId(),
-            invoiceInputDTO.getUserEmail())) {
+      if (invoiceCheckService.checkInvoiceData(invoiceInputDTO.getMerchantId(), invoiceInputDTO.getShoppingCartId())) {
          var updateInvoice = invoiceJpaRepository.findById(invoiceInputDTO.getId());
          if (updateInvoice.isPresent()) {
             try {
@@ -96,4 +99,66 @@ public class InvoiceServiceImpl implements InvoiceService {
       }
       throw new InvoiceCheckCodeException(ExceptionMessage.INOICE_CHECK_SERVICE);
    }
+
+   @Override
+   public InvoiceDTO findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status) {
+      var invoice = invoiceJpaRepository.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
+      if (invoice == null)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      try {
+         return new InvoiceDTO(invoice);
+      } catch (IOException e) {
+         throw new IOJavaException(e.getMessage());
+      }
+   }
+
+   @Override
+   public Integer updateInvoiceMessage(Long invoiceId, Integer message) {
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      invoiceJpaRepository.updateMessageByInvoiceId(message, invoiceId);
+      return 1;
+   }
+
+   @Override
+   public Integer updateInvoicePayment(Long invoiceId, Long paymentId) {
+      var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      
+      invoiceJpaRepository.updatePaymentByInvoiceId(paymentId, invoiceId);
+      invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING, invoiceId);
+      
+      //TODO: Reservar fecha de entrega
+      return 1;
+   }
+
+   @Override
+   public Integer updateInvoiceNote(Long invoiceId, String note) {
+      var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      
+      invoiceJpaRepository.updateNoteByInvoiceId(note, invoiceId);
+      return 1;
+   }
+
+   @Override
+   public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status) {
+      var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      
+      invoiceJpaRepository.updateStatusByInvoiceId(status, invoiceId);
+      return 1;
+   }
+
+	@Override
+	public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
+		var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher), invoiceId);
+      return 1;
+	}
 }

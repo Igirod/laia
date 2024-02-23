@@ -32,12 +32,10 @@ public class Invoice {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
+   @Column(name = "user_id")
+   private Long userId;
    @Column(name = "mer_id")
    private Long merchantId;
-   @Column(name = "mer_email")
-   private String merchantEmail;
-   @Column(name = "user_email")
-   private String userEmail;
    @Column(name = "payment_id")
    private Long paymentId;
    @Column(name = "code")
@@ -73,8 +71,7 @@ public class Invoice {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
       this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
-      this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
+      this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
@@ -100,9 +97,8 @@ public class Invoice {
    public Invoice(Long invoiceId, InvoiceInputDTO invoiceDTO) throws ParseException {
       super();
       this.id = invoiceId;
+      this.userId = invoiceDTO.getUserId() != null ? invoiceDTO.getUserId() : this.userId;
       this.merchantId = invoiceDTO.getMerchantId() != null ? invoiceDTO.getMerchantId() : this.merchantId;
-      this.merchantEmail = invoiceDTO.getMerchantEmail() != null ? invoiceDTO.getMerchantEmail() : this.merchantEmail;
-      this.userEmail = invoiceDTO.getUserEmail() != null ? invoiceDTO.getUserEmail() : this.userEmail;
       this.paymentId = invoiceDTO.getPaymentId() != null ? invoiceDTO.getPaymentId() : this.paymentId;
       this.code = invoiceDTO.getCode() != null ? invoiceDTO.getCode() : this.code;
       this.shoppingCartId = invoiceDTO.getShoppingCartId() != null ? invoiceDTO.getShoppingCartId()
@@ -122,25 +118,15 @@ public class Invoice {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param invoice
+    * @param invoiceId
+    * @param merchantId
     * @throws ParseException
     */
-   public Invoice(InvoiceInputDTO invoice) throws ParseException {
+   public Invoice(Long userId, Long merchantId) throws ParseException {
       super();
-      this.id = (invoice.getId() == null) ? null : invoice.getId();
-      this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
-      this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
-      this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
-      this.code = (invoice.getCode() == null) ? null
-            : invoice.getCode();
-      this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();
-      this.reservation = (invoice.getReservation() == null) ? null
-            : DateUtils.convertStringToDate(invoice.getReservation());
-      this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
-      this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
-      this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
-      this.note = (invoice.getNote() == null) ? null : invoice.getNote();
+      this.id = null;
+      this.userId = (userId == null) ? null : userId;
+      this.merchantId = (merchantId == null) ? null : merchantId;
+      this.status = InvoiceStatus.INITIAL;
    }
 }
