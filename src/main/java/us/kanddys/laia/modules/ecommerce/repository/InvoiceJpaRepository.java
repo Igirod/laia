@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,20 +20,34 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
 
    public Invoice findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status);
 
+   @Modifying
    @Query(value = "UPDATE invoices SET message = :message WHERE id = :invoiceId", nativeQuery = true)
    void updateMessageByInvoiceId(@Param("message") Integer message, @Param("invoiceId") Long invoiceId);
 
+   @Modifying
    @Query(value = "UPDATE invoices SET payment_id = :paymentId WHERE id = :invoiceId", nativeQuery = true)
    public Integer updatePaymentByInvoiceId(Long paymentId, Long invoiceId);
 
+   @Modifying
    @Query(value = "UPDATE invoices SET note = :note WHERE id = :invoiceId", nativeQuery = true)
    public void updateNoteByInvoiceId(String note, Long invoiceId);
 
+   @Modifying
    @Query(value = "UPDATE invoices SET status = :status WHERE id = :invoiceId", nativeQuery = true)
-   public void updateStatusByInvoiceId(InvoiceStatus status, Long invoiceId);
+   public void updateStatusByInvoiceId(String status, Long invoiceId);
 
+   @Modifying
    @Query(value = "UPDATE invoices SET voucher = :voucher WHERE id = :invoiceId", nativeQuery = true)
    public void updateVoucherByInvoiceId(String voucher, Long invoiceId);
 
+   @Modifying
+   @Query(value = "UPDATE invoices SET total = :total WHERE id = :invoiceId", nativeQuery = true)
+   public void updateTotal(Long invoiceId, Double total);
 
+   @Query(value = "SELECT total FROM invoices WHERE id = :invoiceId", nativeQuery = true)
+   public Double findTotalById(Long invoiceId);
+
+   @Modifying
+   @Query(value = "UPDATE invoices SET address_title = :title, address_direction = :direction WHERE id = :invoiceId", nativeQuery = true)
+   public void updateAddressByInvoiceId(String title, String direction, Long invoiceId);
 }

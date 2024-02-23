@@ -27,8 +27,6 @@ public class InvoiceInputDTO {
    @JsonProperty
    private String code;
    @JsonProperty
-   private Long shoppingCartId;
-   @JsonProperty
    private String reservation;
    @JsonProperty
    private Float total;
@@ -40,6 +38,10 @@ public class InvoiceInputDTO {
    private String voucher;
    @JsonProperty
    private String note;
+   @JsonProperty
+   private String addressTitle;
+   @JsonProperty
+   private String addressDirection;
 
    public InvoiceInputDTO() {}
 }

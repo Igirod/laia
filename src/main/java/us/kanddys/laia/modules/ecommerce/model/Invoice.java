@@ -54,6 +54,10 @@ public class Invoice {
    private String voucher;
    @Column(name = "note")
    private String note;
+   @Column(name = "address_title")
+   private String addressTitle;
+   @Column(name = "address_direction")
+   private String addressDirection;
    @Transient
    private Integer count;
 
@@ -84,6 +88,8 @@ public class Invoice {
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
       this.count = (count == null) ? null : count;
+      this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
+      this.addressTitle = (invoice.getAddressTitle() == null) ? null : invoice.getAddressTitle();
    }
 
    /**
@@ -111,6 +117,9 @@ public class Invoice {
       this.voucher = invoiceDTO.getVoucher() != null ? invoiceDTO.getVoucher() : this.voucher;
       this.note = invoiceDTO.getNote() != null ? invoiceDTO.getNote() : this.note;
       this.count = (count == null) ? null : count;
+      this.addressDirection = invoiceDTO.getAddressDirection() != null ? invoiceDTO.getAddressDirection()
+            : this.addressDirection;
+      this.addressTitle = invoiceDTO.getAddressTitle() != null ? invoiceDTO.getAddressTitle() : this.addressTitle;
    }
 
    /**

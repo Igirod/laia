@@ -28,8 +28,8 @@ type Query {
 type Mutation {
    cInvoice(merchantId: Int!): InvoiceDTO
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
-   aProductI(shoppingCartId: Int!, productId: Int!) : Int
-   uProductI(shoppingCartId: Int!, productId: Int!, quantity: Int!) : Int
+   aProductI(invoiceId: Int!, productId: Int!) : Int
+   uProductI(invoiceId: Int!, productId: Int!, quantity: Int!) : Int
    uInvoiceM(invoiceId: Int!, message: Int!) : Int
    uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
@@ -38,4 +38,5 @@ type Mutation {
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
+   uInvoiceA(invoiceId: Int!, title: String!, direction: String!) : Int
 }

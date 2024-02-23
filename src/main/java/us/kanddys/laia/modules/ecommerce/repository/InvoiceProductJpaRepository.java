@@ -13,5 +13,4 @@ public interface InvoiceProductJpaRepository extends JpaRepository<InvoiceProduc
 
    @Query(value = "SELECT COUNT(*) FROM invoices_products invp WHERE invp.invoice_id = :invoiceId", nativeQuery = true)
    public Integer countByInvoiceId(@Param("invoiceId") Long invoiceId);
-
 }

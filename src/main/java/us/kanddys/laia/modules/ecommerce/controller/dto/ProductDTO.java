@@ -28,7 +28,7 @@ public class ProductDTO {
    @JsonProperty
    private String title;
    @JsonProperty
-   private Double price;
+   private Float price;
    @JsonProperty
    private Integer stock;
    @JsonProperty

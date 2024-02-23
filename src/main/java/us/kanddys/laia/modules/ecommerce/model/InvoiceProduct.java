@@ -38,11 +38,12 @@ public class InvoiceProduct {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param InvoiceProductInputDTO
+    * @param invoiceId
+    * @param productId
     */
-   public InvoiceProduct(Long shoppingCartId, Long invoiceId) {
+   public InvoiceProduct(Long productId, Long invoiceId) {
       super();
-      this.id = new InvoiceProductId(shoppingCartId, invoiceId);
+      this.id = new InvoiceProductId(productId, invoiceId);
    }
 
    /**

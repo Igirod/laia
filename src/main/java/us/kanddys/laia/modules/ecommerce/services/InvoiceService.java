@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
-
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
- * Esta interface contiene las obligaciones que debe implementar la 
+ * Esta interface contiene las obligaciones que debe implementar la
  * clase InvoiceServiceImpl.
  * 
  * @author Igirod0
@@ -75,7 +74,7 @@ public interface InvoiceService {
     * @version 1.0.0
     * @param invoiceId
     * @param message
-    * @return 
+    * @return
     */
    public Integer updateInvoiceMessage(Long invoiceId, Integer message);
 
@@ -123,4 +122,16 @@ public interface InvoiceService {
     * @return String
     */
    public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId);
+
+   /**
+    * Este método se encarga de actualizar la dirección de una factura.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param invoiceId
+    * @param title
+    * @param direction
+    * @return Integer
+    */
+   public Integer updateInvoiceAddress(Long invoiceId, String title, String direction);
 }

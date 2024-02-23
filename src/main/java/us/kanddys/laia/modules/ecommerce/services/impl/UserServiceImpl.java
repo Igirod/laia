@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.UserService;
 
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
          return 0;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateUser(Long userId, Optional<String> email, Optional<String> password, Optional<String> phone,
          Optional<String> lastName, Optional<String> name) {

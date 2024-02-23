@@ -9,6 +9,6 @@ type InvoiceProductDTO {
 
 input InvoiceProductInputDTO {
    productId: Int!
-   shoppingCartId: Int!
+   invoiceId: Int!
    quantity: Int
 }

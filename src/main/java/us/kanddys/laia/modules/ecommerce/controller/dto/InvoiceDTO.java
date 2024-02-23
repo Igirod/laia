@@ -13,7 +13,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * Esta clase representa un data transfer object (DTO) para la factura.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Data
 @AllArgsConstructor
@@ -44,6 +44,10 @@ public class InvoiceDTO {
    private String note;
    @JsonProperty
    private Integer count;
+   @JsonProperty
+   private String addressTitle;
+   @JsonProperty
+   private String addressDirection;
 
    public InvoiceDTO() {
    }
@@ -52,7 +56,7 @@ public class InvoiceDTO {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoice
     * @throws IOException
     */
@@ -70,5 +74,7 @@ public class InvoiceDTO {
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
       this.count = (invoice.getCount() == null) ? null : invoice.getCount();
+      this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
+      this.addressTitle = (invoice.getAddressTitle() == null) ? null : invoice.getAddressTitle();
    }
 }
