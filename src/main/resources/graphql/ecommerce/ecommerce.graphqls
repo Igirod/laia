@@ -22,6 +22,7 @@ type Query {
    cUserE(userId: Int!, email: String!, password: String): Int
    lUser(email: String!, password: String!): Int
    gIProducts(invoiceId: Int!, page: Int!): [InvoiceProductDTO]
+   gAddressUId(userId: Int!, page: Int!): [AddressDTO]
 }
 
 type Mutation {
