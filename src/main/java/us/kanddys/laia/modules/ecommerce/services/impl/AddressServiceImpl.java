@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.AddressDTO;
 import us.kanddys.laia.modules.ecommerce.exception.AddressNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
@@ -36,11 +37,13 @@ public class AddressServiceImpl implements AddressService {
             .collect(Collectors.toList());
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer deleteAddress(Long addressId) {
       return addressJpaRepository.deleteAddress(addressId);
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateAddress(Long id, Optional<Long> userId, Optional<String> title, Optional<String> lng,
          Optional<String> lat, Optional<String> direction) {

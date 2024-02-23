@@ -19,7 +19,7 @@ public class InvoiceCriteriaRepository {
    @Autowired
    private EntityManager entityManager;
 
-   public List<Invoice> findinvoicesPaginated(Integer page, Long merchantId, Optional<String> userEmail,
+   public List<Invoice> findInvoicesPaginated(Integer page, Long merchantId, Optional<String> userEmail,
          Optional<InvoiceStatus> status) {
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Invoice> cQueryinvoice = cBuilder.createQuery(Invoice.class);

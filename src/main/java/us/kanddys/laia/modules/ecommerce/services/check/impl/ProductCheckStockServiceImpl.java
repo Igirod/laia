@@ -3,6 +3,7 @@ package us.kanddys.laia.modules.ecommerce.services.check.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.exception.ProductCheckStockLimitedException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
@@ -21,9 +22,9 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
    @Autowired
    private ProductJpaRepository productJpaRepository;
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public boolean checkStock(Long productId, Integer quantity) {
-      var stock = productJpaRepository.findStockByProductId(productId);
+   public boolean checkStock(Long productId, Integer stock, Integer quantity) {
       switch (stock) {
          case 0:
             desactivateProduct(productId);
@@ -32,8 +33,9 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
             return true;
          default:
             if (stock >= quantity) {
-               updateStockByProductQuantity(productId, quantity, quantity);
+               updateStockByProductQuantity(productId, stock, quantity);
             }
+            else throw new ProductCheckStockLimitedException(ExceptionMessage.PRODUCT_CHECK_STOCK_LIMITED);
             return true;
       }
    }
@@ -46,10 +48,12 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
     * @version 1.0.0
     * @param productId
     */
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    private void desactivateProduct(Long productId) {
       productJpaRepository.updateStatusByProductId(productId, 0);
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public void updateStockByProductQuantity(Long productId, Integer stock, Integer quantity) {
       if (stock >= quantity) {
@@ -59,8 +63,7 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
             desactivateProduct(productId);
          } else
             productJpaRepository.updateStockByProductId(productId, resultStock);
-      }
-      else {
+      } else {
          throw new ProductCheckStockLimitedException(ExceptionMessage.PRODUCT_CHECK_STOCK_LIMITED);
       }
    }

@@ -4,7 +4,6 @@ type InvoiceDTO {
    userId: Int!
    paymentId: Int
    code: String
-   shoppingCartId: Int
    reservation: String
    total: Float
    message: Boolean
@@ -12,6 +11,8 @@ type InvoiceDTO {
    voucher: String
    note: String
    count: Int
+   addressTitle: String
+   addressDirection: String
 }
 
 input InvoiceInputDTO {
@@ -20,13 +21,14 @@ input InvoiceInputDTO {
    userId : Int!
    paymentId: Int
    code: String
-   shoppingCartId: Int!
    reservation: String
    total: Float
    message: Boolean
    status: InvoiceStatus
    voucher: String
    note: String
+   addressTitle: String
+   addressDirection: String
 }
 
 enum InvoiceStatus {

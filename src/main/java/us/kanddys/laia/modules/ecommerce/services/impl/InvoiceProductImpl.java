@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
@@ -16,6 +17,7 @@ import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
+import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 
 /**
  * Esta clase implementa las obligaciones de la interface
@@ -36,6 +38,9 @@ public class InvoiceProductImpl implements InvoiceProductService {
    @Autowired
    private InvoiceProductCriteriaRepository invoiceProductCriteriaQueryRepository;
 
+   @Autowired
+   private InvoiceCheckService invoiceCheckService;
+
    @Override
    public Integer addInvoiceProduct(@Argument Long invoiceId, @Argument Long productId) {
       if (invoiceJpaRepository.existByInvoiceId(invoiceId) == null)
@@ -44,19 +49,29 @@ public class InvoiceProductImpl implements InvoiceProductService {
       return 1;
    }
 
+   @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceProduct(Long invoiceId, Long productId, Integer quantity) {
-      var invoiceProduct = invoiceProductJpaRepository.findById(new InvoiceProductId(invoiceId, productId));
-      if (invoiceProduct.isEmpty())
-         throw new InvoiceProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
-      invoiceProduct.get().setQuantity(quantity);
-      invoiceProductJpaRepository.save(invoiceProduct.get());
+      if (quantity == 0) {
+         invoiceProductJpaRepository.deleteById(new InvoiceProductId(invoiceId, productId));
+      } else {
+         var invoiceTotal = invoiceJpaRepository.findTotalById(invoiceId);
+         var invoiceProduct = invoiceProductJpaRepository.findById(new InvoiceProductId(invoiceId, productId));
+         if (invoiceProduct.isEmpty())
+            throw new InvoiceProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+         invoiceProduct.get().setQuantity(quantity);
+         invoiceProductJpaRepository.save(invoiceProduct.get());
+         invoiceCheckService.updateTotal(invoiceId,
+               (invoiceTotal == 0 ? 0 : invoiceTotal)
+                     + invoiceProduct.get().getQuantity() * invoiceProduct.get().getProduct().getPrice());
+      }
       return 1;
    }
 
    @Override
    public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page) {
-      return invoiceProductCriteriaQueryRepository.findInvoiceProductsByInvoiceId(invoiceId, page).stream().map(InvoiceProductDTO::new)
+      return invoiceProductCriteriaQueryRepository.findInvoiceProductsByInvoiceId(invoiceId, page).stream()
+            .map(InvoiceProductDTO::new)
             .toList();
    }
 }

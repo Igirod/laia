@@ -22,12 +22,13 @@ import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
-import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
+import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
 /**
@@ -46,7 +47,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    private InvoiceJpaRepository invoiceJpaRepository;
 
    @Autowired
-   private InvoiceProductService invoiceProductService;
+   private ProductCheckStockService productCheckStockService;
 
    @Autowired
    private InvoiceCodeService invoiceCodeService;
@@ -63,10 +64,13 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Autowired
    private InvoiceProductJpaRepository invoiceProductJpaRepository;
 
+   @Autowired
+   private InvoiceProductCriteriaRepository invoiceProductCriteriaRepository;
+
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
          Optional<String> userEmail, Optional<InvoiceStatus> status) {
-      return invoiceCriteriaRepository.findinvoicesPaginated(page, merchantId, userEmail, status).stream().map(t -> {
+      return invoiceCriteriaRepository.findInvoicesPaginated(page, merchantId, userEmail, status).stream().map(t -> {
          try {
             return new InvoiceDTO(t);
          } catch (IOException e) {
@@ -92,11 +96,12 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public InvoiceDTO updateInvoice(InvoiceInputDTO invoiceInputDTO) {
-      if (invoiceCheckService.checkInvoiceData(invoiceInputDTO.getMerchantId(), invoiceInputDTO.getShoppingCartId())) {
+      if (invoiceCheckService.existsMerchantId(invoiceInputDTO.getMerchantId())) {
          var updateInvoice = invoiceJpaRepository.findById(invoiceInputDTO.getId());
          if (updateInvoice.isPresent()) {
             try {
-               updateInvoice = Optional.of(new Invoice(invoiceInputDTO.getId(), invoiceInputDTO, invoiceProductJpaRepository.countByInvoiceId(invoiceInputDTO.getId())));
+               updateInvoice = Optional.of(new Invoice(invoiceInputDTO.getId(), invoiceInputDTO,
+                     invoiceProductJpaRepository.countByInvoiceId(invoiceInputDTO.getId())));
                return Optional.of(new InvoiceDTO(invoiceJpaRepository.save(updateInvoice.get()))).get();
             } catch (ParseException e) {
                throw new RuntimeException(e);
@@ -114,8 +119,6 @@ public class InvoiceServiceImpl implements InvoiceService {
    public InvoiceDTO findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status) {
       var invoice = invoiceJpaRepository.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
       invoice.setCount(invoiceProductJpaRepository.countByInvoiceId(invoice.getId() == null ? 0 : invoice.getId()));
-      if (invoice == null)
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       try {
          return new InvoiceDTO(invoice);
       } catch (IOException e) {
@@ -123,6 +126,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       }
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceMessage(Long invoiceId, Integer message) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
@@ -131,19 +135,23 @@ public class InvoiceServiceImpl implements InvoiceService {
       return 1;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoicePayment(Long invoiceId, Long paymentId) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-
       invoiceJpaRepository.updatePaymentByInvoiceId(paymentId, invoiceId);
-      invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING, invoiceId);
-
-      // TODO: Reservar fecha de entrega
+      invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING.toString(), invoiceId);
+      var invoiceProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId);
+      invoiceProducts.stream().map(t -> {
+         productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
+         return t;
+      }).collect(Collectors.toList());
       return 1;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceNote(Long invoiceId, String note) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
@@ -154,16 +162,18 @@ public class InvoiceServiceImpl implements InvoiceService {
       return 1;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
 
-      invoiceJpaRepository.updateStatusByInvoiceId(status, invoiceId);
+      invoiceJpaRepository.updateStatusByInvoiceId(status.toString(), invoiceId);
       return 1;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
@@ -172,4 +182,14 @@ public class InvoiceServiceImpl implements InvoiceService {
       invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher), invoiceId);
       return 1;
    }
+
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
+	@Override
+	public Integer updateInvoiceAddress(Long invoiceId, String title, String direction) {
+		var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      invoiceJpaRepository.updateAddressByInvoiceId(title, direction, invoiceId);
+      return 1;
+	}
 }

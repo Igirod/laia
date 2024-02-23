@@ -8,7 +8,6 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
@@ -63,4 +62,9 @@ public class InvoiceController {
    public Integer updateInvoiceStatus(@Argument Long invoiceId, @Argument InvoiceStatus status) {
       return invoiceService.updateInvoiceStatus(invoiceId, status);
    }
+
+   @MutationMapping("uInvoiceA")
+   public Integer updateInvoiceAddress(@Argument Long invoiceId, @Argument String title, @Argument String direction) {
+      return invoiceService.updateInvoiceAddress(invoiceId, title, direction);
+   }   
 }

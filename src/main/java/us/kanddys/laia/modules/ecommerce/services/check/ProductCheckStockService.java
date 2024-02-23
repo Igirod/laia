@@ -13,10 +13,11 @@ public interface ProductCheckStockService {
     * Este método verifica si hay suficiente stock para el producto.
     *
     * @param productId
+    * @param stock
     * @param quantity
     * @return boolean
     */
-   public boolean checkStock(Long productId, Integer quantity);
+   public boolean checkStock(Long productId, Integer stock, Integer quantity);
 
    /**
     * Este método verifica actualiza el stock del producto en base a la

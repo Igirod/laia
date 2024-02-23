@@ -18,7 +18,7 @@ public class InvoiceProductController {
    private InvoiceProductService invoiceProductService;
 
    @MutationMapping("aProductI")
-   public Integer addInvoiceProduct(Long invoiceId, Long productId) {
+   public Integer addInvoiceProduct(@Argument Long invoiceId, @Argument Long productId) {
       return invoiceProductService.addInvoiceProduct(invoiceId, productId);
    }
 

@@ -29,4 +29,14 @@ public class InvoiceProductCriteriaRepository {
       return entityManager.createQuery(cQueryInvoiceProduct).setMaxResults(10)
             .setFirstResult((page - 1) * 10).getResultList();
    }
+
+   public List<InvoiceProduct> findInvoiceProductsByInvoiceId(Long InvoiceProductId) {
+      List<Predicate> predicates = new ArrayList<>();
+      CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+      CriteriaQuery<InvoiceProduct> cQueryInvoiceProduct = cBuilder.createQuery(InvoiceProduct.class);
+      Root<InvoiceProduct> rInvoiceProduct = cQueryInvoiceProduct.from(InvoiceProduct.class);
+      predicates.add(cBuilder.equal(rInvoiceProduct.get("id").get("invoiceId"), InvoiceProductId));
+      cQueryInvoiceProduct.where(predicates.toArray(new Predicate[0]));
+      return entityManager.createQuery(cQueryInvoiceProduct).getResultList();
+   }
 }
