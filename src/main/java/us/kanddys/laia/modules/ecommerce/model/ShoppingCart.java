@@ -30,8 +30,8 @@ public class ShoppingCart {
    private Long id;
    @Column(name = "merchant_id")
    private Long merchantId;
-   @Column(name = "user_id")
-   private Long userId;
+   @Column(name = "invoice_id")
+   private Long invoiceId;
    @Column(name = "createAt")
    private Date createAt;
    @Transient

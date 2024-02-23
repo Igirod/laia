@@ -19,7 +19,7 @@ type Query {
    invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
-   gCart(merchantId: Int!, userId: Int!): ShoppingCartDTO
+   gCart(merchantId: Int!, invoiceId: Int!): ShoppingCartDTO
 }
 
 type Mutation {

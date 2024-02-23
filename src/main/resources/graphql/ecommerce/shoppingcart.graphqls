@@ -1,7 +1,7 @@
 type ShoppingCartDTO {
    id: Int
    merchantId: Int!
-   userId: Int!
+   invoiceId: Int!
    count: Int
    createAt: String
 }
