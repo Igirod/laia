@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.repository;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,10 +11,13 @@ import us.kanddys.laia.modules.ecommerce.model.Merchant;
 
 @Repository
 public interface MerchantJpaRepository extends JpaRepository<Merchant, Long> {
-   
+
    public Optional<Merchant> findBySlug(String slug);
 
    @Query(value = "SELECT id FROM merchants WHERE id = :merchantId", nativeQuery = true)
    public Long existByMerchantId(Long merchantId);
+
+   @Query(value = "SELECT id, title FROM merchants WHERE slug = :slug", nativeQuery = true)
+   public Map<String, Object> findMerchantIdAndTitle(String slug);
 
 }

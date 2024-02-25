@@ -7,10 +7,34 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
  * ShopServiceImpl.
+ * 
+ * @author Igirod0
+ * @version 1.0.0
  */
 public interface CombinedService {
 
-	CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId);
+   /**
+    * Este metodo tiene la obligación de buscar una tienda y sus productos. Crea
+    * una factura si el usuario esta presente.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param slug
+    * @param userId
+    * @return CombinedShopDTO
+    */
+	public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId);
 
-   CombinedProductDTO findCombinedProduct(Long productId, String slug, Optional<Long> userId);
+   /**
+    * Este metodo tiene la obligación de buscar un producto y sus imagenes. Crea
+    * una factura si el usuario esta presente.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param slug
+    * @param userId
+    * @return CombinedProductDTO
+    */
+   public CombinedProductDTO findCombinedProduct(Long productId, String slug, Optional<Long> userId);
 }

@@ -36,6 +36,8 @@ public class Address {
    @Column(name = "direction")
    private String direction;
 
+   public Address() {}
+
    /**
     * Constructor personalizado utilizado en diferentes servicios.
     *

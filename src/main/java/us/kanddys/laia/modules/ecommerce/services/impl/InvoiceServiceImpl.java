@@ -35,7 +35,7 @@ import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService
  * Esta clase implementa las obligaciones de la interface InvoiceService.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -129,8 +129,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceMessage(Long invoiceId, Integer message) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false)
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateMessageByInvoiceId(message, invoiceId);
       return 1;
    }
@@ -138,9 +137,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoicePayment(Long invoiceId, Long paymentId) {
-      var invoice = invoiceJpaRepository.findById(invoiceId);
-      if (invoice.isEmpty())
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updatePaymentByInvoiceId(paymentId, invoiceId);
       invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING.toString(), invoiceId);
       var invoiceProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId);
@@ -154,10 +151,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceNote(Long invoiceId, String note) {
-      var invoice = invoiceJpaRepository.findById(invoiceId);
-      if (invoice.isEmpty())
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateNoteByInvoiceId(note, invoiceId);
       return 1;
    }
@@ -165,10 +159,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status) {
-      var invoice = invoiceJpaRepository.findById(invoiceId);
-      if (invoice.isEmpty())
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateStatusByInvoiceId(status.toString(), invoiceId);
       return 1;
    }
@@ -176,20 +167,16 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
-      var invoice = invoiceJpaRepository.findById(invoiceId);
-      if (invoice.isEmpty())
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher), invoiceId);
       return 1;
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
-	@Override
-	public Integer updateInvoiceAddress(Long invoiceId, String title, String direction) {
-		var invoice = invoiceJpaRepository.findById(invoiceId);
-      if (invoice.isEmpty())
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+   @Override
+   public Integer updateInvoiceAddress(Long invoiceId, String title, String direction) {
+      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateAddressByInvoiceId(title, direction, invoiceId);
       return 1;
-	}
+   }
 }
