@@ -14,7 +14,7 @@ import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService
  * ProductCheckStockService.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Service
 public class ProductCheckStockServiceImpl implements ProductCheckStockService {
@@ -32,10 +32,8 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
          case -1:
             return true;
          default:
-            if (stock >= quantity) {
+            if (stock >= quantity)
                updateStockByProductQuantity(productId, stock, quantity);
-            }
-            else throw new ProductCheckStockLimitedException(ExceptionMessage.PRODUCT_CHECK_STOCK_LIMITED);
             return true;
       }
    }
@@ -48,12 +46,10 @@ public class ProductCheckStockServiceImpl implements ProductCheckStockService {
     * @version 1.0.0
     * @param productId
     */
-   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    private void desactivateProduct(Long productId) {
       productJpaRepository.updateStatusByProductId(productId, 0);
    }
 
-   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public void updateStockByProductQuantity(Long productId, Integer stock, Integer quantity) {
       if (stock >= quantity) {
