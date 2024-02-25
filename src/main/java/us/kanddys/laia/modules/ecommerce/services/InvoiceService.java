@@ -13,7 +13,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * clase InvoiceServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface InvoiceService {
 
@@ -60,12 +60,10 @@ public interface InvoiceService {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param userId
-    * @param merchantId
-    * @param status
+    * @param invoiceId
     * @return InvoiceDTO
     */
-   public InvoiceDTO findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status);
+   public InvoiceDTO findInvoiceById(Long invoiceId);
 
    /**
     * Este método se encarga de actualizar el mensaje de una factura.
