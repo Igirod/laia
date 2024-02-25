@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -28,7 +29,7 @@ public class InvoiceProductController {
    }
 
    @QueryMapping("gIProducts")
-   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(@Argument Long invoiceId, @Argument Integer page) {
-      return invoiceProductService.findInvoiceProductsByInvoiceId(invoiceId, page);
+   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(@Argument Long invoiceId, @Argument Integer page, @Argument Optional<Integer> limit) {
+      return invoiceProductService.findInvoiceProductsByInvoiceId(invoiceId, page, limit);
    }
 }

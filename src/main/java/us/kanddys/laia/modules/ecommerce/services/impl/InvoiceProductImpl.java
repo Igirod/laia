@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -62,15 +63,15 @@ public class InvoiceProductImpl implements InvoiceProductService {
          invoiceProduct.get().setQuantity(quantity);
          invoiceProductJpaRepository.save(invoiceProduct.get());
          invoiceCheckService.updateTotal(invoiceId,
-               (invoiceTotal == 0 ? 0 : invoiceTotal)
+               (invoiceTotal == null ? 0 : invoiceTotal)
                      + invoiceProduct.get().getQuantity() * invoiceProduct.get().getProduct().getPrice());
       }
       return 1;
    }
 
    @Override
-   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page) {
-      return invoiceProductCriteriaQueryRepository.findInvoiceProductsByInvoiceId(invoiceId, page).stream()
+   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page, Optional<Integer> limit) {
+      return invoiceProductCriteriaQueryRepository.findInvoiceProductsByInvoiceId(invoiceId, page, limit).stream()
             .map(InvoiceProductDTO::new)
             .toList();
    }
