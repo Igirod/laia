@@ -38,9 +38,8 @@ public class InvoiceController {
    }
 
    @QueryMapping("gInvoice")
-   public InvoiceDTO getInvoiceByUserIdAndMerchantIdAndStatus(@Argument Long userId, @Argument Long merchantId,
-         @Argument InvoiceStatus status) {
-      return invoiceService.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
+   public InvoiceDTO getInvoice(@Argument Long invoiceId) {
+      return invoiceService.findInvoiceById(invoiceId);
    }
 
    @MutationMapping("uInvoiceM")
@@ -66,5 +65,5 @@ public class InvoiceController {
    @MutationMapping("uInvoiceA")
    public Integer updateInvoiceAddress(@Argument Long invoiceId, @Argument String title, @Argument String direction) {
       return invoiceService.updateInvoiceAddress(invoiceId, title, direction);
-   }   
+   }
 }

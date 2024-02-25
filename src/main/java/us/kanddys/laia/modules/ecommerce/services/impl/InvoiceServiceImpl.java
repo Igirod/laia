@@ -116,11 +116,14 @@ public class InvoiceServiceImpl implements InvoiceService {
    }
 
    @Override
-   public InvoiceDTO findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status) {
-      var invoice = invoiceJpaRepository.findInvoiceByUserIdAndMerchantIdAndStatus(userId, merchantId, status);
-      invoice.setCount(invoiceProductJpaRepository.countByInvoiceId(invoice.getId() == null ? 0 : invoice.getId()));
+   public InvoiceDTO findInvoiceById(Long invoiceId) {
+      var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       try {
-         return new InvoiceDTO(invoice);
+         invoice.get().setCount(
+               invoiceProductJpaRepository.countByInvoiceId(invoice.get() == null ? 0 : invoice.get().getId()));
+         return new InvoiceDTO(invoice.get());
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }
@@ -129,7 +132,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceMessage(Long invoiceId, Integer message) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateMessageByInvoiceId(message, invoiceId);
       return 1;
    }
@@ -137,7 +141,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoicePayment(Long invoiceId, Long paymentId) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updatePaymentByInvoiceId(paymentId, invoiceId);
       invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING.toString(), invoiceId);
       var invoiceProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId);
@@ -151,7 +156,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceNote(Long invoiceId, String note) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateNoteByInvoiceId(note, invoiceId);
       return 1;
    }
@@ -159,7 +165,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateStatusByInvoiceId(status.toString(), invoiceId);
       return 1;
    }
@@ -167,7 +174,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher), invoiceId);
       return 1;
    }
@@ -175,7 +183,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceAddress(Long invoiceId, String title, String direction) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false) throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+      if (invoiceJpaRepository.existsById(invoiceId) == false)
+         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateAddressByInvoiceId(title, direction, invoiceId);
       return 1;
    }
