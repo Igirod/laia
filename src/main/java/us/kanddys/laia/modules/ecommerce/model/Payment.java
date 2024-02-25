@@ -34,6 +34,10 @@ public class Payment {
    private String title;
    @Column(name = "cvu")
    private String cvu;
+   @Column(name = "status")
+   private Integer status;
+   @Column(name = "mer_id")
+   private Long merchantId;
 
    public Payment() {
    }

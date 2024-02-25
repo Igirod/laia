@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class PaymentServiceImpl implements PaymentService {
    private PaymentCriteriaRepository paymentCriteriaRepository;
 
    @Override
-   public List<PaymentDTO> findPaymentsPaginated(Integer page) {
-      return paymentCriteriaRepository.findPaymentsPaginated(page).stream().map(PaymentDTO::new)
+   public List<PaymentDTO> findPaymentsPaginated(Integer page, Optional<Long> merchantId, Optional<Integer> status) {
+      return paymentCriteriaRepository.findPaymentsPaginated(page, merchantId, status).stream().map(PaymentDTO::new)
             .collect(Collectors.toList());
    }
 }
