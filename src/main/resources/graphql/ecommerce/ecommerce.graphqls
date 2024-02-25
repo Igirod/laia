@@ -13,7 +13,7 @@ type Query {
    products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
    productDId(productId: Int!): [ProductDetailDTO]
    merchantId(merchantId: Int!): MerchantDTO
-   payments(page: Int!): [PaymentDTO]
+   payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
    invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
