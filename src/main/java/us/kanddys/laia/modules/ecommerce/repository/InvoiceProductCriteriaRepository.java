@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,15 +20,16 @@ public class InvoiceProductCriteriaRepository {
    @Autowired
    private EntityManager entityManager;
 
-   public List<InvoiceProduct> findInvoiceProductsByInvoiceId(Long InvoiceProductId, Integer page) {
+   public List<InvoiceProduct> findInvoiceProductsByInvoiceId(Long InvoiceProductId, Integer page,
+         Optional<Integer> limit) {
       List<Predicate> predicates = new ArrayList<>();
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<InvoiceProduct> cQueryInvoiceProduct = cBuilder.createQuery(InvoiceProduct.class);
       Root<InvoiceProduct> rInvoiceProduct = cQueryInvoiceProduct.from(InvoiceProduct.class);
       predicates.add(cBuilder.equal(rInvoiceProduct.get("id").get("invoiceId"), InvoiceProductId));
       cQueryInvoiceProduct.where(predicates.toArray(new Predicate[0]));
-      return entityManager.createQuery(cQueryInvoiceProduct).setMaxResults(10)
-            .setFirstResult((page - 1) * 10).getResultList();
+      return entityManager.createQuery(cQueryInvoiceProduct).setMaxResults(limit.isPresent() ? limit.get() : 10)
+            .setFirstResult((page - 1) * (limit.isPresent() ? limit.get() : 10)).getResultList();
    }
 
    public List<InvoiceProduct> findInvoiceProductsByInvoiceId(Long InvoiceProductId) {

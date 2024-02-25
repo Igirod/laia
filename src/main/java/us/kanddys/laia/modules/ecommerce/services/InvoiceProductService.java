@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
 
@@ -44,7 +45,8 @@ public interface InvoiceProductService {
     * @version 1.0.0
     * @param invoiceId
     * @param page
+    * @param limit
     * @return List<InvoiceProductDTO>
     */
-   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page);
+   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page, Optional<Integer> limit);
 }
