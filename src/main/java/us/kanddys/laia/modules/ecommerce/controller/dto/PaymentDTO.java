@@ -36,7 +36,7 @@ public class PaymentDTO {
    public PaymentDTO(Payment payment) {
       super();
       this.id = (payment.getId() == null ? 0 : payment.getId());
-      this.typePayment = (payment.getTypePayment() == null ? null : payment.getTypePayment());
+      this.typePayment = (payment.getType() == null ? null : payment.getType());
       this.title = (payment.getTitle() == null ? null : payment.getTitle());
       this.cvu = (payment.getCvu() == null ? null : payment.getCvu());
       this.merchantId = (payment.getMerchantId() == null ? 0 : payment.getMerchantId());

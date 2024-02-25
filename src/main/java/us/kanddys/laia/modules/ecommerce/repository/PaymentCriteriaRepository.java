@@ -22,7 +22,7 @@ public class PaymentCriteriaRepository {
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Payment> cQueryPayment = cBuilder.createQuery(Payment.class);
       Root<Payment> rPayment = cQueryPayment.from(Payment.class);
-      if (merchantId.isPresent()) cQueryPayment.where(cBuilder.equal(rPayment.get("mer_id"), merchantId.get()));
+      if (merchantId.isPresent()) cQueryPayment.where(cBuilder.equal(rPayment.get("merchantId"), merchantId.get()));
       if (status.isPresent()) cQueryPayment.where(cBuilder.equal(rPayment.get("status"), status.get()));
       cQueryPayment.select(rPayment);
       return entityManager.createQuery(cQueryPayment).setMaxResults(10)
