@@ -28,7 +28,7 @@ import us.kanddys.laia.modules.ecommerce.services.ProductService;
  * Esta clase implementa las obligaciones de la interface CombinedService.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Service
 public class CombinedServiceImpl implements CombinedService {
@@ -82,7 +82,9 @@ public class CombinedServiceImpl implements CombinedService {
       var product = productService.getProductById(productId);
       var invoice = invoiceIfUserPresent(userId, merchantId);
       return new CombinedProductDTO(merchantId, merchantTitle, product.getId(), product.getTitle(), product.getPrice(),
-            images, details, product.getStock(), invoice.getId(), invoiceProductJpaRepository.countByInvoiceId(invoice.getId()),
+            product.getFrontPage(),
+            images, details, product.getStock(), invoice.getId(),
+            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()),
             invoice.getUserId());
    }
 
