@@ -21,6 +21,8 @@ public class CombinedProductDTO {
    @JsonProperty
    private Double productPrice;
    @JsonProperty
+   private String productFrontPage;
+   @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty
    private List<ProductDetailDTO> details;

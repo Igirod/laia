@@ -16,6 +16,7 @@ type CombinedProductDTO {
    merchantTitle: String
    productId: Int
    productTitle: String
+   productFrontPage: String
    productPrice: Float
    images: [ImageProductDTO]
    details: [ProductDetailDTO]
