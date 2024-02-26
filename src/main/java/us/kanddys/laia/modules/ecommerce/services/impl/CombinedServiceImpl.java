@@ -6,17 +6,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
+import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 
 /**
@@ -35,6 +40,12 @@ public class CombinedServiceImpl implements CombinedService {
    private InvoiceJpaRepository invoiceJpaRepository;
 
    @Autowired
+   private UserJpaRepository userJpaRepository;
+
+   @Autowired
+   private ProductJpaRepository productJpaRepository;
+
+   @Autowired
    private ProductService productService;
 
    @Autowired
@@ -42,6 +53,9 @@ public class CombinedServiceImpl implements CombinedService {
 
    @Autowired
    private InvoiceProductJpaRepository invoiceProductJpaRepository;
+
+   @Autowired
+   private ProductDetailService productDetailService;
 
    @Override
    public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId) {
@@ -51,9 +65,9 @@ public class CombinedServiceImpl implements CombinedService {
       Long merchantId = merchant.get("id") == null ? null : Long.valueOf(merchant.get("id").toString());
       String merchantTitle = (merchant.get("title") == null ? null : merchant.get("title").toString());
       var products = productService.getProductsPaginated(1, merchantId, Optional.of(1));
-      Long invoice = invoiceIfUserPresent(userId, merchantId);
-      return new CombinedShopDTO(merchantId, merchantTitle, products, invoice,
-            invoiceProductJpaRepository.countByInvoiceId(invoice));
+      Invoice invoice = invoiceIfUserPresent(userId, merchantId);
+      return new CombinedShopDTO(merchantId, merchantTitle, products, invoice.getId(),
+            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()), invoice.getUserId());
    }
 
    @Override
@@ -63,13 +77,13 @@ public class CombinedServiceImpl implements CombinedService {
          throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
       Long merchantId = merchant.get("id") == null ? null : Long.valueOf(merchant.get("id").toString());
       String merchantTitle = (merchant.get("title") == null ? null : merchant.get("title").toString());
-      var images = imageProductService.findImagesProductByProductId(productId);
+      var images = imageProductService.getImagesProductByProductId(productId);
+      var details = productDetailService.getProductDetailsByProductId(productId);
       var product = productService.getProductById(productId);
-      Long invoice = invoiceIfUserPresent(userId, merchantId);
-      return new CombinedProductDTO(merchantId, merchantTitle,
-            product.getId(), product.getTitle(),
-            product.getPrice(), images, product.getStock(), invoice,
-            invoiceProductJpaRepository.countByInvoiceId(invoice));
+      var invoice = invoiceIfUserPresent(userId, merchantId);
+      return new CombinedProductDTO(merchantId, merchantTitle, product.getId(), product.getTitle(), product.getPrice(),
+            images, details, product.getStock(), invoice.getId(), invoiceProductJpaRepository.countByInvoiceId(invoice.getId()),
+            invoice.getUserId());
    }
 
    /**
@@ -80,10 +94,10 @@ public class CombinedServiceImpl implements CombinedService {
     * @version 1.0.0
     * @param userId
     * @param merchantId
-    * @return Long
+    * @return Invoice
     */
-   private Long invoiceIfUserPresent(Optional<Long> userId, Long merchantId) {
-      Long invoice;
+   private Invoice invoiceIfUserPresent(Optional<Long> userId, Long merchantId) {
+      Invoice invoice;
       if (userId.isPresent()) {
          invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
                InvoiceStatus.INITIAL.toString());
@@ -91,9 +105,17 @@ public class CombinedServiceImpl implements CombinedService {
             throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       } else {
          var newInvoice = new Invoice();
+         newInvoice.setUserId(userJpaRepository.save(new User()).getId());
          newInvoice.setMerchantId(merchantId);
-         invoice = invoiceJpaRepository.save(newInvoice).getId();
+         invoice = invoiceJpaRepository.save(newInvoice);
       }
       return invoice;
+   }
+
+   @Override
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId) {
+      return new CombinedProductDetailDTO(productJpaRepository.findStockByProductId(productId),
+            imageProductService.getImagesProductByProductId(productId),
+            productDetailService.getProductDetailsByProductId(productId));
    }
 }

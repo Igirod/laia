@@ -12,11 +12,9 @@ import us.kanddys.laia.modules.ecommerce.model.Product;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<Product, Long> {
 
-   @Modifying
    @Query(value = "SELECT id FROM products WHERE id = ?1", nativeQuery = true)
    Optional<Long> findProductIdIfExists(Long id);
 
-   @Modifying
    @Query(value = "SELECT stock FROM products WHERE id = ?1", nativeQuery = true)
    Integer findStockByProductId(Long id);
 

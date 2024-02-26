@@ -42,7 +42,7 @@ public class ImageProductServiceImpl implements ImageProductService {
    }
 
    @Override
-   public List<ImageProductDTO> findImagesProductByProductId(Long productId) {
+   public List<ImageProductDTO> getImagesProductByProductId(Long productId) {
       return imageProductJpaRepository.findAllByProductId(productId).stream().map(ImageProductDTO::new)
             .toList();
    }

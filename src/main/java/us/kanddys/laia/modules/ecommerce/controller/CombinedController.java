@@ -7,6 +7,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
@@ -25,5 +26,10 @@ public class CombinedController {
    @QueryMapping("combinedProduct")
    public CombinedProductDTO getCombinedProduct(@Argument Long productId, @Argument String slug, @Argument Optional<Long> userId) {
       return combinedService.findCombinedProduct(productId, slug, userId);
+   }
+
+   @QueryMapping("rProduct")
+   public CombinedProductDetailDTO getProductById(@Argument Long productId) {
+      return combinedService.findCombinedProductDetail(productId);
    }
 }

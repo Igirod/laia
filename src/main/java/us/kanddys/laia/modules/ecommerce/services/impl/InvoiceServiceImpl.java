@@ -85,7 +85,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       var userNew = userJpaRepository.save(new User());
       try {
          return new InvoiceDTO(invoiceJpaRepository.save(invoiceCodeService
-               .generateInvoiceCode(new Invoice(userNew.getUserId(), merchantId))));
+               .generateInvoiceCode(new Invoice(userNew.getId(), merchantId))));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       } catch (ParseException e) {

@@ -1,11 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.springframework.util.StreamUtils;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -57,7 +52,7 @@ public class ProductDTO {
       this.price = (product.getPrice() != null) ? product.getPrice() : null;
       this.stock = (product.getStock() != null) ? product.getStock() : null;
       this.frontPage = (product.getFrontPage() != null)
-            ? StreamUtils.copyToString(new ByteArrayInputStream(product.getFrontPage()), StandardCharsets.UTF_8)
+            ? product.getFrontPage()
             : null;
       this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
       this.status = (product.getStatus() != null) ? ProductCheckStock.returnStatusByStock(stock) : null;

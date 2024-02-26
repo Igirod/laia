@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.Optional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
 
 /**
@@ -37,4 +38,15 @@ public interface CombinedService {
     * @return CombinedProductDTO
     */
    public CombinedProductDTO findCombinedProduct(Long productId, String slug, Optional<Long> userId);
+
+   /**
+    * Este método tiene la obligación de buscar un producto, sus imagenes y los detalles
+    * relacionados por el id.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return CombinedProductDetailDTO
+    */
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId);
 }

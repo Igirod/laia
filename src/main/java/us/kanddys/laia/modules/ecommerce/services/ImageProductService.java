@@ -35,5 +35,5 @@ public interface ImageProductService {
     * @param productId
     * @return List<ImageProductDTO>
     */
-   public List<ImageProductDTO> findImagesProductByProductId(Long productId);
+   public List<ImageProductDTO> getImagesProductByProductId(Long productId);
 }

@@ -35,7 +35,7 @@ public class Product {
    @Column(name = "stock")
    private Integer stock;
    @Column(name = "front_page")
-   private byte[] frontPage;
+   private String frontPage;
    @Column(name = "merchant_id")
    private Long merchantId;
    @Column(name = "status")
