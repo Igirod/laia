@@ -21,7 +21,7 @@ public class Batch {
    @Column(name = "id")
    private Long id;
    @Column(name = "calendar_id")
-   private Long calendayId;
+   private Long calendarId;
    @Column(name = "days")
    private Integer days;
    @Column(name = "from_time")
