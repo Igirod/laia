@@ -2,38 +2,32 @@ package us.kanddys.laia.modules.ecommerce.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.model.Utils.TypeCalendar;
 
 /**
- * Esta clase representa un calendario.
+ * Esta clase representa una reserva.
  * 
  * @author Igirod0
  * @version 1.0.0
  */
-@Data
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "calendars")
-public class Calendar {
+@Table(name = "reservations")
+public class Reservation {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "merchant_id")
+   @Column(name = "mer_id")
    private Long merchantId;
-   @Column(name = "delay")
-   private Integer delay;
-   @Enumerated(EnumType.STRING)
-   @Column(name = "type")
-   private TypeCalendar type;
-
-   public Calendar() {} 
+   @Column(name = "user_id")
+   private Long userId;
+   @Column(name = "batch_id")
+   private Long batchId;
 }

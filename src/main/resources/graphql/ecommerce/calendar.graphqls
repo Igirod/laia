@@ -1,0 +1,7 @@
+type CalendarDTO {
+   delay: Int
+   typeCalendar: String
+   disabledDates: [String]
+   workingDays: [String]
+   exceptionsDates: [String]
+}

@@ -7,6 +7,7 @@
 #import "./ecommerce/user.graphqls"
 #import "./ecommerce/invoiceproduct.graphqls"
 #import "./ecommerce/combined.graphqls"
+#import "./ecommerce/calendar.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
@@ -26,6 +27,7 @@ type Query {
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
    rProduct(productId: Int!): CombinedProductDetailDTO
+   gCalendar(year: Int!, month: Int!, day: Int!, calendarId: Int!): CalendarDTO
 }
 
 type Mutation {
