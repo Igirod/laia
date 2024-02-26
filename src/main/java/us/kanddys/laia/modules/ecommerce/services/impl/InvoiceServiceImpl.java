@@ -25,7 +25,6 @@ import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
-import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService;
@@ -48,9 +47,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Autowired
    private ProductCheckStockService productCheckStockService;
-
-   @Autowired
-   private InvoiceCodeService invoiceCodeService;
 
    @Autowired
    private InvoiceCheckService invoiceCheckService;
@@ -84,8 +80,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    public InvoiceDTO createInvoice(Long merchantId) {
       var userNew = userJpaRepository.save(new User());
       try {
-         return new InvoiceDTO(invoiceJpaRepository.save(invoiceCodeService
-               .generateInvoiceCode(new Invoice(userNew.getId(), merchantId))));
+         return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(userNew.getId(), merchantId)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       } catch (ParseException e) {
