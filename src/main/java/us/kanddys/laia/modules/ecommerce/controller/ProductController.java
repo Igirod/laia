@@ -18,11 +18,6 @@ public class ProductController {
    @Autowired
    private ProductService productService;
 
-   @QueryMapping("productId")
-   public ProductDTO getProductById(@Argument(name = "productId") Long productId) {
-      return productService.getProductById(productId);
-   }
-
    @QueryMapping("products")
    public List<ProductDTO> getProductsPaginated(@Argument(name = "page") Integer page,
          @Argument(name = "merchantId") Long merchantId,

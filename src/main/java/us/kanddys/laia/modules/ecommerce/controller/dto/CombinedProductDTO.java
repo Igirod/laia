@@ -23,11 +23,15 @@ public class CombinedProductDTO {
    @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty
+   private List<ProductDetailDTO> details;
+   @JsonProperty
    private Integer productStock;
    @JsonProperty
    private Long invoiceId;
    @JsonProperty
    private Integer invoiceCount;
+   @JsonProperty
+   private Long userId;
 
    public CombinedProductDTO(){}
 }

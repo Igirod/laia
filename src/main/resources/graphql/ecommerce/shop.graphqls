@@ -1,9 +1,0 @@
-
-#import "./ecommerce/product.graphqls"
-
-type MerchantProductInvoiceDTO {
-   title: String
-   invoiceId: Int
-   invoiceCount: Int
-   products: [ProductDTO]
-}

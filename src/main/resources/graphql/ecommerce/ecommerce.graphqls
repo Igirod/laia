@@ -6,10 +6,10 @@
 #import "./ecommerce/invoice.graphqls"
 #import "./ecommerce/user.graphqls"
 #import "./ecommerce/invoiceproduct.graphqls"
+#import "./ecommerce/combined.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
-   productId(productId: Int!): ProductDTO
    products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
    productDId(productId: Int!): [ProductDetailDTO]
    merchantId(merchantId: Int!): MerchantDTO
@@ -25,6 +25,7 @@ type Query {
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
+   rProduct(productId: Int!): CombinedProductDetailDTO
 }
 
 type Mutation {
@@ -41,24 +42,4 @@ type Mutation {
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
    uInvoiceA(invoiceId: Int!, title: String!, direction: String!) : Int
-}
-
-type CombinedShopDTO {
-   merchantId: Int!
-   merchantTitle: String
-   products: [ProductDTO]
-   invoiceId: Int
-   invoiceCount: Int
-}
-
-type CombinedProductDTO {
-   merchantId: Int!
-   merchantTitle: String
-   productId: Int
-   productTitle: String
-   productPrice: Float
-   images: [ImageProductDTO]
-   productStock: Int
-   invoiceId: Int
-   invoiceCount: Int
 }

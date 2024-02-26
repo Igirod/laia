@@ -20,6 +20,8 @@ public class CombinedShopDTO {
    private Long invoiceId;
    @JsonProperty
    private Integer invoiceCount;
+   @JsonProperty
+   private Long userId;
 
    public CombinedShopDTO() {
    }
