@@ -17,8 +17,8 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.CalendarJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.DateExceptionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.DisabledDateJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ExceptionDateJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CalendarService;
 
 /**
@@ -31,7 +31,7 @@ import us.kanddys.laia.modules.ecommerce.services.CalendarService;
 public class CalendarServiceImpl implements CalendarService {
 
    @Autowired
-   private DateExceptionJpaRepository dateExceptionJpaRepository;
+   private ExceptionDateJpaRepository dateExceptionJpaRepository;
 
    @Autowired
    private DisabledDateJpaRepository disabledDateJpaRepository;

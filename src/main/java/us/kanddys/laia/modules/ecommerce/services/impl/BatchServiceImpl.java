@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ExceptionDateJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.BatchService;
 
 /**
@@ -22,9 +24,18 @@ public class BatchServiceImpl implements BatchService {
    @Autowired
    private BatchJpaRepository batchJpaRepository;
 
+   @Autowired
+   private ExceptionDateJpaRepository exceptionDateJpaRepository;
+
    @Override
-   public List<BatchDTO> getBatchesByCalendarId(Long calendarId, String day) {
-      //Analizar si es una fecha excepcional y buscar por id.
-      return batchJpaRepository.findByCalendarIdAndDaysContaining(calendarId, CalendarDay.getDayNumber(day)).stream().map(BatchDTO::new).toList();
+   public List<BatchDTO> getBatchesByCalendarId(Long calendarId, String day, String date) {
+      if (exceptionDateJpaRepository.findDateByCalendarIdAndDate(DateUtils.convertStringToDate(date), calendarId)
+            .isEmpty()) {
+         return batchJpaRepository.findByCalendarIdAndDaysContaining(calendarId, CalendarDay.getDayNumber(day)).stream()
+               .map(BatchDTO::new).toList();
+      }
+      else {
+         return 
+      }
    }
 }
