@@ -1,39 +1,42 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.sql.Time;
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.model.Utils.TypeCalendar;
 
 /**
- * Esta clase representa un calendario.
+ * Esta clase representa una excepción de fecha.
  * 
  * @author Igirod0
  * @version 1.0.0
  */
-@Data
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "calendars")
-public class Calendar {
+@Table(name = "date_exceptions")
+public class DateException {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "merchant_id")
-   private Long merchantId;
-   @Column(name = "delay")
-   private Integer delay;
-   @Enumerated(EnumType.STRING)
-   @Column(name = "type")
-   private TypeCalendar type;
+   @Column(name = "date")
+   private Date date;
+   @Column(name = "from")
+   private Time from;
+   @Column(name = "to")
+   private Time to;
+   @Column(name = "max_limit")
+   private Integer limit;
+   @Column(name = "title")
+   private String title;
 
-   public Calendar() {} 
+   public DateException() {}
 }

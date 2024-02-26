@@ -1,0 +1,5 @@
+type CalendarDTO {
+   disabledDates: [String]
+   workingDays: [String]
+   exceptionsDates: [String]
+}

@@ -48,4 +48,17 @@ public class DateUtils {
    public static String getCurrentDateString() {
       return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
    }
+
+   /**
+    * Convierte un String a Date con el formato yyyy-MM-dd.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param dateString
+    * @return Date
+    * @throws ParseException
+    */
+   public static Date convertStringToDateWithoutTime(String dateString) throws ParseException {
+      return new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+   }
 }
