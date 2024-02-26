@@ -27,7 +27,7 @@ type Query {
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
    rProduct(productId: Int!): CombinedProductDetailDTO
-   gCalendar(year: Int!, month: Int!, number: Int!, day: String!, calendarId: Int!): CalendarDTO
+   gCalendar(year: Int!, month: Int!, day: Int!, calendarId: Int!): CalendarDTO
 }
 
 type Mutation {
