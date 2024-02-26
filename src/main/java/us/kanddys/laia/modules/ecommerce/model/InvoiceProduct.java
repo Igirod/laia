@@ -44,6 +44,7 @@ public class InvoiceProduct {
    public InvoiceProduct(Long productId, Long invoiceId) {
       super();
       this.id = new InvoiceProductId(productId, invoiceId);
+      this.quantity = 1;
    }
 
    /**
