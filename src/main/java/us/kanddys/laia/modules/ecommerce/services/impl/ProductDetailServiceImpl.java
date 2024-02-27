@@ -62,7 +62,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       if (productJpaRepository.findProductIdIfExists(productId).isEmpty()) throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       try {
          return new ProductDetailDTO(productDetailJpaRepository.save(new ProductDetail(null, productId,
-               title.orElse(null), description.orElse(null), (frontPage.isPresent()) ? firebaseStorageService.uploadFile(frontPage.get()) : null)));
+               title.orElse(null), description.orElse(null), (frontPage.isPresent()) ? firebaseStorageService.uploadFile(frontPage.get(), "imageProducts") : null)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }

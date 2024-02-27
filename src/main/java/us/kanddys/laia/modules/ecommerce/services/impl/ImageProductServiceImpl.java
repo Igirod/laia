@@ -38,7 +38,7 @@ public class ImageProductServiceImpl implements ImageProductService {
    public ImageProductDTO uploadImageProduct(MultipartFile multipartFile, Long productId) {
       if (productJpaRepository.findProductIdIfExists(productId).isEmpty()) throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       return new ImageProductDTO(imageProductJpaRepository
-            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(multipartFile))));
+            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(multipartFile, "imageProducts"))));
    }
 
    @Override

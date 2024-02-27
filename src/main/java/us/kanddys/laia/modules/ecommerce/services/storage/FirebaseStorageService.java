@@ -17,7 +17,8 @@ public interface FirebaseStorageService {
     * @author Igirod
     * @version 1.0.0
     * @param multipartFile
+    * @param folderName
     * @return String
     */
-   public String uploadFile(MultipartFile multipartFile);
+   public String uploadFile(MultipartFile multipartFile, String folderName);
 }

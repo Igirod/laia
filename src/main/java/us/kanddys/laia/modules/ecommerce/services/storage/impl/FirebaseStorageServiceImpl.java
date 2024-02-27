@@ -24,8 +24,7 @@ import us.kanddys.laia.modules.ecommerce.services.storage.utils.ImageFormatUtils
 @Service
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
-   @Override
-   public String uploadFile(MultipartFile multipartFile) {
+   public String uploadFile(MultipartFile multipartFile, String folderName) {
       try {
          StorageOptions storageOptions = StorageOptions.newBuilder()
                .setProjectId("kanddys-1088e")
@@ -33,9 +32,10 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
                      GoogleCredentials.fromStream(new ClassPathResource("firebase_admin.json").getInputStream()))
                .build();
          Storage storage = storageOptions.getService();
-         BlobInfo blobInfo = BlobInfo
-               .newBuilder(BlobId.of("kanddys-1088e.appspot.com", multipartFile.getOriginalFilename()))
-               .setContentType("image/png").build();
+         String objectName = folderName + "/" + multipartFile.getOriginalFilename();
+         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of("kanddys-1088e.appspot.com", objectName))
+               .setContentType("image/png")
+               .build();
          storage.create(blobInfo, ImageFormatUtils.resizeImage(multipartFile));
          return storage.signUrl(blobInfo, 3650, TimeUnit.DAYS).toString();
       } catch (IOException e) {
