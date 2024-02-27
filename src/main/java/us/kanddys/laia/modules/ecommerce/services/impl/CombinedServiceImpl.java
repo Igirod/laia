@@ -115,8 +115,13 @@ public class CombinedServiceImpl implements CombinedService {
    }
 
    @Override
-   public CombinedProductDetailDTO findCombinedProductDetail(Long productId) {
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId) {
       return new CombinedProductDetailDTO(productJpaRepository.findStockByProductId(productId),
+            invoiceId.isPresent()
+                  ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoiceId.get(),
+                        productId) != null ? 1
+                              : 0)
+                  : 0,
             imageProductService.getImagesProductByProductId(productId),
             productDetailService.getProductDetailsByProductId(productId));
    }

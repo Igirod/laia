@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
@@ -29,13 +30,12 @@ public interface InvoiceProductService {
     * Este metodo se encarga de actualizar la cantidad de un producto en una factura.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoiceId
-    * @param productId
-    * @param quantity
+    * @param listInvoiceProducts
     * @return Integer
     */
-   public Integer updateInvoiceProduct(Long invoiceId, Long productId, Integer quantity);
+   public Integer updateInvoiceProduct(Long invoiceId, List<InvoiceProductInputDTO> listInvoiceProducts);
 
    /**
     * Este método tiene la obligación de obtener todos los productos asociados

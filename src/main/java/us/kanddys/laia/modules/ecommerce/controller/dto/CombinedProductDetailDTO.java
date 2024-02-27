@@ -10,14 +10,15 @@ import lombok.Data;
  * Esta clase representa un producto completo junto a su detalle.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @AllArgsConstructor
 @Data
-
 public class CombinedProductDetailDTO {
    @JsonProperty
    private Integer stock;
+   @JsonProperty
+   private Integer check;
    @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty

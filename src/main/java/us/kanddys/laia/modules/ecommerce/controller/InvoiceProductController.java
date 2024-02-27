@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
 
 @Controller
@@ -24,8 +25,8 @@ public class InvoiceProductController {
    }
 
    @MutationMapping("uProductI")
-   public Integer updateInvoiceProduct(@Argument Long invoiceId, @Argument Long productId, @Argument Integer quantity) {
-      return invoiceProductService.updateInvoiceProduct(invoiceId, productId, quantity);
+   public Integer updateInvoiceProduct(@Argument Long invoiceId, @Argument List<InvoiceProductInputDTO> listInvoiceProducts) {
+      return invoiceProductService.updateInvoiceProduct(invoiceId, listInvoiceProducts);
    }
 
    @QueryMapping("gIProducts")

@@ -36,12 +36,13 @@ public class CalendarServiceImpl implements CalendarService {
 
    @Transactional(rollbackOn = Exception.class)
    @Override
-   public CalendarDTO getCalendarByMerchantId(Integer year, Integer month, Integer day, Long calendarId) {
+   public CalendarDTO getCalendarByMerchantId(Integer year, Integer month, Integer day, Long merchantId) {
       try {
          var startDate = year.toString() + "-" + month.toString() + "-" + day.toString();
          var endDate = DateUtils.convertStringToDateWithoutTime(YearMonth.of(year, month).atEndOfMonth().toString());
-         Map<String, Object> calendar = calendarJpaRepository.findTypeAndDelayByCalendarId(calendarId);
-         return new CalendarDTO((Integer) calendar.get("delay"), (String) calendar.get("type"),
+         Map<String, Object> calendar = calendarJpaRepository.findTypeAndDelayAndCalendarIdByMerchantId(merchantId);
+         var calendarId = Long.valueOf((Integer) calendar.get("id"));
+         return new CalendarDTO(calendarId, (Integer) calendar.get("delay"), (String) calendar.get("type"),
                disabledDateJpaRepository.findDateExceptionsByCalendarIdRange(
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate, calendarId),
                CalendarDay.getDays(batchJpaRepository.findDaysByCalendarId(calendarId)),

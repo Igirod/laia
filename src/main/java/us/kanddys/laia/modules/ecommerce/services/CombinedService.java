@@ -10,7 +10,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
  * ShopServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public interface CombinedService {
 
@@ -44,9 +44,10 @@ public interface CombinedService {
     * relacionados por el id.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param productId
+    * @param invoiceId
     * @return CombinedProductDetailDTO
     */
-   public CombinedProductDetailDTO findCombinedProductDetail(Long productId);
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId);
 }

@@ -17,9 +17,11 @@ import lombok.Data;
 @Data
 public class CalendarDTO {
    @JsonProperty
+   private Long calendarId;
+   @JsonProperty
    private Integer delay;
    @JsonProperty
-   private String typeCalendar;
+   private String typeDelay;
    @JsonProperty
    private List<String> disabledDates;
    @JsonProperty

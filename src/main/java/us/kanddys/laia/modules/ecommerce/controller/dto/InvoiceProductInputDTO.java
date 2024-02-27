@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class InvoiceProductInputDTO {
    @JsonProperty
-   private Long shoppingCartId;
+   private Long invoiceId;
    @JsonProperty
    private Long productId;
    @JsonProperty
