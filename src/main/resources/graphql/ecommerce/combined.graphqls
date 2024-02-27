@@ -28,6 +28,7 @@ type CombinedProductDTO {
 
 type CombinedProductDetailDTO {
    stock: Int
+   check: Int
    images: [ImageProductDTO]
    details: [ProductDetailDTO]
 }

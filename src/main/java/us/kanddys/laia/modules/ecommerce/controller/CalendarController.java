@@ -15,8 +15,8 @@ public class CalendarController {
    private CalendarService calendarService;
 
    @QueryMapping("gCalendar")
-   public CalendarDTO getCalendar(@Argument Long merchantId, @Argument Integer year, @Argument Integer month,
-         @Argument Integer day, @Argument Long calendarId) {
-      return calendarService.getCalendarByMerchantId(year, month, day, calendarId);
+   public CalendarDTO getCalendar(@Argument Integer year, @Argument Integer month,
+         @Argument Integer day, @Argument Long merchantId) {
+      return calendarService.getCalendarByMerchantId(year, month, day, merchantId);
    }
 }

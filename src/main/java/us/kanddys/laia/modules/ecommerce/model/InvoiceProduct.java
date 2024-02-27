@@ -51,12 +51,12 @@ public class InvoiceProduct {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param InvoiceProductInputDTO
     */
    public InvoiceProduct(InvoiceProductInputDTO InvoiceProductInputDTO) {
       super();
-      this.id = new InvoiceProductId(InvoiceProductInputDTO.getShoppingCartId(),
+      this.id = new InvoiceProductId(InvoiceProductInputDTO.getInvoiceId(),
             InvoiceProductInputDTO.getProductId());
       this.quantity = InvoiceProductInputDTO.getQuantity();
    }

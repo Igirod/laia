@@ -29,7 +29,7 @@ public class CombinedController {
    }
 
    @QueryMapping("rProduct")
-   public CombinedProductDetailDTO getProductById(@Argument Long productId) {
-      return combinedService.findCombinedProductDetail(productId);
+   public CombinedProductDetailDTO getProductById(@Argument Long productId, @Argument Optional<Long> invoiceId) {
+      return combinedService.findCombinedProductDetail(productId, invoiceId);
    }
 }

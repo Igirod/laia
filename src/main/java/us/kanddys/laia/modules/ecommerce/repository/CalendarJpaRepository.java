@@ -11,7 +11,7 @@ import us.kanddys.laia.modules.ecommerce.model.Calendar;
 @Repository
 public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
 
-   @Query(value = "SELECT type, delay FROM calendars WHERE id = ?1", nativeQuery = true)
-   Map<String, Object> findTypeAndDelayByCalendarId(Long calendarId);
+   @Query(value = "SELECT type, delay, id FROM calendars WHERE merchant_id = ?1", nativeQuery = true)
+   Map<String, Object> findTypeAndDelayAndCalendarIdByMerchantId(Long merchantId);
 
 }

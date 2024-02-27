@@ -26,8 +26,8 @@ type Query {
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
-   rProduct(productId: Int!): CombinedProductDetailDTO
-   gCalendar(year: Int!, month: Int!, day: Int!, calendarId: Int!): CalendarDTO
+   rProduct(productId: Int!, invoiceId: Int): CombinedProductDetailDTO
+   gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
 }
 
@@ -35,7 +35,7 @@ type Mutation {
    cInvoice(merchantId: Int!): InvoiceDTO
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
    aProductI(invoiceId: Int!, productId: Int!) : Int
-   uProductI(invoiceId: Int!, productId: Int!, quantity: Int!) : Int
+   uProductI(invoiceId: Int!, listInvoiceProducts: [InvoiceProductInputDTO]) : Int
    uInvoiceM(invoiceId: Int!, message: Int!) : Int
    uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
