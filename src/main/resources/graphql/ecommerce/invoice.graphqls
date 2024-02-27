@@ -6,7 +6,7 @@ type InvoiceDTO {
    code: String
    reservation: String
    total: Float
-   message: Boolean
+   message: String
    status: InvoiceStatus
    voucher: String
    note: String
@@ -23,7 +23,7 @@ input InvoiceInputDTO {
    code: String
    reservation: String
    total: Float
-   message: Boolean
+   message: String
    status: InvoiceStatus
    voucher: String
    note: String

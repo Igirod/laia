@@ -69,12 +69,12 @@ public interface InvoiceService {
     * Este método se encarga de actualizar el mensaje de una factura.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoiceId
     * @param message
-    * @return
+    * @return Integer
     */
-   public Integer updateInvoiceMessage(Long invoiceId, Integer message);
+   public Integer updateInvoiceMessage(Long invoiceId, String message);
 
    /**
     * Este método se encarga de actualizar el pago de una factura.

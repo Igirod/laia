@@ -35,7 +35,7 @@ public class InvoiceDTO {
    @JsonProperty
    private Float total;
    @JsonProperty
-   private Boolean message;
+   private String message;
    @JsonProperty
    private InvoiceStatus status;
    @JsonProperty

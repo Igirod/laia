@@ -43,7 +43,7 @@ public class InvoiceController {
    }
 
    @MutationMapping("uInvoiceM")
-   public Integer updateInvoiceMessage(@Argument Long invoiceId, @Argument Integer message) {
+   public Integer updateInvoiceMessage(@Argument Long invoiceId, @Argument String message) {
       return invoiceService.updateInvoiceMessage(invoiceId, message);
    }
 
