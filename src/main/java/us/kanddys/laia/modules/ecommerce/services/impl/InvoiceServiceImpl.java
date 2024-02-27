@@ -171,7 +171,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher), invoiceId);
+      invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher, "vouchers"), invoiceId);
       return 1;
    }
 
