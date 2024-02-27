@@ -83,9 +83,14 @@ public interface InvoiceService {
     * @version 1.0.0
     * @param invoiceId
     * @param payment
+    * @param date
+    * @param batchId
+    * @param merchantId
+    * @param userId
     * @return Integer
     */
-   public Integer updateInvoicePayment(Long invoiceId, Long paymentId);
+   public Integer updateInvoicePayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
+         Long userId);
 
    /**
     * Este método se encarga de actualizar la nota de una factura.

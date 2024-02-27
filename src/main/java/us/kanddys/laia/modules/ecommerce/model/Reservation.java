@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +32,8 @@ public class Reservation {
    private Long userId;
    @Column(name = "batch_id")
    private Long batchId;
+   @Column(name = "date")
+   private Date date;
+
+   public Reservation() {}
 }

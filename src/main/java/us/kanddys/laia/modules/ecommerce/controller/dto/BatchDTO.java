@@ -20,6 +20,8 @@ public class BatchDTO {
    @JsonProperty
    private Long calendarId;
    @JsonProperty
+   private Integer limit;
+   @JsonProperty
    private String date;
    @JsonProperty
    private String from;
@@ -45,5 +47,6 @@ public class BatchDTO {
       this.to = (batch.getTo() == null) ? null : batch.getTo().toString();
       this.title = (batch.getTitle() == null) ? null : batch.getTitle();
       this.date = (batch.getDate() == null) ? null : batch.getDate().toString();
+      this.limit = (batch.getLimit() == null) ? null : batch.getLimit();
    }
 }
