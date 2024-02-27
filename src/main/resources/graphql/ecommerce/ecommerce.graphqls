@@ -36,7 +36,7 @@ type Mutation {
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
    aProductI(invoiceId: Int!, productId: Int!) : Int
    uProductI(invoiceId: Int!, listInvoiceProducts: [InvoiceProductInputDTO]) : Int
-   uInvoiceM(invoiceId: Int!, message: Int!) : Int
+   uInvoiceM(invoiceId: Int!, message: String!) : Int
    uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
    uInvoicePayment(invoiceId: Int!, paymentId: Int!, date: String!, batchId: Int!, merchantId: Int!, userId: Int!) : Int

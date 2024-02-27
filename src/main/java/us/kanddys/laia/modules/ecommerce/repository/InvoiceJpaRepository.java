@@ -22,7 +22,7 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
 
    @Modifying
    @Query(value = "UPDATE invoices SET message = :message WHERE id = :invoiceId", nativeQuery = true)
-   void updateMessageByInvoiceId(@Param("message") Integer message, @Param("invoiceId") Long invoiceId);
+   void updateMessageByInvoiceId(@Param("message") String message, @Param("invoiceId") Long invoiceId);
 
    @Modifying
    @Query(value = "UPDATE invoices SET payment_id = :paymentId WHERE id = :invoiceId", nativeQuery = true)

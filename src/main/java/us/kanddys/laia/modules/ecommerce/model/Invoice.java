@@ -22,7 +22,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * Esta clase representa una factura.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Entity
 @Table(name = "invoices")
@@ -46,7 +46,7 @@ public class Invoice {
    @Column(name = "total")
    private Float total;
    @Column(name = "message")
-   private Boolean message;
+   private String message;
    @Enumerated(EnumType.STRING)
    @Column(name = "status")
    private InvoiceStatus status;
