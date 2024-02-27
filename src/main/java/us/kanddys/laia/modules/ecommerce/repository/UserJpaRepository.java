@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,18 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
 
    @Query(value = "SELECT id FROM users WHERE email = :userEmail AND password = :password", nativeQuery = true)
    public Integer existByUserEmail(String userEmail, String password);
+
+   @Query(value = "SELECT id FROM users WHERE email = :userEmail", nativeQuery = true)
+   public Long findByUserEmail(String userEmail);
+
+   @Modifying
+   @Query(value = "UPDATE users SET password = :password WHERE id = :id", nativeQuery = true)
+   public void updatePasswordByUserId(Long id, String password);
+
+   @Modifying
+   @Query(value = "UPDATE users SET email = :email WHERE id = :id", nativeQuery = true)
+   public void updateEmailByUserId(Long id, String email);
+
+   @Query(value = "SELECT password FROM users WHERE id = :id", nativeQuery = true)
+   public String getPasswordByUserId(Long id);
 }

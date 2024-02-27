@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LaiaApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LaiaApplication.class, args);
-	}
+   public static void main(String[] args) {
+      SpringApplication.run(LaiaApplication.class, args);
+   }
 }
