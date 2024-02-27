@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDTO;
 
@@ -17,8 +18,10 @@ public interface BatchService {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param merchantId
+    * @param calendarId
+    * @param day
+    * @param exceptionalDate
     * @return List<BatchDTO>
     */
-   public List<BatchDTO> getBatchesByCalendarId(Long calendarId, String day);
+   public List<BatchDTO> getBatchesByCalendarId(Long calendarId, String day, String date, Optional<Integer> exceptionalDate);
 }

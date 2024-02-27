@@ -8,7 +8,6 @@
 #import "./ecommerce/invoiceproduct.graphqls"
 #import "./ecommerce/combined.graphqls"
 #import "./ecommerce/calendar.graphqls"
-#import "./ecommerce/batch.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
@@ -29,7 +28,7 @@ type Query {
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
    rProduct(productId: Int!): CombinedProductDetailDTO
    gCalendar(year: Int!, month: Int!, day: Int!, calendarId: Int!): CalendarDTO
-   gBatches(calendarId: Int!, day: String, date: String!): [BatchDTO]
+   gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
 }
 
 type Mutation {

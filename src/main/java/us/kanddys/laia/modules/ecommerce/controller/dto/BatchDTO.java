@@ -17,6 +17,8 @@ public class BatchDTO {
    @JsonProperty
    private Long calendarId;
    @JsonProperty
+   private String date;
+   @JsonProperty
    private String from;
    @JsonProperty
    private String to;
@@ -39,5 +41,6 @@ public class BatchDTO {
       this.from = (batch.getFrom() == null) ? null : batch.getFrom().toString();
       this.to = batch.getTo().toString();
       this.title = batch.getTitle();
+      this.date = (batch.getDate() == null) ? null : batch.getDate().toString();
    }
 }
