@@ -24,6 +24,7 @@ type CombinedProductDTO {
    invoiceId: Int
    invoiceCount: Int
    userId: Int
+   check: Int
 }
 
 type CombinedProductDetailDTO {

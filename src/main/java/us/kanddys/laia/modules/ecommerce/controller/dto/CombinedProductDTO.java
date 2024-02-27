@@ -34,6 +34,8 @@ public class CombinedProductDTO {
    private Integer invoiceCount;
    @JsonProperty
    private Long userId;
+   @JsonProperty
+   private Integer check;
 
    public CombinedProductDTO(){}
 }

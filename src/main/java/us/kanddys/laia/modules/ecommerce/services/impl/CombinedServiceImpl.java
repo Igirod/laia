@@ -85,7 +85,12 @@ public class CombinedServiceImpl implements CombinedService {
             product.getFrontPage(),
             images, details, product.getStock(), invoice.getId(),
             invoiceProductJpaRepository.countByInvoiceId(invoice.getId()),
-            invoice.getUserId());
+            invoice.getUserId(),
+            (userId.isPresent() && invoiceProductJpaRepository.countByInvoiceId(invoice.getId()) > 0)
+                  ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoice.getId(),
+                        productId) != null ? 1
+                              : 0)
+                  : 0);
    }
 
    /**
