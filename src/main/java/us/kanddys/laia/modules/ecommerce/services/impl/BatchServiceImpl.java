@@ -33,6 +33,6 @@ public class BatchServiceImpl implements BatchService {
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
-      else return batchJpaRepository.findByCalendarIdAndDaysContaining(calendarId, CalendarDay.getDayNumber(day)).stream().map(batch -> new BatchDTO(batch)).toList();
+      else return batchJpaRepository.findByCalendarIdAndDaysContainingAndDateIsNull(calendarId, CalendarDay.getDayNumber(day)).stream().map(batch -> new BatchDTO(batch)).toList();
    }
 }
