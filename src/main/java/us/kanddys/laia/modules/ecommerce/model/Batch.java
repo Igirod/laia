@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
 import java.sql.Time;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +22,9 @@ public class Batch {
    @Column(name = "id")
    private Long id;
    @Column(name = "calendar_id")
-   private Long calendayId;
+   private Long calendarId;
+   @Column(name = "date")
+   private Date date;
    @Column(name = "days")
    private Integer days;
    @Column(name = "from_time")

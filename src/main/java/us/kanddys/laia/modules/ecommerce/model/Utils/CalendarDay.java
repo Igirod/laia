@@ -11,16 +11,9 @@ import java.util.List;
  */
 public class CalendarDay {
 
-   private static final Integer MONDAY = 1;
-   private static final Integer TUESDAY = 2;
-   private static final Integer WEDNESDAY = 3;
-   private static final Integer THURSDAY = 4;
-   private static final Integer FRIDAY = 5;
-   private static final Integer SATURDAY = 6;
-   private static final Integer SUNDAY = 7;
-
    /**
-    * Este método estático establece los rangos de busqueda.
+    * Este método analiza las combinaciones de los batches y registra
+    * los días que trabaja el usuario.
     *
     * @author Igirod0
     * @version 1.0.0
@@ -66,4 +59,45 @@ public class CalendarDay {
       }
       return days;
    }
+
+   /**
+    * Este método tiene la obligacion de devolver el dia correspondiente a la
+    * cadena
+    * de caracteres pasada por parametro.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param day
+    * @return Integer
+    */
+   public static Integer getDayNumber(String day) {
+      Integer dayNumber = null;
+      switch (day) {
+         case "MON":
+            dayNumber = 1;
+            break;
+         case "TUE":
+            dayNumber = 2;
+            break;
+         case "WED":
+            dayNumber = 3;
+            break;
+         case "THU":
+            dayNumber = 4;
+            break;
+         case "FRI":
+            dayNumber = 5;
+            break;
+         case "SAT":
+            dayNumber = 6;
+            break;
+         case "SUN":
+            dayNumber = 7;
+            break;
+         default:
+            System.out.println("Día inválido: " + day);
+      }
+      return dayNumber;
+   }
+
 }
