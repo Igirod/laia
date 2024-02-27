@@ -39,7 +39,7 @@ type Mutation {
    uInvoiceM(invoiceId: Int!, message: Int!) : Int
    uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
-   uInvoicePayment(invoiceId: Int!, paymentId: Int!) : Int
+   uInvoicePayment(invoiceId: Int!, paymentId: Int!, date: String!, batchId: Int!, merchantId: Int!, userId: Int!) : Int
    uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int

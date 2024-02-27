@@ -18,12 +18,15 @@ import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.Reservation;
 import us.kanddys.laia.modules.ecommerce.model.User;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
@@ -62,6 +65,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Autowired
    private InvoiceProductCriteriaRepository invoiceProductCriteriaRepository;
+
+   @Autowired
+   private ReservationJpaRepository reservationJpaRepository;
 
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
@@ -135,16 +141,22 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer updateInvoicePayment(Long invoiceId, Long paymentId) {
+   public Integer updateInvoicePayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
+         Long userId) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updatePaymentByInvoiceId(paymentId, invoiceId);
       invoiceJpaRepository.updateStatusByInvoiceId(InvoiceStatus.PENDING.toString(), invoiceId);
-      var invoiceProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId);
-      invoiceProducts.stream().map(t -> {
+      invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId).stream().map(t -> {
          productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
          return t;
       }).collect(Collectors.toList());
+      try {
+         reservationJpaRepository.save(
+               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al convertir la fecha");
+      }
       return 1;
    }
 

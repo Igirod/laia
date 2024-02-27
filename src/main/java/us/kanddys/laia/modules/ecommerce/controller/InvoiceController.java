@@ -48,8 +48,8 @@ public class InvoiceController {
    }
 
    @MutationMapping("uInvoicePayment")
-   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId) {
-      return invoiceService.updateInvoicePayment(invoiceId, paymentId);
+   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId, @Argument String date, @Argument Long batchId, @Argument Long merchantId, @Argument Long userId) {
+      return invoiceService.updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
    }
 
    @MutationMapping("uInvoiceN")
