@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
    @Autowired
    private FirebaseStorageService firebaseStorageService;
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    public UserDTO checkEmail(@Argument Long userId, @Argument String email, @Argument Optional<Long> invoiceId) {
       var id = userJpaRepository.existByUserEmail(email);
       if (id != null) {
