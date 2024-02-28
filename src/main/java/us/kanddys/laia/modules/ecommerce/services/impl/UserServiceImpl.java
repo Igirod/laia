@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
       Optional<User> user = userJpaRepository.findById(userId);
       User userError;
       if (user.isPresent()) {
-         if (user.get().getPassword().equals(password))
+         if (user.get().getPassword().equals(password) && user.get().getMail().equals(email))
             return new UserDTO(user.get(), 1);
          else
             userError = new User(0L, null, null, null, null, null, null, 0);
