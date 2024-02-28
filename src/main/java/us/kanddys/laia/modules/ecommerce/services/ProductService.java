@@ -3,6 +3,9 @@ package us.kanddys.laia.modules.ecommerce.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.web.multipart.MultipartFile;
+
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -35,7 +38,7 @@ public interface ProductService {
     * @version 1.0.1
     * @param page
     * @param merchantId
-    * @param status Optional
+    * @param status     Optional
     * @return List<ProductDTO>
     */
    public List<ProductDTO> getProductsPaginated(Integer page, Long merchantId, Optional<Integer> status);
@@ -51,4 +54,16 @@ public interface ProductService {
     * @return List<ProductDTO>
     */
    public List<ProductDTO> getProductsByTypeFilterPaginated(Integer page, TypeFilter typeFilter);
+
+   /**
+    * Este método tiene la obligación de actualizar el frontPage de un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param valueOf
+    * @param image
+    * @return Integer
+    */
+   @Modifying
+   public Integer updateFrontPage(Long productId, MultipartFile image);
 }
