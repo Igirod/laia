@@ -127,9 +127,9 @@ public interface InvoiceService {
     * @param batchId
     * @param merchantId
     * @param userId
-    * @return Integer
+    * @return String
     */
-   public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+   public String updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
          Long merchantId,
          Long userId);
 
