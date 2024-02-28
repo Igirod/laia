@@ -6,14 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
-import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
  * Esta clase representa un data transfer object (DTO) para la factura.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Data
 @AllArgsConstructor
@@ -48,6 +47,8 @@ public class InvoiceDTO {
    private String addressTitle;
    @JsonProperty
    private String addressDirection;
+   @JsonProperty
+   private Long batchId;
 
    public InvoiceDTO() {
    }
@@ -67,7 +68,8 @@ public class InvoiceDTO {
       this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null : invoice.getCode();
-      this.reservation = (invoice.getReservation() == null) ? null : DateUtils.convertDateToString(invoice.getReservation());
+      this.reservation = (invoice.getReservation() == null) ? null
+            : invoice.getReservation();
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus().toString() == null) ? null : invoice.getStatus();
@@ -76,5 +78,6 @@ public class InvoiceDTO {
       this.count = (invoice.getCount() == null) ? null : invoice.getCount();
       this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
       this.addressTitle = (invoice.getAddressTitle() == null) ? null : invoice.getAddressTitle();
+      this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
    }
 }

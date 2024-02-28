@@ -137,4 +137,17 @@ public interface InvoiceService {
     * @return Integer
     */
    public Integer updateInvoiceAddress(Long invoiceId, String title, String direction);
+
+   /**
+    * Este método tiene la obligación de actualizar la fecha de reservación
+    * asociada a una factura.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param invoiceId
+    * @param date
+    * @param batchId
+    * @return Integer
+    */
+   public Integer updateInvoiceReservation(Long invoiceId, String date, Long batchId);
 }

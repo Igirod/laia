@@ -47,8 +47,9 @@ public class InvoiceController {
       return invoiceService.updateInvoiceMessage(invoiceId, message);
    }
 
-   @MutationMapping("uInvoicePayment")
-   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId, @Argument String date, @Argument Long batchId, @Argument Long merchantId, @Argument Long userId) {
+   @MutationMapping("uInvoiceP")
+   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId, @Argument String date,
+         @Argument Long batchId, @Argument Long merchantId, @Argument Long userId) {
       return invoiceService.updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
    }
 
@@ -65,5 +66,10 @@ public class InvoiceController {
    @MutationMapping("uInvoiceA")
    public Integer updateInvoiceAddress(@Argument Long invoiceId, @Argument String title, @Argument String direction) {
       return invoiceService.updateInvoiceAddress(invoiceId, title, direction);
+   }
+
+   @MutationMapping("uInvoiceR")
+   public Integer updateInvoiceReservation(@Argument Long invoiceId, @Argument String date, @Argument Long batchId) {
+      return invoiceService.updateInvoiceReservation(invoiceId, date, batchId);
    }
 }

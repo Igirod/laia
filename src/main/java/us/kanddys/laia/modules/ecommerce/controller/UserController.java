@@ -8,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
 import us.kanddys.laia.modules.ecommerce.services.UserService;
 
 @Controller
@@ -17,13 +18,13 @@ public class UserController {
    private UserService userService;
 
    @QueryMapping("cUserE")
-   public Integer checkUserEmail(@Argument Long userId, @Argument String email, @Argument String password) {
-      return userService.checkEmail(userId, email, password);
+   public UserDTO checkUserEmail(@Argument Long userId, @Argument String email, @Argument Optional<Long> invoiceId) {
+      return userService.checkEmail(userId, email, invoiceId);
    }
 
    @QueryMapping("lUser")
-   public Integer loginUser(@Argument String email, @Argument String password) {
-      return userService.loginUser(email, password);
+   public UserDTO loginUser(@Argument Long userId, @Argument String email, @Argument String password) {
+      return userService.loginUser(userId, email, password);
    }
 
    @MutationMapping("uUser")

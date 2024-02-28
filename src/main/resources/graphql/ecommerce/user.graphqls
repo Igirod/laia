@@ -5,4 +5,6 @@ type UserDTO {
    password: String
    phone: String
    image: String
+   first: Int
+   operationStatus: Int
 }

@@ -18,9 +18,9 @@ public class MailSenderRestController {
    @Autowired
    private MailSenderService mailSenderService;
 
-   @PostMapping("/send")
-   public ResponseEntity<String> enviarCorreo(@RequestBody MailDTO mailDTO) throws MessagingException {
-      mailSenderService.sendEmail(mailDTO);
-      return ResponseEntity.ok("Correo enviado correctamente");
+   @PostMapping("/send/change-password")
+   public ResponseEntity<String> sendEmailChangePassword(@RequestBody MailDTO mailDTO) throws MessagingException {
+      mailSenderService.sendEmailChangePassword(mailDTO);
+      return ResponseEntity.ok("Mail sent successfully!");
    }
 }

@@ -11,7 +11,7 @@ import us.kanddys.laia.modules.ecommerce.model.User;
 public interface UserJpaRepository extends JpaRepository<User, Long> {
 
    @Query(value = "SELECT id FROM users WHERE email = :userEmail", nativeQuery = true)
-   public Integer existByUserEmail(String userEmail);
+   public Long existByUserEmail(String userEmail);
 
    @Query(value = "SELECT id FROM users WHERE email = :userEmail AND password = :password", nativeQuery = true)
    public Integer existByUserEmail(String userEmail, String password);
@@ -29,4 +29,15 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
 
    @Query(value = "SELECT password FROM users WHERE id = :id", nativeQuery = true)
    public String getPasswordByUserId(Long id);
+
+   @Modifying
+   @Query(value = "UPDATE users SET email = :email WHERE id = :userId", nativeQuery = true)
+   public void updateUserEmail(Long userId, String email);
+
+   @Modifying
+   @Query(value = "UPDATE users SET image = :image WHERE id = :userId", nativeQuery = true)
+   public void updateUserImage(Long userId, String image);
+
+   @Query(value = "SELECT * FROM users WHERE id = :userId", nativeQuery = true)
+   public User findUserById(Long userId);
 }
