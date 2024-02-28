@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
-import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
@@ -70,7 +69,7 @@ public class InvoiceDTO {
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null : invoice.getCode();
       this.reservation = (invoice.getReservation() == null) ? null
-            : DateUtils.convertDateToString(invoice.getReservation());
+            : invoice.getReservation();
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus().toString() == null) ? null : invoice.getStatus();

@@ -1,7 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
 import java.text.ParseException;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
@@ -43,7 +41,7 @@ public class Invoice {
    @Column(name = "code")
    private String code;
    @Column(name = "reservation")
-   private Date reservation;
+   private String reservation;
    @Column(name = "total")
    private Float total;
    @Column(name = "message")
@@ -84,7 +82,7 @@ public class Invoice {
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
       this.reservation = (invoice.getReservation() == null) ? null
-            : DateUtils.convertStringToDate(invoice.getReservation());
+            : invoice.getReservation();
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
@@ -113,7 +111,7 @@ public class Invoice {
       this.paymentId = invoiceDTO.getPaymentId() != null ? invoiceDTO.getPaymentId() : this.paymentId;
       this.code = invoiceDTO.getCode() != null ? invoiceDTO.getCode() : this.code;
       this.reservation = invoiceDTO.getReservation() != null
-            ? DateUtils.convertStringToDate(invoiceDTO.getReservation())
+            ? invoiceDTO.getReservation()
             : this.reservation;
       this.total = invoiceDTO.getTotal() != null ? invoiceDTO.getTotal() : this.total;
       this.message = invoiceDTO.getMessage() != null ? invoiceDTO.getMessage() : this.message;
