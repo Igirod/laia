@@ -20,8 +20,8 @@ type Query {
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
    gInvoice(invoiceId: Int!): InvoiceDTO
-   cUserE(userId: Int!, email: String!, password: String): Int
-   lUser(email: String!, password: String!): Int
+   cUserE(userId: Int!, email: String!, invoiceId: Int): UserDTO
+   lUser(userId: Int!, email: String!, password: String!): UserDTO
    gIProducts(invoiceId: Int!, page: Int!, limit: Int): [InvoiceProductDTO]
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
@@ -39,7 +39,8 @@ type Mutation {
    uInvoiceM(invoiceId: Int!, message: String!) : Int
    uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
-   uInvoicePayment(invoiceId: Int!, paymentId: Int!, date: String!, batchId: Int!, merchantId: Int!, userId: Int!) : Int
+   uInvoiceP(invoiceId: Int!, paymentId: Int!, date: String!, batchId: Int!, merchantId: Int!, userId: Int!) : Int
+   uInvoiceR(invoiceId: Int!, batchId: Int!, date: String!) : Int
    uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int

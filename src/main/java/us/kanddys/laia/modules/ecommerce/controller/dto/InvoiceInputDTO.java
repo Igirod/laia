@@ -7,7 +7,8 @@ import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
- * Esta clase representa el data transfer object (DTO) que se utiliza para la entrada 
+ * Esta clase representa el data transfer object (DTO) que se utiliza para la
+ * entrada
  * de datos de la creación de una factura.
  * 
  * @author Igirod0
@@ -42,6 +43,9 @@ public class InvoiceInputDTO {
    private String addressTitle;
    @JsonProperty
    private String addressDirection;
+   @JsonProperty
+   private Long batchId;
 
-   public InvoiceInputDTO() {}
+   public InvoiceInputDTO() {
+   }
 }

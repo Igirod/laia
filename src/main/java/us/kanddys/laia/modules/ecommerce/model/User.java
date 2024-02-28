@@ -30,6 +30,9 @@ public class User {
    private String phone;
    @Column(name = "image")
    private String image;
+   @Column(name = "first")
+   private Integer first;
 
-   public User() {}
+   public User() {
+   }
 }
