@@ -20,7 +20,7 @@ import us.kanddys.laia.modules.ecommerce.services.CalendarService;
  * Esta clase implementa las obligaciones de la interface CalendarService.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Service
 public class CalendarServiceImpl implements CalendarService {
@@ -45,7 +45,7 @@ public class CalendarServiceImpl implements CalendarService {
          return new CalendarDTO(calendarId, (Integer) calendar.get("delay"), (String) calendar.get("type"),
                disabledDateJpaRepository.findDateExceptionsByCalendarIdRange(
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate, calendarId),
-               CalendarDay.getDays(batchJpaRepository.findDaysByCalendarId(calendarId)),
+               CalendarDay.getDays(batchJpaRepository.findDaysByCalendarIdAndDateIsNull(calendarId)),
                batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate));
       } catch (ParseException e) {

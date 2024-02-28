@@ -15,6 +15,9 @@ public interface BatchJpaRepository extends JpaRepository<Batch, Long> {
    @Query(value = "SELECT days FROM batches e WHERE calendar_id = ?1", nativeQuery = true)
    List<Integer> findDaysByCalendarId(Long calendarId);
 
+   @Query(value = "SELECT days FROM batches e WHERE calendar_id = ?1 AND date IS NULL", nativeQuery = true)
+   List<Integer> findDaysByCalendarIdAndDateIsNull(Long calendarId);
+
    @Query(value = "SELECT * FROM batches WHERE calendar_id = ?1 AND days LIKE %?2% AND date IS NULL", nativeQuery = true)
    List<Batch> findByCalendarIdAndDaysContainingAndDateIsNull(Long calendarId, Integer days);
 
