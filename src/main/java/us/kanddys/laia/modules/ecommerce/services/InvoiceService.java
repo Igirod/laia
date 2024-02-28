@@ -122,9 +122,16 @@ public interface InvoiceService {
     * @version 1.0.0
     * @param voucher
     * @param invoiceId
-    * @return String
+    * @param paymentId
+    * @param date
+    * @param batchId
+    * @param merchantId
+    * @param userId
+    * @return Integer
     */
-   public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId);
+   public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+         Long merchantId,
+         Long userId);
 
    /**
     * Este método se encarga de actualizar la dirección de una factura.
