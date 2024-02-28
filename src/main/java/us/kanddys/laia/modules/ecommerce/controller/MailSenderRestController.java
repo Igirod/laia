@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.mail.MessagingException;
 import us.kanddys.laia.modules.ecommerce.controller.dto.MailDTO;
 import us.kanddys.laia.modules.ecommerce.services.MailSenderService;
 
@@ -18,7 +19,7 @@ public class MailSenderRestController {
    private MailSenderService mailSenderService;
 
    @PostMapping("/send")
-   public ResponseEntity<String> enviarCorreo(@RequestBody MailDTO mailDTO) {
+   public ResponseEntity<String> enviarCorreo(@RequestBody MailDTO mailDTO) throws MessagingException {
       mailSenderService.sendEmail(mailDTO);
       return ResponseEntity.ok("Correo enviado correctamente");
    }
