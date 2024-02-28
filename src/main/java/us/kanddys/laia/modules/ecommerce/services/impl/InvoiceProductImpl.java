@@ -75,7 +75,6 @@ public class InvoiceProductImpl implements InvoiceProductService {
    public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page,
          Optional<Integer> limit) {
       return invoiceProductCriteriaQueryRepository.findInvoiceProductsByInvoiceId(invoiceId, page, limit).stream()
-            .map(InvoiceProductDTO::new)
-            .toList();
+            .map(InvoiceProductDTO::new).toList();
    }
 }
