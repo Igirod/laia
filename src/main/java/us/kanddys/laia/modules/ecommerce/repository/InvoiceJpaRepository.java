@@ -63,4 +63,7 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    @Query(value = "UPDATE invoices SET reservation = :reservation, batch_id = :batchId WHERE id = :invoiceId", nativeQuery = true)
    public void updateReservationAndBatchIdByInvoiceId(@Param("reservation") String reservation,
          @Param("batchId") Long batchId, @Param("invoiceId") Long invoiceId);
+
+   @Query("SELECT total FROM Invoice WHERE id = :invoiceId")
+   public Double findTotalByInvoiceId(@Param("invoiceId") Long invoiceId);
 }

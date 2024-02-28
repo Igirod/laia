@@ -20,7 +20,7 @@ type Query {
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
    gInvoice(invoiceId: Int!): InvoiceDTO
-   cUserE(userId: Int!, email: String!, invoiceId: Int): UserDTO
+   cUserE(userId: Int!, email: String!): Int
    lUser(userId: Int!, email: String!, password: String!): UserDTO
    gIProducts(invoiceId: Int!, page: Int!, limit: Int): [InvoiceProductDTO]
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]

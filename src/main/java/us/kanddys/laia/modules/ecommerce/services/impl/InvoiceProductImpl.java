@@ -11,12 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
+import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.InvoiceProduct;
 import us.kanddys.laia.modules.ecommerce.model.InvoiceProductId;
+import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceProductService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 
@@ -42,11 +45,20 @@ public class InvoiceProductImpl implements InvoiceProductService {
    @Autowired
    private InvoiceCheckService invoiceCheckService;
 
+   @Autowired
+   private ProductJpaRepository productJpaRepository;
+
    @Override
    public Integer addInvoiceProduct(@Argument Long invoiceId, @Argument Long productId) {
       if (invoiceJpaRepository.existByInvoiceId(invoiceId) == null)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      invoiceProductJpaRepository.save(new InvoiceProduct(invoiceId, productId));
+      Optional<Product> product = productJpaRepository.findById(productId);
+      if (product.isEmpty())
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      invoiceProductJpaRepository.save(new InvoiceProduct(invoiceId, productId, product.get()));
+      invoiceCheckService.updateTotal(invoiceId,
+            invoiceJpaRepository.findTotalById(invoiceId) + invoiceProductJpaRepository
+                  .findById(new InvoiceProductId(invoiceId, productId)).get().getProduct().getPrice() * 1);
       return 1;
    }
 
