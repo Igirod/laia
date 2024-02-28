@@ -19,7 +19,7 @@ public class ProductDetailRestController {
    @Autowired
    private ProductDetailService productDetailService;
 
-   @RequestMapping(method = RequestMethod.GET, value = "/upload", produces = {
+   @RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public ProductDetailDTO uploadProductDetail(@RequestPart Optional<String> title,
          @RequestPart Optional<MultipartFile> frontPage, @RequestPart String productId,

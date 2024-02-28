@@ -16,7 +16,7 @@ public class InvoiceRestController {
    @Autowired
    private InvoiceService invoiceService;
 
-   @RequestMapping(method = RequestMethod.GET, value = "/upload", produces = {
+   @RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public Integer updateInvoiceVoucher(@RequestPart MultipartFile voucher, @RequestPart String invoiceId) {
       return invoiceService.updateInvoiceVoucher(voucher, Long.valueOf(invoiceId));
