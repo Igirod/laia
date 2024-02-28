@@ -178,14 +178,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+   public String updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
          Long merchantId,
          Long userId) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      invoiceJpaRepository.updateVoucherByInvoiceId(firebaseStorageService.uploadFile(voucher, "vouchers"), invoiceId);
+      var urlVoucher = firebaseStorageService.uploadFile(voucher, "vouchers");
+      invoiceJpaRepository.updateVoucherByInvoiceId(urlVoucher, invoiceId);
       updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
-      return 1;
+      return urlVoucher;
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })

@@ -18,7 +18,7 @@ public class InvoiceRestController {
 
    @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public Integer updateInvoiceVoucher(@RequestPart MultipartFile voucher, @RequestPart String invoiceId,
+   public String updateInvoiceVoucher(@RequestPart MultipartFile voucher, @RequestPart String invoiceId,
          @RequestPart String paymentId, @RequestPart String date, @RequestPart String batchId,
          @RequestPart String merchantId, @RequestPart String userId) {
       return invoiceService.updateInvoiceVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
