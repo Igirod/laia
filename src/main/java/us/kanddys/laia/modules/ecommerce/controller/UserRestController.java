@@ -15,7 +15,7 @@ public class UserRestController {
    @Autowired
    private UserService userService;
 
-   @RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/upload", produces = {
+   @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public Integer uploadImageProduct(@RequestPart MultipartFile image, @RequestPart String userId) {
       return userService.updateProfileImage(Long.valueOf(userId), image);
