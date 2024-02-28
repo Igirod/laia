@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
 import us.kanddys.laia.modules.ecommerce.model.User;
-import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.UserService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
@@ -20,9 +19,6 @@ public class UserServiceImpl implements UserService {
 
    @Autowired
    private UserJpaRepository userJpaRepository;
-
-   @Autowired
-   private InvoiceJpaRepository invoiceJpaRepository;
 
    @Autowired
    private FirebaseStorageService firebaseStorageService;
