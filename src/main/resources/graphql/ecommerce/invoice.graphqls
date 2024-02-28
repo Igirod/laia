@@ -13,6 +13,7 @@ type InvoiceDTO {
    count: Int
    addressTitle: String
    addressDirection: String
+   batchId: Int
 }
 
 input InvoiceInputDTO {
@@ -29,6 +30,7 @@ input InvoiceInputDTO {
    note: String
    addressTitle: String
    addressDirection: String
+   batchId: Int   
 }
 
 enum InvoiceStatus {

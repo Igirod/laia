@@ -195,4 +195,14 @@ public class InvoiceServiceImpl implements InvoiceService {
       invoiceJpaRepository.updateAddressByInvoiceId(title, direction, invoiceId);
       return 1;
    }
+
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
+   @Override
+   public Integer updateInvoiceReservation(Long invoiceId, String date, Long batchId) {
+      if (invoiceJpaRepository.existsById(invoiceId)) {
+         invoiceJpaRepository.updateReservationAndBatchIdByInvoiceId(date, batchId, invoiceId);
+         return 1;
+      } else
+         return 0;
+   }
 }

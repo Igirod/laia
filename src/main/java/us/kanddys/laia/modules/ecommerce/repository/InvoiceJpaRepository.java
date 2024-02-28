@@ -44,6 +44,10 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    @Query(value = "UPDATE invoices SET total = :total WHERE id = :invoiceId", nativeQuery = true)
    public void updateTotal(Long invoiceId, Double total);
 
+   @Modifying
+   @Query(value = "UPDATE invoices SET user_id = :userId WHERE id = :invoiceId", nativeQuery = true)
+   public void updateUserId(Long invoiceId, Long userId);
+
    @Query(value = "SELECT total FROM invoices WHERE id = :invoiceId", nativeQuery = true)
    public Double findTotalById(Long invoiceId);
 
@@ -52,5 +56,11 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    public void updateAddressByInvoiceId(String title, String direction, Long invoiceId);
 
    @Query(value = "SELECT * FROM invoices WHERE user_id = :userId AND mer_id = :merchantId AND status = :status", nativeQuery = true)
-   public Invoice findInvoiceIdByUserIdAndMerchantIdAndStatus(@Param("userId") Long userId, @Param("merchantId") Long merchantId, @Param("status") String status);
+   public Invoice findInvoiceIdByUserIdAndMerchantIdAndStatus(@Param("userId") Long userId,
+         @Param("merchantId") Long merchantId, @Param("status") String status);
+
+   @Modifying
+   @Query(value = "UPDATE invoices SET reservation = :reservation, batch_id = :batchId WHERE id = :invoiceId", nativeQuery = true)
+   public void updateReservationAndBatchIdByInvoiceId(@Param("reservation") String reservation,
+         @Param("batchId") Long batchId, @Param("invoiceId") Long invoiceId);
 }

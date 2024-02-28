@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.model;
 
 import java.text.ParseException;
 import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,7 +23,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * Esta clase representa una factura.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Entity
 @Table(name = "invoices")
@@ -60,6 +61,8 @@ public class Invoice {
    private String addressDirection;
    @Transient
    private Integer count;
+   @Column(name = "batch_id")
+   private Long batchId;
 
    public Invoice() {
    }
@@ -90,6 +93,7 @@ public class Invoice {
       this.count = (count == null) ? null : count;
       this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
       this.addressTitle = (invoice.getAddressTitle() == null) ? null : invoice.getAddressTitle();
+      this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
    }
 
    /**
@@ -120,6 +124,7 @@ public class Invoice {
       this.addressDirection = invoiceDTO.getAddressDirection() != null ? invoiceDTO.getAddressDirection()
             : this.addressDirection;
       this.addressTitle = invoiceDTO.getAddressTitle() != null ? invoiceDTO.getAddressTitle() : this.addressTitle;
+      this.batchId = invoiceDTO.getBatchId() != null ? invoiceDTO.getBatchId() : this.batchId;
    }
 
    /**
