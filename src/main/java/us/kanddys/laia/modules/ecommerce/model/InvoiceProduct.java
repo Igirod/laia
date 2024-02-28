@@ -41,9 +41,10 @@ public class InvoiceProduct {
     * @param invoiceId
     * @param productId
     */
-   public InvoiceProduct(Long productId, Long invoiceId) {
+   public InvoiceProduct(Long productId, Long invoiceId, Product product) {
       super();
       this.id = new InvoiceProductId(productId, invoiceId);
+      this.product = product;
       this.quantity = 1;
    }
 

@@ -22,10 +22,9 @@ public interface UserService {
     * @version 1.0.1
     * @param userId
     * @param email
-    * @param invoiceId
     * @return Integer
     */
-   public UserDTO checkEmail(Long userId, String email, Optional<Long> invoiceId);
+   public Integer checkEmail(Long userId, String email);
 
    /**
     * Este método verifica si el email y la contraseña son correctos.

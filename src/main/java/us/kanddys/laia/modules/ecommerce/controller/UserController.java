@@ -18,8 +18,8 @@ public class UserController {
    private UserService userService;
 
    @QueryMapping("cUserE")
-   public UserDTO checkUserEmail(@Argument Long userId, @Argument String email, @Argument Optional<Long> invoiceId) {
-      return userService.checkEmail(userId, email, invoiceId);
+   public Integer checkUserEmail(@Argument Long userId, @Argument String email) {
+      return userService.checkEmail(userId, email);
    }
 
    @QueryMapping("lUser")

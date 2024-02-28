@@ -28,18 +28,11 @@ public class UserServiceImpl implements UserService {
    private FirebaseStorageService firebaseStorageService;
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
-   public UserDTO checkEmail(@Argument Long userId, @Argument String email, @Argument Optional<Long> invoiceId) {
-      var id = userJpaRepository.existByUserEmail(email);
-      if (id != null) {
-         if (invoiceId.isPresent()) {
-            invoiceJpaRepository.updateUserId(invoiceId.get(), id);
-            userJpaRepository.deleteById(userId);
-         }
-         return new UserDTO(userJpaRepository.findUserById(id), 1);
-      } else {
-         userJpaRepository.updateUserEmail(userId, email);
-         return new UserDTO(userJpaRepository.findUserById(userId), 0);
-      }
+   public Integer checkEmail(@Argument Long userId, @Argument String email) {
+      if (userJpaRepository.existByUserEmail(email) != null)
+         return 1;
+      else
+         return 0;
    }
 
    @Override
