@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDateDTO;
-import us.kanddys.laia.modules.ecommerce.model.Reservation;
 import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
