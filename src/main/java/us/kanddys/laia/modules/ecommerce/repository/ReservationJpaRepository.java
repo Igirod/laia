@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import us.kanddys.laia.modules.ecommerce.model.Reservation;
 
 @Repository
-public interface ReservationJpaRepository extends JpaRepository<Reservation, Long>{
+public interface ReservationJpaRepository extends JpaRepository<Reservation, Long> {
 
    @Query(value = "SELECT batch_id, COUNT(*) FROM reservations WHERE batch_id IN :batchIds AND `date` = :date GROUP BY batch_id", nativeQuery = true)
    List<Object[]> countRecordsByBatchIdsAndDate(List<Long> batchIds, Date date);
