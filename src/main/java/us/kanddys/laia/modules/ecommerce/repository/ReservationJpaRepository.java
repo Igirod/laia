@@ -11,6 +11,9 @@ import us.kanddys.laia.modules.ecommerce.model.Reservation;
 @Repository
 public interface ReservationJpaRepository extends JpaRepository<Reservation, Long> {
 
-   @Query(value = "SELECT batch_id, COUNT(*) FROM reservations WHERE batch_id IN :batchIds AND `date` BETWEEN :startDate AND :endDate GROUP BY batch_id", nativeQuery = true)
+   @Query(value = "SELECT batch_id, COUNT(*), CAST(Date as CHAR) FROM reservations WHERE batch_id IN :batchIds AND `date` BETWEEN :startDate AND :endDate GROUP BY date", nativeQuery = true)
    List<Object[]> countRecordsByBatchIdsAndDate(List<Long> batchIds, Date startDate, Date endDate);
+
+   @Query(value = "SELECT mer_id, CAST(date as CHAR) FROM reservations WHERE batch_id IN :batchIds", nativeQuery = true)
+   List<Object[]> findDatesByBatchIds(List<Long> batchIds);
 }
