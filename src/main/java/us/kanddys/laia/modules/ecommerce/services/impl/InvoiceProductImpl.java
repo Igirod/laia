@@ -50,16 +50,20 @@ public class InvoiceProductImpl implements InvoiceProductService {
 
    @Override
    public Integer addInvoiceProduct(@Argument Long invoiceId, @Argument Long productId) {
-      if (invoiceJpaRepository.existByInvoiceId(invoiceId) == null)
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      Optional<Product> product = productJpaRepository.findById(productId);
-      if (product.isEmpty())
-         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
-      invoiceProductJpaRepository.save(new InvoiceProduct(invoiceId, productId, product.get()));
-      invoiceCheckService.updateTotal(invoiceId,
-            invoiceJpaRepository.findTotalById(invoiceId) + invoiceProductJpaRepository
-                  .findById(new InvoiceProductId(invoiceId, productId)).get().getProduct().getPrice() * 1);
-      return 1;
+      if (invoiceProductJpaRepository.findById(new InvoiceProductId(invoiceId, productId)).isPresent()) {
+         return 1;
+      } else {
+         if (invoiceJpaRepository.existByInvoiceId(invoiceId) == null)
+            throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
+         Optional<Product> product = productJpaRepository.findById(productId);
+         if (product.isEmpty())
+            throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+         invoiceProductJpaRepository.save(new InvoiceProduct(invoiceId, productId, product.get()));
+         invoiceCheckService.updateTotal(invoiceId,
+               invoiceJpaRepository.findTotalById(invoiceId) + invoiceProductJpaRepository
+                     .findById(new InvoiceProductId(invoiceId, productId)).get().getProduct().getPrice() * 1);
+         return 1;
+      }
    }
 
    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })

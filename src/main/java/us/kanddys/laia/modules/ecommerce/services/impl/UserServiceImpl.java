@@ -7,10 +7,13 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.MailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
 import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
+import us.kanddys.laia.modules.ecommerce.services.MailSenderService;
 import us.kanddys.laia.modules.ecommerce.services.UserService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
@@ -23,12 +26,22 @@ public class UserServiceImpl implements UserService {
    @Autowired
    private FirebaseStorageService firebaseStorageService;
 
+   @Autowired
+   private MailSenderService mailSenderService;
+
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    public Integer checkEmail(@Argument Long userId, @Argument String email) {
       if (userJpaRepository.existByUserEmail(email) != null)
          return 1;
-      else
+      else {
+         userJpaRepository.updateEmailByUserId(userId, email);
+         try {
+            mailSenderService.sendEmailChangePassword(new MailDTO(email, "Bienvenido", "", ""));
+         } catch (MessagingException e) {
+            throw new RuntimeException("Error al enviar el correo");
+         }
          return 0;
+      }
    }
 
    @Override
