@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.text.ParseException;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,13 +44,17 @@ public class BatchServiceImpl implements BatchService {
                : batchJpaRepository
                      .findByCalendarIdAndDaysContainingAndDateIsNull(calendarId, CalendarDay.getDayNumber(day)).stream()
                      .map(batch -> new BatchDTO(batch)).toList());
+         var dateSplitted = date.split("-");
          reservations = reservationJpaRepository.countRecordsByBatchIdsAndDate(
-               batches.stream().map(BatchDTO::getId).toList(), DateUtils.convertStringToDateWithoutTime(date))
+               batches.stream().map(BatchDTO::getId).toList(), DateUtils.convertStringToDateWithoutTime(date),
+               DateUtils.convertStringToDateWithoutTime(
+                     YearMonth.of(Integer.parseInt(dateSplitted[0]), Integer.parseInt(dateSplitted[1])).atEndOfMonth()
+                           .toString()))
                .stream().map(BatchDateDTO::new).toList();
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
       }
-      disableDates(reservations, batches, date);
+      disableDates(reservations, batches);
       return (reservations.isEmpty()) ? batches
             : batches.stream()
                   .filter(batch -> reservations.stream()
@@ -61,10 +66,19 @@ public class BatchServiceImpl implements BatchService {
 
    }
 
-   private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches, String date) {
-      var dates = reservations.stream().filter(reservation -> reservation.getCount() == batches.stream()
-            .filter(batch -> batch.getId().equals(reservation.getBatchId())).findFirst().get().getLimit())
-            .map(BatchDateDTO::getBatchId).toList();
+   /**
+    * Desactiva las fechas que ya no tienen disponibilidad.
+    * 
+    * @param reservations Lista de reservas.
+    * @param batches      Lista de lotes.
+    * @param date         Fecha.
+    */
+   private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches) {
+      var dates = reservations.stream()
+            .filter(reservation -> batches.stream()
+                  .anyMatch(batch -> reservation.getBatchId().equals(batch.getId())
+                        && reservation.getCount() == batch.getLimit()))
+            .collect(Collectors.toList());
       System.out.println("hola");
    }
 }

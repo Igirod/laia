@@ -11,7 +11,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.TypeShipment;
  * Esta clase representa un data transfer object (DTO) de Merchant.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Data
 @AllArgsConstructor
@@ -30,6 +30,8 @@ public class MerchantDTO {
    private String title;
    @JsonProperty
    private String image;
+   @JsonProperty
+   private String address;
 
    public MerchantDTO() {
    }
@@ -50,5 +52,6 @@ public class MerchantDTO {
       this.typeShipment = (merchant.getTypeShipment() == null) ? null : merchant.getTypeShipment();
       this.title = (merchant.getTitle() == null) ? null : merchant.getTitle();
       this.image = (merchant.getImage() == null) ? null : merchant.getImage();
+      this.address = (merchant.getAddress() == null) ? null : merchant.getAddress();
    }
 }

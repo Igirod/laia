@@ -33,6 +33,9 @@ public class Merchant {
    private String title;
    @Column(name = "image")
    private String image;
+   @Column(name = "address")
+   private String address;
 
-   public Merchant() {}
+   public Merchant() {
+   }
 }
