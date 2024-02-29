@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.UrlDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
@@ -178,7 +179,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public String updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+   public UrlDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
          Long merchantId,
          Long userId) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
@@ -186,7 +187,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       var urlVoucher = firebaseStorageService.uploadFile(voucher, "vouchers");
       invoiceJpaRepository.updateVoucherByInvoiceId(urlVoucher, invoiceId);
       updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
-      return urlVoucher;
+      return new UrlDTO(urlVoucher);
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
