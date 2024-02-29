@@ -141,6 +141,7 @@ public class CombinedServiceImpl implements CombinedService {
     * @return Invoice
     */
    private Invoice createNewInvoice(Long userId, Long merchantId) {
+      // Fix
       var newInvoice = new Invoice();
       newInvoice.setUserId(userId);
       newInvoice.setMerchantId(merchantId);
