@@ -75,7 +75,7 @@ public class MailSenderServiceImpl implements MailSenderService {
                   "    <div class=\"container\">\n" +
                   "        <h2>Acceso a tu LAIA</h2>\n" +
                   "        <p>Aquí te dejamos tu contraseña para futuros ingresos en la misma:</p>\n" +
-                  "        <p class=\"strong\">" + getPassword(mailDTO.getTo()) + "</p>\n" +
+                  "        <p><strong>" + getPassword(mailDTO.getTo()) + "</strong></p>\n" +
                   "        <p>LAIA entrenada por Daviel - <strong>Coordinador de tu Experiencia con LAIA</strong></p>\n"
                   +
                   "    </div>\n" +

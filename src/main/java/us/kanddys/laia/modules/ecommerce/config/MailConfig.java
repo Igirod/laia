@@ -25,7 +25,7 @@ public class MailConfig {
       JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
       mailSender.setHost(credentialMailHost);
       mailSender.setPort(credentialMailPort);
-      mailSender.setUsername("credentialMailUser");
+      mailSender.setUsername(credentialMailUser);
       mailSender.setPassword(credentialMailPassword);
       Properties props = mailSender.getJavaMailProperties();
       props.put("mail.transport.protocol", "smtp");
