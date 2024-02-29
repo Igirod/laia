@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDateDTO;
+import us.kanddys.laia.modules.ecommerce.model.Reservation;
 import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
@@ -49,11 +50,22 @@ public class BatchServiceImpl implements BatchService {
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
       }
+      disableDates(reservations, batches, date);
       return (reservations.isEmpty()) ? batches
             : batches.stream()
                   .filter(batch -> reservations.stream()
                         .anyMatch(reservation -> reservation.getBatchId().equals(batch.getId())
                               && reservation.getCount() <= batch.getLimit()))
                   .collect(Collectors.toList());
+
+      // DESACTIVAR LA FECHA
+
+   }
+
+   private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches, String date) {
+      var dates = reservations.stream().filter(reservation -> reservation.getCount() == batches.stream()
+            .filter(batch -> batch.getId().equals(reservation.getBatchId())).findFirst().get().getLimit())
+            .map(BatchDateDTO::getBatchId).toList();
+      System.out.println("hola");
    }
 }
