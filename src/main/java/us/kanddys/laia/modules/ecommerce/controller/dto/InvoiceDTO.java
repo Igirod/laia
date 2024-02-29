@@ -32,7 +32,7 @@ public class InvoiceDTO {
    @JsonProperty
    private String reservation;
    @JsonProperty
-   private Float total;
+   private Double total;
    @JsonProperty
    private String message;
    @JsonProperty

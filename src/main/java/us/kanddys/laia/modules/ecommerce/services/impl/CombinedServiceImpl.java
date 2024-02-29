@@ -146,6 +146,7 @@ public class CombinedServiceImpl implements CombinedService {
       newInvoice.setUserId(userId);
       newInvoice.setMerchantId(merchantId);
       newInvoice.setStatus(InvoiceStatus.INITIAL);
+      newInvoice.setTotal(0.0);
       return invoiceJpaRepository.save(newInvoice);
    }
 }

@@ -43,7 +43,7 @@ public class Invoice {
    @Column(name = "reservation")
    private String reservation;
    @Column(name = "total")
-   private Float total;
+   private Double total;
    @Column(name = "message")
    private String message;
    @Enumerated(EnumType.STRING)
