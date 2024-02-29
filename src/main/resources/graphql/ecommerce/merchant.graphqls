@@ -6,6 +6,7 @@ type MerchantDTO {
    typeShipment: TypeShipment
    title: String
    image: String
+   address: String
 }
 
 enum TypeShipment {
