@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.BatchDateDTO;
+import us.kanddys.laia.modules.ecommerce.model.DisabledDate;
 import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.DisabledDateJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.BatchService;
 
@@ -31,6 +33,9 @@ public class BatchServiceImpl implements BatchService {
 
    @Autowired
    private ReservationJpaRepository reservationJpaRepository;
+
+   @Autowired
+   private DisabledDateJpaRepository disabledDateJpaRepository;
 
    @Override
    public List<BatchDTO> getBatchesByCalendarId(Long calendarId, String day, String date,
@@ -61,24 +66,27 @@ public class BatchServiceImpl implements BatchService {
                         .anyMatch(reservation -> reservation.getBatchId().equals(batch.getId())
                               && reservation.getCount() <= batch.getLimit()))
                   .collect(Collectors.toList());
-
-      // DESACTIVAR LA FECHA
-
    }
 
    /**
-    * Desactiva las fechas que ya no tienen disponibilidad.
+    * Desactiva las fechas que ya no tienen disponibilidad para realizar pedidos.
     * 
-    * @param reservations Lista de reservas.
-    * @param batches      Lista de lotes.
-    * @param date         Fecha.
+    * @author Igirod0
+    * @version 1.0.0
+    * @param reservations
+    * @param batches
+    * @param date
     */
    private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches) {
-      var dates = reservations.stream()
+      List<Long> disabledBatchIds = reservations.stream()
             .filter(reservation -> batches.stream()
                   .anyMatch(batch -> reservation.getBatchId().equals(batch.getId())
-                        && reservation.getCount() == batch.getLimit()))
+                        && (reservation.getCount() == batch.getLimit() || reservation.getCount() >= batch.getLimit())))
+            .map(reservation -> reservation.getBatchId())
+            .distinct()
             .collect(Collectors.toList());
-      System.out.println("hola");
+      disabledDateJpaRepository
+            .saveAll(reservationJpaRepository.findDatesByBatchIds(disabledBatchIds).stream().map(DisabledDate::new)
+                  .toList());
    }
 }

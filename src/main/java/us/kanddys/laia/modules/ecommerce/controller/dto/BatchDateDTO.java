@@ -18,15 +18,15 @@ import lombok.Data;
 @Data
 public class BatchDateDTO {
    @JsonProperty
+   private String date;
+   @JsonProperty
    private Long batchId;
    @JsonProperty
    private Integer count;
-   @JsonProperty
-   private String date;
 
    public BatchDateDTO(Object[] data) {
       this.batchId = Long.parseLong(data[0].toString());
+      this.date = data[2].toString();
       this.count = Integer.parseInt(data[1].toString());
-      this.date = (String) data[2];
    }
 }
