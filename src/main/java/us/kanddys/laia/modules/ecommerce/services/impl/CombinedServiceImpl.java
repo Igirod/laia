@@ -12,13 +12,11 @@ import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
-import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
@@ -38,9 +36,6 @@ public class CombinedServiceImpl implements CombinedService {
 
    @Autowired
    private InvoiceJpaRepository invoiceJpaRepository;
-
-   @Autowired
-   private UserJpaRepository userJpaRepository;
 
    @Autowired
    private ProductJpaRepository productJpaRepository;
@@ -108,14 +103,13 @@ public class CombinedServiceImpl implements CombinedService {
       if (userId.isPresent()) {
          invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
                InvoiceStatus.INITIAL.toString());
+         if (invoice == null) {
+            invoice = createNewInvoice(merchantId, merchantId);
+         }
          if (invoice == null)
             throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       } else {
-         var newInvoice = new Invoice();
-         newInvoice.setUserId(userJpaRepository.save(new User()).getId());
-         newInvoice.setMerchantId(merchantId);
-         newInvoice.setStatus(InvoiceStatus.INITIAL);
-         invoice = invoiceJpaRepository.save(newInvoice);
+         invoice = createNewInvoice(merchantId, merchantId);
       }
       return invoice;
    }
@@ -130,5 +124,22 @@ public class CombinedServiceImpl implements CombinedService {
                   : 0,
             imageProductService.getImagesProductByProductId(productId),
             productDetailService.getProductDetailsByProductId(productId));
+   }
+
+   /**
+    * Este método se encarga de crear una nueva factura.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param userId
+    * @param merchantId
+    * @return Invoice
+    */
+   private Invoice createNewInvoice(Long userId, Long merchantId) {
+      var newInvoice = new Invoice();
+      newInvoice.setUserId(userId);
+      newInvoice.setMerchantId(merchantId);
+      newInvoice.setStatus(InvoiceStatus.INITIAL);
+      return invoiceJpaRepository.save(newInvoice);
    }
 }
