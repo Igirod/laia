@@ -28,7 +28,7 @@ import us.kanddys.laia.modules.ecommerce.services.ProductService;
  * Esta clase implementa las obligaciones de la interface CombinedService.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Service
 public class CombinedServiceImpl implements CombinedService {
@@ -98,7 +98,7 @@ public class CombinedServiceImpl implements CombinedService {
     * existe crea una nueva factura.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param userId
     * @param merchantId
     * @return Invoice
@@ -114,6 +114,7 @@ public class CombinedServiceImpl implements CombinedService {
          var newInvoice = new Invoice();
          newInvoice.setUserId(userJpaRepository.save(new User()).getId());
          newInvoice.setMerchantId(merchantId);
+         newInvoice.setStatus(InvoiceStatus.INITIAL);
          invoice = invoiceJpaRepository.save(newInvoice);
       }
       return invoice;
