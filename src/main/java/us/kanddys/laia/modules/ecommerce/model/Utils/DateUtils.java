@@ -3,6 +3,7 @@ package us.kanddys.laia.modules.ecommerce.model.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Esta clase representa un conjunto de utilidades para el manejo de fechas.
@@ -37,6 +38,11 @@ public class DateUtils {
       return dateFormat.format(date);
    }
 
+   public static String convertDateToStringWithoutTime(Date date) {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      return dateFormat.format(date);
+   }
+
    /**
     * Este método tiene la obligacion de devolver el String de la fecha actual
     * con el formato yyyy-MM-dd.
@@ -60,5 +66,9 @@ public class DateUtils {
     */
    public static Date convertStringToDateWithoutTime(String dateString) throws ParseException {
       return new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+   }
+
+   public static List<String> convertDateToStringList(List<Date> dates) {
+      return dates.stream().map(DateUtils::convertDateToStringWithoutTime).toList();
    }
 }

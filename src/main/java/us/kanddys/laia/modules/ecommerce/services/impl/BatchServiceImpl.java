@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.text.ParseException;
 import java.time.YearMonth;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,30 +43,29 @@ public class BatchServiceImpl implements BatchService {
          Optional<Integer> exceptionalDate) {
       List<BatchDTO> batches;
       List<BatchDateDTO> reservations;
+      var dateSplitted = date.split("-");
+      Date endDate;
+      Date startDate;
       try {
-         batches = (exceptionalDate.isPresent()
-               ? batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,
-                     DateUtils.convertStringToDateWithoutTime(date)).stream().map(BatchDTO::new).toList()
-               : batchJpaRepository
-                     .findByCalendarIdAndDaysContainingAndDateIsNull(calendarId, CalendarDay.getDayNumber(day)).stream()
-                     .map(batch -> new BatchDTO(batch)).toList());
-         var dateSplitted = date.split("-");
-         reservations = reservationJpaRepository.countRecordsByBatchIdsAndDate(
-               batches.stream().map(BatchDTO::getId).toList(), DateUtils.convertStringToDateWithoutTime(date),
-               DateUtils.convertStringToDateWithoutTime(
-                     YearMonth.of(Integer.parseInt(dateSplitted[0]), Integer.parseInt(dateSplitted[1])).atEndOfMonth()
-                           .toString()))
-               .stream().map(BatchDateDTO::new).toList();
+         startDate = DateUtils.convertStringToDateWithoutTime(date);
+         endDate = DateUtils.convertStringToDateWithoutTime(
+               YearMonth.of(Integer.parseInt(dateSplitted[0]), Integer.parseInt(dateSplitted[1])).atEndOfMonth()
+                     .toString());
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
       }
-      disableDates(reservations, batches);
+      batches = (exceptionalDate.isPresent()
+            ? batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,
+                  startDate).stream().map(BatchDTO::new).toList()
+            : batchJpaRepository
+                  .findByCalendarIdAndDaysContainingAndDateIsNull(calendarId, CalendarDay.getDayNumber(day)).stream()
+                  .map(batch -> new BatchDTO(batch)).toList());
+      reservations = reservationJpaRepository.countRecordsByBatchIdsAndDate(
+            batches.stream().map(BatchDTO::getId).toList(), startDate, endDate)
+            .stream().map(BatchDateDTO::new).toList();
+      disableDates(reservations, batches, date, calendarId, CalendarDay.getDayNumber(day), startDate, endDate);
       return (reservations.isEmpty()) ? batches
-            : batches.stream()
-                  .filter(batch -> reservations.stream()
-                        .anyMatch(reservation -> reservation.getBatchId().equals(batch.getId())
-                              && reservation.getCount() <= batch.getLimit()))
-                  .collect(Collectors.toList());
+            : filterBatches(batches, reservations, date);
    }
 
    /**
@@ -77,7 +77,8 @@ public class BatchServiceImpl implements BatchService {
     * @param batches
     * @param date
     */
-   private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches) {
+   private void disableDates(List<BatchDateDTO> reservations, List<BatchDTO> batches, String date, Long calendarId,
+         Integer day, Date startDate, Date endDate) {
       List<Long> disabledBatchIds = reservations.stream()
             .filter(reservation -> batches.stream()
                   .anyMatch(batch -> reservation.getBatchId().equals(batch.getId())
@@ -85,8 +86,39 @@ public class BatchServiceImpl implements BatchService {
             .map(reservation -> reservation.getBatchId())
             .distinct()
             .collect(Collectors.toList());
-      disabledDateJpaRepository
-            .saveAll(reservationJpaRepository.findDatesByBatchIds(disabledBatchIds).stream().map(DisabledDate::new)
-                  .toList());
+
+      if (!DateUtils.convertDateToStringList(
+            reservationJpaRepository.findDatesByBatchIds(disabledBatchIds).stream().map(DisabledDate::new)
+                  .toList().stream().map(DisabledDate::getDate).toList())
+            .contains(date)
+            && batchJpaRepository.findMaxMerchantBatchesByCalendarId(calendarId, day).equals(disabledBatchIds.size())) {
+         try {
+            if (disabledDateJpaRepository
+                  .existDisabledDateByCalendarIdAndDate(calendarId, DateUtils.convertStringToDateWithoutTime(date))
+                  .isEmpty()) {
+               disabledDateJpaRepository
+                     .save(new DisabledDate(null, calendarId, DateUtils.convertStringToDateWithoutTime(date)));
+               reservations = reservationJpaRepository.countRecordsByBatchIdsAndDate(
+                     batches.stream().map(BatchDTO::getId).toList(), startDate, endDate)
+                     .stream().map(BatchDateDTO::new).toList();
+            }
+         } catch (ParseException e) {
+            throw new RuntimeException("Error al convertir la fecha");
+         }
+      }
+   }
+
+   private List<BatchDTO> filterBatches(List<BatchDTO> batches, List<BatchDateDTO> reservations, String date) {
+      List<BatchDTO> batchesFiltered = batches;
+      for (int i = 0; i < batchesFiltered.size(); i++) {
+         BatchDTO batch = batchesFiltered.get(i);
+         for (BatchDateDTO reservation : reservations) {
+            if (batch.getId().equals(reservation.getBatchId()) && batch.getLimit() <= reservation.getCount()
+                  && reservation.getDate().equals(date)) {
+               batchesFiltered.remove(i);
+            }
+         }
+      }
+      return batchesFiltered;
    }
 }

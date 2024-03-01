@@ -16,4 +16,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation, Lon
 
    @Query(value = "SELECT mer_id, CAST(date as CHAR) FROM reservations WHERE batch_id IN :batchIds", nativeQuery = true)
    List<Object[]> findDatesByBatchIds(List<Long> batchIds);
+
+   @Query(value = "SELECT batch_id, COUNT(*), CAST(Date as CHAR) FROM reservations WHERE batch_id = id AND `date` = date GROUP BY date", nativeQuery = true)
+   Object[] countRecordsByBatchIdsAndDate(Long batchId, Date date);
 }
