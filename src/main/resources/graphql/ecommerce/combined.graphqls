@@ -30,6 +30,8 @@ type CombinedProductDTO {
 type CombinedProductDetailDTO {
    stock: Int
    check: Int
+   merchantDirection: String
+   firstShippingDate: String
    images: [ImageProductDTO]
    details: [ProductDetailDTO]
 }

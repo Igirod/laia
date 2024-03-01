@@ -16,4 +16,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation, Lon
 
    @Query(value = "SELECT mer_id, CAST(date as CHAR) FROM reservations WHERE batch_id IN :batchIds", nativeQuery = true)
    List<Object[]> findDatesByBatchIds(List<Long> batchIds);
+
+   @Query(value = "SELECT CAST(date AS CHAR) FROM reservations WHERE mer_id = :merchantId ORDER BY date DESC LIMIT 1", nativeQuery = true)
+   String findLatestDateByMerchantId(Long merchantId);
 }

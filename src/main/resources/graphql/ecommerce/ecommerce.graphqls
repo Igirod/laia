@@ -26,7 +26,7 @@ type Query {
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
-   rProduct(productId: Int!, invoiceId: Int): CombinedProductDetailDTO
+   rProduct(productId: Int!, invoiceId: Int, merchantId: Int!): CombinedProductDetailDTO
    gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
 }
@@ -45,5 +45,5 @@ type Mutation {
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
-   uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String) : Int
+   uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String, type: String, addressNumber: Int) : Int
 }

@@ -47,6 +47,10 @@ public class InvoiceInputDTO {
    private String addressDirection;
    @JsonProperty
    private Long batchId;
+   @JsonProperty
+   private String type;
+   @JsonProperty
+   private Integer addressNumber;
 
    public InvoiceInputDTO() {
    }

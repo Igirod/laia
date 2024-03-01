@@ -25,4 +25,7 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
    @Modifying
    @Query(value = "UPDATE products SET stock = :stock WHERE id = :productId", nativeQuery = true)
    Integer updateStockByProductId(Long productId, Integer stock);
+
+   @Query(value = "SELECT merchant_id FROM products WHERE id = :productId", nativeQuery = true)
+   Long findMerchantIdByProductId(Long productId);
 }

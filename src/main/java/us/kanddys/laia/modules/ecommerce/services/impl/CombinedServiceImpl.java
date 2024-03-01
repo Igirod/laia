@@ -1,5 +1,10 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,11 +18,16 @@ import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
 import us.kanddys.laia.modules.ecommerce.model.User;
+import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.CalendarJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
@@ -35,6 +45,9 @@ public class CombinedServiceImpl implements CombinedService {
 
    @Autowired
    private MerchantJpaRepository merchantJpaRepository;
+
+   @Autowired
+   private CalendarJpaRepository calendarJpaRepository;
 
    @Autowired
    private InvoiceJpaRepository invoiceJpaRepository;
@@ -56,6 +69,12 @@ public class CombinedServiceImpl implements CombinedService {
 
    @Autowired
    private ProductDetailService productDetailService;
+
+   @Autowired
+   private BatchJpaRepository batchJpaRepository;
+
+   @Autowired
+   private ReservationJpaRepository reservationJpaRepository;
 
    @Override
    public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId) {
@@ -120,15 +139,55 @@ public class CombinedServiceImpl implements CombinedService {
    }
 
    @Override
-   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId) {
-      return new CombinedProductDetailDTO(productJpaRepository.findStockByProductId(productId),
-            invoiceId.isPresent()
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId,
+         Long merchantId) {
+      CombinedProductDetailDTO combinedProductDetailDTO = new CombinedProductDetailDTO(
+            productJpaRepository.findStockByProductId(productId), invoiceId.isPresent()
                   ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoiceId.get(),
                         productId) != null ? 1
                               : 0)
                   : 0,
-            imageProductService.getImagesProductByProductId(productId),
+            null, null, imageProductService.getImagesProductByProductId(productId),
             productDetailService.getProductDetailsByProductId(productId));
+      return findMerchantDirectionAndFirstShippingDate(combinedProductDetailDTO, merchantId);
+   }
+
+   private CombinedProductDetailDTO findMerchantDirectionAndFirstShippingDate(
+         CombinedProductDetailDTO combinedProductDetailDTO,
+         Long merchantId) {
+      combinedProductDetailDTO.setMerchantDirection(merchantJpaRepository.findAddressByMerchantId(merchantId));
+      List<String> workingDays = CalendarDay.getDays(batchJpaRepository
+            .findDaysByCalendarId(calendarJpaRepository.findCalendarIdByMerchantId(merchantId).get()));
+      String reservations = reservationJpaRepository.findLatestDateByMerchantId(merchantId);
+      if (reservations == null) {
+         String formatoString = "yyyy-MM-dd";
+         SimpleDateFormat formato = new SimpleDateFormat(formatoString);
+         Date fecha;
+         try {
+            fecha = formato.parse("2024-03-17");
+         } catch (ParseException e) {
+            throw new RuntimeException("Error al parsear la fecha");
+         }
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(fecha);
+         System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+      }
+
+      // Calendar calendar = Calendar.getInstance();
+      // try {
+      // calendar.setTime(DateUtils.convertStringToDateWithoutTime("2024-03-20"));
+      // } catch (ParseException e) {
+      // // TODO Auto-generated catch block
+      // e.printStackTrace();
+      // }
+      // int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+      // String[] daysOfWeek = { "", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"
+      // };
+      // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      // System.out
+      // .println(CalendarDay.getDayNumber(calendar.get(Calendar.DAY_OF_WEEK) + 1) + "
+      // " + sdf.format("2024-03-20"));
+      // return combinedProductDetailDTO;
    }
 
    /**
@@ -141,7 +200,6 @@ public class CombinedServiceImpl implements CombinedService {
     * @return Invoice
     */
    private Invoice createNewInvoice(Long userId, Long merchantId) {
-      // Fix
       var newInvoice = new Invoice();
       newInvoice.setUserId(userId);
       newInvoice.setMerchantId(merchantId);

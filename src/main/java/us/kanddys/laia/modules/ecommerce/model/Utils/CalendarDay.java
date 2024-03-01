@@ -100,4 +100,42 @@ public class CalendarDay {
       return dayNumber;
    }
 
+   /**
+    * Este método tiene la obligación de devolver el nombre del día de la semana
+    * correspondiente al número pasado por parámetro.
+    * 
+    * @param day el número del día de la semana (1 para lunes, 2 para martes, etc.)
+    * @return el nombre abreviado del día (por ejemplo, "MON" para lunes)
+    */
+   public static String getDayNumber(Integer day) {
+      String dayName = null;
+      switch (day) {
+         case 1:
+            dayName = "MON";
+            break;
+         case 2:
+            dayName = "TUE";
+            break;
+         case 3:
+            dayName = "WED";
+            break;
+         case 4:
+            dayName = "THU";
+            break;
+         case 5:
+            dayName = "FRI";
+            break;
+         case 6:
+            dayName = "SAT";
+            break;
+         case 7:
+            dayName = "SUN";
+            break;
+         default:
+            System.out.println("Número de día inválido: " + day);
+            break;
+      }
+      return dayName;
+   }
+
 }
