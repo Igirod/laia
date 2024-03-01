@@ -45,5 +45,5 @@ type Mutation {
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
-   uInvoiceA(invoiceId: Int!, title: String!, direction: String!) : Int
+   uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String) : Int
 }

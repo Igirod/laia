@@ -192,10 +192,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer updateInvoiceAddress(Long invoiceId, String title, String direction) {
+   public Integer updateInvoiceAddress(Long invoiceId, String direction, String lat, String lng) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      invoiceJpaRepository.updateAddressByInvoiceId(title, direction, invoiceId);
+      invoiceJpaRepository.updateAddressByInvoiceId(direction, lat, lng, invoiceId);
       return 1;
    }
 
