@@ -44,7 +44,9 @@ public class InvoiceDTO {
    @JsonProperty
    private Integer count;
    @JsonProperty
-   private String addressTitle;
+   private String addressLat;
+   @JsonProperty
+   private String addressLng;
    @JsonProperty
    private String addressDirection;
    @JsonProperty
@@ -77,7 +79,8 @@ public class InvoiceDTO {
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
       this.count = (invoice.getCount() == null) ? null : invoice.getCount();
       this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
-      this.addressTitle = (invoice.getAddressTitle() == null) ? null : invoice.getAddressTitle();
+      this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
+      this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
    }
 }

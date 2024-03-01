@@ -11,7 +11,8 @@ type InvoiceDTO {
    voucher: String
    note: String
    count: Int
-   addressTitle: String
+   addressLat: String
+   addressLng: String
    addressDirection: String
    batchId: Int
 }
@@ -28,7 +29,8 @@ input InvoiceInputDTO {
    status: InvoiceStatus
    voucher: String
    note: String
-   addressTitle: String
+   addressLat: String
+   addressLng: String
    addressDirection: String
    batchId: Int   
 }

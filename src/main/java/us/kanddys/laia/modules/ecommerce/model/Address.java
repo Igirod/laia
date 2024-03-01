@@ -24,6 +24,7 @@ import lombok.Data;
 public class Address {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
    private Long id;
    @Column(name = "user_id")
    private Long userId;
@@ -36,7 +37,8 @@ public class Address {
    @Column(name = "direction")
    private String direction;
 
-   public Address() {}
+   public Address() {
+   }
 
    /**
     * Constructor personalizado utilizado en diferentes servicios.
@@ -49,9 +51,10 @@ public class Address {
     * @param lat
     * @param direction
     */
-   public Address(Long userId, Optional<String> title, Optional<String> lng, Optional<String> lat, Optional<String> direction) {
+   public Address(Long userId, Long id, Optional<String> title, Optional<String> lng, Optional<String> lat,
+         Optional<String> direction) {
       super();
-      this.id = null;
+      this.id = (id == null) ? null : id;
       this.userId = userId;
       this.title = title.orElse(null);
       this.lng = lng.orElse(null);
