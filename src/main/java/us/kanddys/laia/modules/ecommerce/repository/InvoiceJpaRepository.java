@@ -52,8 +52,9 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    public Double findTotalById(Long invoiceId);
 
    @Modifying
-   @Query(value = "UPDATE invoices SET address_lat = :lat, address_lng = :lng, address_direction = :direction WHERE id = :invoiceId", nativeQuery = true)
-   public void updateAddressByInvoiceId(String direction, String lat, String lng, Long invoiceId);
+   @Query(value = "UPDATE invoices SET address_number = :addressNumber, type = :type,address_lat = :lat, address_lng = :lng, address_direction = :direction WHERE id = :invoiceId", nativeQuery = true)
+   public void updateAddressByInvoiceId(String direction, String lat, String lng, Long invoiceId, Integer addressNumber,
+         String type);
 
    @Query(value = "SELECT * FROM invoices WHERE user_id = :userId AND mer_id = :merchantId AND status = :status", nativeQuery = true)
    public Invoice findInvoiceIdByUserIdAndMerchantIdAndStatus(@Param("userId") Long userId,
