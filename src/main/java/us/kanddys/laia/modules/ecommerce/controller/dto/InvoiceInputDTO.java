@@ -40,7 +40,9 @@ public class InvoiceInputDTO {
    @JsonProperty
    private String note;
    @JsonProperty
-   private String addressTitle;
+   private String addressLat;
+   @JsonProperty
+   private String addressLng;
    @JsonProperty
    private String addressDirection;
    @JsonProperty
