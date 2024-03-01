@@ -20,7 +20,6 @@ import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
 import us.kanddys.laia.modules.ecommerce.model.Reservation;
-import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
@@ -28,7 +27,6 @@ import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService;
@@ -59,9 +57,6 @@ public class InvoiceServiceImpl implements InvoiceService {
    private FirebaseStorageService firebaseStorageService;
 
    @Autowired
-   private UserJpaRepository userJpaRepository;
-
-   @Autowired
    private InvoiceProductJpaRepository invoiceProductJpaRepository;
 
    @Autowired
@@ -84,10 +79,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public InvoiceDTO createInvoice(Long merchantId) {
-      var userNew = userJpaRepository.save(new User());
+   public InvoiceDTO createInvoice(Long merchantId, Long userId) {
       try {
-         return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(userNew.getId(), merchantId)));
+         return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(userId, merchantId)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       } catch (ParseException e) {

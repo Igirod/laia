@@ -14,22 +14,25 @@ import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 
 @Controller
 public class CombinedController {
-   
+
    @Autowired
    private CombinedService combinedService;
 
    @QueryMapping("combinedShop")
-   public CombinedShopDTO getCombinedShop(@Argument String slug, @Argument InvoiceStatus invoiceStatus, @Argument Optional<Long> userId) {
+   public CombinedShopDTO getCombinedShop(@Argument String slug, @Argument InvoiceStatus invoiceStatus,
+         @Argument Optional<Long> userId) {
       return combinedService.findCombinedShop(slug, userId);
    }
 
    @QueryMapping("combinedProduct")
-   public CombinedProductDTO getCombinedProduct(@Argument Long productId, @Argument String slug, @Argument Optional<Long> userId) {
+   public CombinedProductDTO getCombinedProduct(@Argument Long productId, @Argument String slug,
+         @Argument Optional<Long> userId) {
       return combinedService.findCombinedProduct(productId, slug, userId);
    }
 
    @QueryMapping("rProduct")
-   public CombinedProductDetailDTO getProductById(@Argument Long productId, @Argument Optional<Long> invoiceId) {
-      return combinedService.findCombinedProductDetail(productId, invoiceId);
+   public CombinedProductDetailDTO getProductById(@Argument Long productId, @Argument Optional<Long> invoiceId,
+         @Argument Long merchantId) {
+      return combinedService.findCombinedProductDetail(productId, invoiceId, merchantId);
    }
 }

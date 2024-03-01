@@ -42,8 +42,9 @@ public class CalendarServiceImpl implements CalendarService {
          var endDate = DateUtils.convertStringToDateWithoutTime(YearMonth.of(year, month).atEndOfMonth().toString());
          Map<String, Object> calendar = calendarJpaRepository.findTypeAndDelayAndCalendarIdByMerchantId(merchantId);
          var calendarId = Long.valueOf((Integer) calendar.get("id"));
+
          return new CalendarDTO(calendarId, (Integer) calendar.get("delay"), (String) calendar.get("type"),
-               disabledDateJpaRepository.findDateExceptionsByCalendarIdRange(
+               disabledDateJpaRepository.findDisabedDatesByCalendarIdRange(
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate, calendarId),
                CalendarDay.getDays(batchJpaRepository.findDaysByCalendarIdAndDateIsNull(calendarId)),
                batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,

@@ -14,7 +14,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * clase InvoiceServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.3
  */
 public interface InvoiceService {
 
@@ -39,11 +39,12 @@ public interface InvoiceService {
     * Este método se encarga de crear una factura.
     *
     * @author Igirod0
-    * @version 1.0.2
+    * @version 1.0.3
     * @param merchantId
+    * @param userId
     * @return InvoiceDTO
     */
-   public InvoiceDTO createInvoice(Long merchantId);
+   public InvoiceDTO createInvoice(Long merchantId, Long userId);
 
    /**
     * Este método se encarga de actualizar una factura.

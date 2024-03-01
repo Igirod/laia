@@ -10,7 +10,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
  * ShopServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface CombinedService {
 
@@ -24,7 +24,7 @@ public interface CombinedService {
     * @param userId
     * @return CombinedShopDTO
     */
-	public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId);
+   public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId);
 
    /**
     * Este metodo tiene la obligación de buscar un producto y sus imagenes. Crea
@@ -40,14 +40,15 @@ public interface CombinedService {
    public CombinedProductDTO findCombinedProduct(Long productId, String slug, Optional<Long> userId);
 
    /**
-    * Este método tiene la obligación de buscar un producto, sus imagenes y los detalles
+    * Este método tiene la obligación de buscar un producto, sus imagenes y los
+    * detalles
     * relacionados por el id.
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @param productId
     * @param invoiceId
     * @return CombinedProductDetailDTO
     */
-   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId);
+   public CombinedProductDetailDTO findCombinedProductDetail(Long productId, Optional<Long> invoiceId, Long merchantId);
 }

@@ -12,7 +12,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * Esta clase representa un data transfer object (DTO) para la factura.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.3
  */
 @Data
 @AllArgsConstructor
@@ -86,7 +86,7 @@ public class InvoiceDTO {
       this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
       this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
-      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
       this.type = (invoice.getType() == null) ? null : invoice.getType();
+      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
    }
 }

@@ -20,7 +20,11 @@ public class CombinedProductDetailDTO {
    @JsonProperty
    private Integer check;
    @JsonProperty
+   private String merchantDirection;
+   @JsonProperty
+   private String firstShippingDate;
+   @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty
-   private List<ProductDetailDTO> details; 
+   private List<ProductDetailDTO> details;
 }
