@@ -5,6 +5,4 @@ type AddressDTO {
    lng: String
    lat: String
    direction: String
-   type: String
-   addressNumber: Int
 }

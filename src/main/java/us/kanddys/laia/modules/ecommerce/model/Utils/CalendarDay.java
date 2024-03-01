@@ -111,25 +111,25 @@ public class CalendarDay {
       String dayName = null;
       switch (day) {
          case 1:
-            dayName = "MON";
+            dayName = "SUN";
             break;
          case 2:
-            dayName = "TUE";
+            dayName = "MON";
             break;
          case 3:
-            dayName = "WED";
+            dayName = "TUE";
             break;
          case 4:
-            dayName = "THU";
+            dayName = "WED";
             break;
          case 5:
-            dayName = "FRI";
+            dayName = "THU";
             break;
          case 6:
-            dayName = "SAT";
+            dayName = "FRI";
             break;
          case 7:
-            dayName = "SUN";
+            dayName = "SAT";
             break;
          default:
             System.out.println("Número de día inválido: " + day);

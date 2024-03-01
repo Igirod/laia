@@ -31,11 +31,9 @@ public class UserServiceImpl implements UserService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    public Integer checkEmail(@Argument Long userId, @Argument String email) {
-      if (userJpaRepository.existByUserEmail(email) != null)
-         return 1;
-      else if (userJpaRepository.existsById(userId))
-         return -1;
-      else {
+      var userAtributes = userJpaRepository.findUserIdByEmail(email);
+
+      if (userAtributes.get("email") == null) {
          userJpaRepository.updateEmailByUserId(userId, email);
          try {
             mailSenderService.sendEmailChangePassword(new MailDTO(email, "Bienvenido", "", ""));
@@ -44,6 +42,9 @@ public class UserServiceImpl implements UserService {
          }
          return 0;
       }
+      if (userAtributes.get("email") != null && Long.valueOf(userAtributes.get("id").toString()).equals(userId))
+         return 1;
+      return Integer.valueOf(userAtributes.get("id").toString());
    }
 
    @Override

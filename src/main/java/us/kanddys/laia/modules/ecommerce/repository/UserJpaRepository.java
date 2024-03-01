@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.repository;
 
+import java.util.Map;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +42,7 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
 
    @Query(value = "SELECT * FROM users WHERE id = :userId", nativeQuery = true)
    public User findUserById(Long userId);
+
+   @Query(value = "SELECT id, email FROM users WHERE email = :email", nativeQuery = true)
+   public Map<String, Object> findUserIdByEmail(String email);
 }

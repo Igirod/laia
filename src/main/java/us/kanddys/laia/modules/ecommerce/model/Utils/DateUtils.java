@@ -50,6 +50,21 @@ public class DateUtils {
    }
 
    /**
+    * Este método tiene la obligacion de devolver el String de la fecha actual
+    * con el formato yyyy-MM-dd.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @return String
+    * @throws ParseException
+    */
+   public static Date getCurrentDateWitheoutTime() throws ParseException {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      String dateString = dateFormat.format(new Date());
+      return dateFormat.parse(dateString);
+   }
+
+   /**
     * Convierte un String a Date con el formato yyyy-MM-dd.
     *
     * @author Igirod0
@@ -60,5 +75,22 @@ public class DateUtils {
     */
    public static Date convertStringToDateWithoutTime(String dateString) throws ParseException {
       return new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+   }
+
+   /**
+    * Convierte un objeto Date a String con el formato yyyy-MM-dd.
+    *
+    * @param date el objeto Date que se desea convertir
+    * @return una cadena de texto que representa la fecha en formato "yyyy-MM-dd"
+    */
+   public static String convertDateToStringWithoutTime(Date date) {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      return dateFormat.format(date);
+   }
+
+   public static Date changeDateFormat(Date date) throws ParseException {
+      SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      String formattedDate = outputDateFormat.format(date);
+      return outputDateFormat.parse(formattedDate);
    }
 }

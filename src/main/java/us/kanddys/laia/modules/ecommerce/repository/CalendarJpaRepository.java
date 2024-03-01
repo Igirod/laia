@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,5 +18,4 @@ public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
 
    @Query(value = "SELECT id FROM calendars WHERE merchant_id = ?1", nativeQuery = true)
    Optional<Long> findCalendarIdByMerchantId(Long merchantId);
-
 }

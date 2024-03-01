@@ -32,7 +32,7 @@ type Query {
 }
 
 type Mutation {
-   cInvoice(merchantId: Int!): InvoiceDTO
+   cInvoice(merchantId: Int!, userId: Int!): InvoiceDTO
    uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
    aProductI(invoiceId: Int!, productId: Int!) : Int
    uProductI(invoiceId: Int!, listInvoiceProducts: [InvoiceProductInputDTO]) : Int
