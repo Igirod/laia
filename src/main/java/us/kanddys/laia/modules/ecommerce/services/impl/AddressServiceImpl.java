@@ -63,9 +63,9 @@ public class AddressServiceImpl implements AddressService {
    }
 
    @Override
-   public Integer addAddress(Long userId, Optional<String> title, Optional<String> lng, Optional<String> lat, Optional<String> direction) {
-      addressJpaRepository.save(new Address(userId, title, lng, lat, direction));
-      return 1;
+   public Long addAddress(Long userId, Optional<String> title, Optional<String> lng, Optional<String> lat,
+         Optional<String> direction) {
+      return addressJpaRepository.save(new Address(userId, null, title, lng, lat, direction)).getId();
    }
 
 }

@@ -64,7 +64,7 @@ public interface AddressService {
     * @param direction
     * @return
     */
-   public Integer addAddress(Long userId, Optional<String> title, Optional<String> lng,
-   Optional<String> lat, Optional<String> direction);
+   public Long addAddress(Long userId, Optional<String> title, Optional<String> lng,
+         Optional<String> lat, Optional<String> direction);
 
 }

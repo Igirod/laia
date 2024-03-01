@@ -23,18 +23,20 @@ public class AddressController {
       return addressService.findAddressByUserId(page, userId);
    }
 
-   @MutationMapping("dAddress") 
+   @MutationMapping("dAddress")
    public Integer deleteAddress(@Argument Long addressId) {
       return addressService.deleteAddress(addressId);
    }
 
    @MutationMapping("uAddress")
-   public Integer updateAddress(@Argument Long addressId, @Argument Optional<Long> userId, Optional<String> title, Optional<String> lng, Optional<String> lat, Optional<String> direction) {
+   public Integer updateAddress(@Argument Long addressId, @Argument Optional<Long> userId, Optional<String> title,
+         Optional<String> lng, Optional<String> lat, Optional<String> direction) {
       return addressService.updateAddress(addressId, userId, title, lng, lat, direction);
    }
 
    @MutationMapping("aAddress")
-   public Integer addAddress(@Argument Long userId, @Argument Optional<String> title, @Argument Optional<String> lng, @Argument Optional<String> lat, @Argument Optional<String> direction) {
+   public Long addAddress(@Argument Long userId, @Argument Optional<String> title, @Argument Optional<String> lng,
+         @Argument Optional<String> lat, @Argument Optional<String> direction) {
       return addressService.addAddress(userId, title, lng, lat, direction);
    }
 }
