@@ -34,7 +34,7 @@ input InvoiceInputDTO {
    addressLat: String
    addressLng: String
    addressDirection: String
-   batchId: Int
+   batchId: Int   
    type: String
    addressNumber: Int
 }

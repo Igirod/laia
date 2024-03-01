@@ -142,9 +142,12 @@ public interface InvoiceService {
     * @param invoiceId
     * @param title
     * @param direction
+    * @param lat
+    * @param lng
     * @return Integer
     */
-   public Integer updateInvoiceAddress(Long invoiceId, String direction, String lat, String lng);
+   public Integer updateInvoiceAddress(Long invoiceId, String direction, String lat, String lng, Integer addressNumber,
+         String type);
 
    /**
     * Este método tiene la obligación de actualizar la fecha de reservación

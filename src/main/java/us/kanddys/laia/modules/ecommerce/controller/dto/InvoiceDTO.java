@@ -52,9 +52,9 @@ public class InvoiceDTO {
    @JsonProperty
    private Long batchId;
    @JsonProperty
-   private String type;
-   @JsonProperty
    private Integer addressNumber;
+   @JsonProperty
+   private String type;
 
    public InvoiceDTO() {
    }
