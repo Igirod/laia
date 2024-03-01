@@ -1,7 +1,5 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;

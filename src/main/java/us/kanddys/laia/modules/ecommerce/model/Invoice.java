@@ -21,7 +21,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
  * Esta clase representa una factura.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.3
  */
 @Entity
 @Table(name = "invoices")
@@ -63,6 +63,10 @@ public class Invoice {
    private Integer count;
    @Column(name = "batch_id")
    private Long batchId;
+   @Column(name = "address_number")
+   private Integer addressNumber;
+   @Column(name = "type")
+   private String type;
 
    public Invoice() {
    }
@@ -71,7 +75,7 @@ public class Invoice {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @param invoice
     * @throws ParseException
     */
@@ -95,13 +99,15 @@ public class Invoice {
       this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
       this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
+      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
+      this.type = (invoice.getType() == null) ? null : invoice.getType();
    }
 
    /**
     * Constructor personalizado para actualizar una factura existente.
     *
     * @author Igirod
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoiceId
     * @param invoiceDTO
     * @throws ParseException
@@ -127,13 +133,15 @@ public class Invoice {
       this.addressLat = invoiceDTO.getAddressLat() != null ? invoiceDTO.getAddressLat() : this.addressLat;
       this.addressLng = invoiceDTO.getAddressLng() != null ? invoiceDTO.getAddressLng() : this.addressLng;
       this.batchId = invoiceDTO.getBatchId() != null ? invoiceDTO.getBatchId() : this.batchId;
+      this.addressNumber = invoiceDTO.getAddressNumber() != null ? invoiceDTO.getAddressNumber() : this.addressNumber;
+      this.type = invoiceDTO.getType() != null ? invoiceDTO.getType() : this.type;
    }
 
    /**
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoiceId
     * @param merchantId
     * @throws ParseException
@@ -144,5 +152,6 @@ public class Invoice {
       this.userId = (userId == null) ? null : userId;
       this.merchantId = (merchantId == null) ? null : merchantId;
       this.status = InvoiceStatus.INITIAL;
+      this.total = 0.0;
    }
 }

@@ -51,6 +51,10 @@ public class InvoiceDTO {
    private String addressDirection;
    @JsonProperty
    private Long batchId;
+   @JsonProperty
+   private Integer addressNumber;
+   @JsonProperty
+   private String type;
 
    public InvoiceDTO() {
    }
@@ -82,5 +86,7 @@ public class InvoiceDTO {
       this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
       this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
+      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
+      this.type = (invoice.getType() == null) ? null : invoice.getType();
    }
 }

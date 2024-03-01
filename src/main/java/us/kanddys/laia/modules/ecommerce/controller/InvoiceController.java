@@ -65,8 +65,8 @@ public class InvoiceController {
 
    @MutationMapping("uInvoiceA")
    public Integer updateInvoiceAddress(@Argument Long invoiceId, @Argument String direction, @Argument String lat,
-         @Argument String lng) {
-      return invoiceService.updateInvoiceAddress(invoiceId, direction, lat, lng);
+         @Argument String lng, @Argument Integer addressNumber, @Argument String type) {
+      return invoiceService.updateInvoiceAddress(invoiceId, direction, lat, lng, addressNumber, type);
    }
 
    @MutationMapping("uInvoiceR")
