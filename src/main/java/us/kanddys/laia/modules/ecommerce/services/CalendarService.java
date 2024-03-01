@@ -16,12 +16,14 @@ public interface CalendarService {
     *
     * @author Igirod0
     * @version 1.0.0
+    *
     * @param day
     * @param month
     * @param year
     * @param calendarId
+    * @param dateDayString
     * @return CalendarDTO
     */
-   public CalendarDTO getCalendarByMerchantId(Integer year, Integer month, Integer day,
+   public CalendarDTO getCalendarByMerchantId(String year, String month, String day, String dateDayString,
          Long calendarId);
 }
