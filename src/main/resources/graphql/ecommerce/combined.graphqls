@@ -25,6 +25,8 @@ type CombinedProductDTO {
    invoiceCount: Int
    userId: Int
    check: Int
+   merchantDirection: String
+   firstShippingDate: String
 }
 
 type CombinedProductDetailDTO {

@@ -36,6 +36,11 @@ public class CombinedProductDTO {
    private Long userId;
    @JsonProperty
    private Integer check;
+   @JsonProperty
+   private String firstShippingDate;
+   @JsonProperty
+   private String merchantDirection;
 
-   public CombinedProductDTO(){}
+   public CombinedProductDTO() {
+   }
 }

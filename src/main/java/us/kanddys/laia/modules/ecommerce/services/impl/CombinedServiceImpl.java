@@ -109,7 +109,8 @@ public class CombinedServiceImpl implements CombinedService {
                   ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoice.getId(),
                         productId) != null ? 1
                               : 0)
-                  : 0);
+                  : 0,
+            findFirstShippingDate(merchantId), merchantJpaRepository.findAddressByMerchantId(merchantId));
    }
 
    /**
@@ -149,14 +150,14 @@ public class CombinedServiceImpl implements CombinedService {
                   : 0,
             null, null, imageProductService.getImagesProductByProductId(productId),
             productDetailService.getProductDetailsByProductId(productId));
-      return findMerchantDirectionAndFirstShippingDate(combinedProductDetailDTO, merchantId);
+      combinedProductDetailDTO.setMerchantDirection(merchantJpaRepository.findAddressByMerchantId(merchantId));
+      combinedProductDetailDTO.setFirstShippingDate(findFirstShippingDate(merchantId));
+      return combinedProductDetailDTO;
    }
 
-   private CombinedProductDetailDTO findMerchantDirectionAndFirstShippingDate(
-         CombinedProductDetailDTO combinedProductDetailDTO,
+   private String findFirstShippingDate(
          Long merchantId) {
       Date actuallyDate;
-      combinedProductDetailDTO.setMerchantDirection(merchantJpaRepository.findAddressByMerchantId(merchantId));
       // ! Tener en cosideracion los batches y las reservas.
       // String reservation =
       // reservationJpaRepository.findLatestDateByMerchantId(merchantId);
@@ -193,8 +194,6 @@ public class CombinedServiceImpl implements CombinedService {
             .contains(DateUtils.convertDateToStringWithoutTime(calendar.getTime()))) {
          calendar.add(Calendar.DAY_OF_YEAR, 1);
       }
-      combinedProductDetailDTO.setFirstShippingDate(DateUtils.convertDateToStringWithoutTime(calendar.getTime()));
-
       // } else {
       // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       // Calendar calendar = Calendar.getInstance();
@@ -211,7 +210,7 @@ public class CombinedServiceImpl implements CombinedService {
       // }
       // combinedProductDetailDTO.setFirstShippingDate(DateUtils.convertDateToStringWithoutTime(calendar.getTime()));
       // }
-      return combinedProductDetailDTO;
+      return DateUtils.convertDateToStringWithoutTime(calendar.getTime());
    }
 
    /**
