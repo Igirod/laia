@@ -134,7 +134,8 @@ public class CombinedServiceImpl implements CombinedService {
          if (invoice == null)
             throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       } else {
-         invoice = createNewInvoice(userJpaRepository.save(new User()).getId(), merchantId);
+         User user = new User(true);
+         invoice = createNewInvoice(userJpaRepository.save(user).getId(), merchantId);
       }
       return invoice;
    }

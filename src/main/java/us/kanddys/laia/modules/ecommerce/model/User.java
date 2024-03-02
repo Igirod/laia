@@ -35,4 +35,9 @@ public class User {
 
    public User() {
    }
+
+   public User(Boolean invoice) {
+      super();
+      this.password = "cocodrilo";
+   }
 }
