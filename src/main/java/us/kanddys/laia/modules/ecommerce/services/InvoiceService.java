@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.UrlDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceUpdatePaymentDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
 
 /**
@@ -131,7 +131,8 @@ public interface InvoiceService {
     * @param userId
     * @return String
     */
-   public UrlDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+   public InvoiceUpdatePaymentDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
+         String date, Long batchId,
          Long merchantId,
          Long userId);
 

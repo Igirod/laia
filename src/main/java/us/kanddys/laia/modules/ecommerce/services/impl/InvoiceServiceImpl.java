@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.UrlDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceUpdatePaymentDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
@@ -27,6 +27,7 @@ import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
+import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService;
@@ -64,6 +65,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Autowired
    private ReservationJpaRepository reservationJpaRepository;
+
+   @Autowired
+   private InvoiceCodeService invoiceCodeService;
 
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
@@ -173,7 +177,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public UrlDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId, String date, Long batchId,
+   public InvoiceUpdatePaymentDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
+         String date, Long batchId,
          Long merchantId,
          Long userId) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
@@ -181,7 +186,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       var urlVoucher = firebaseStorageService.uploadFile(voucher, "vouchers");
       invoiceJpaRepository.updateVoucherByInvoiceId(urlVoucher, invoiceId);
       updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
-      return new UrlDTO(urlVoucher);
+      return new InvoiceUpdatePaymentDTO(urlVoucher, invoiceCodeService.generateInvoiceCode(merchantId, invoiceId));
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })

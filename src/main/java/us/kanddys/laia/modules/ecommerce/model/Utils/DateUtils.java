@@ -39,7 +39,7 @@ public class DateUtils {
 
    /**
     * Este método tiene la obligacion de devolver el String de la fecha actual
-    * con el formato yyyy-MM-dd.
+    * con el formato yyyy-MM-dd HH:mm:ss.
     *
     * @author Igirod0
     * @version 1.0.0
@@ -47,6 +47,18 @@ public class DateUtils {
     */
    public static String getCurrentDateString() {
       return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+   }
+
+   /**
+    * Este método tiene la obligacion de devolver el String de la fecha actual
+    * con el formato yyyy-MM-dd HH:mm:ss.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @return String
+    */
+   public static String getCurrentDateStringWitheoutTime() {
+      return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
    }
 
    /**
