@@ -29,6 +29,7 @@ import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
+import us.kanddys.laia.modules.ecommerce.services.BatchService;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
@@ -74,10 +75,15 @@ public class CombinedServiceImpl implements CombinedService {
    private BatchJpaRepository batchJpaRepository;
 
    @Autowired
+   private BatchService batchService;
+
+   @Autowired
    private DisabledDateJpaRepository disabledDateJpaRepository;
 
-   @Override
-   public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId) {
+   @Autowired
+   private
+
+   @Override public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId) {
       Map<String, Object> merchant = merchantJpaRepository.findMerchantIdAndTitle(slug);
       if (merchant == null)
          throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
@@ -100,6 +106,8 @@ public class CombinedServiceImpl implements CombinedService {
       var details = productDetailService.getProductDetailsByProductId(productId);
       var product = productService.getProductById(productId);
       var invoice = invoiceIfUserPresent(userId, merchantId);
+      var firstShippingDate = findFirstShippingDate(merchantId);
+
       return new CombinedProductDTO(merchantId, merchantTitle, product.getId(), product.getTitle(), product.getPrice(),
             product.getFrontPage(),
             images, details, product.getStock(), invoice.getId(),
@@ -110,7 +118,12 @@ public class CombinedServiceImpl implements CombinedService {
                         productId) != null ? 1
                               : 0)
                   : 0,
-            findFirstShippingDate(merchantId), merchantJpaRepository.findAddressByMerchantId(merchantId));
+            firstShippingDate.get("firstShippingDate"), merchantJpaRepository.findAddressByMerchantId(merchantId),
+            batchService.getBatchesByCalendarId(
+                  calendarJpaRepository.findCalendarIdByMerchantId(merchantId).get(), firstShippingDate.get("day"),
+                  firstShippingDate.get("firstShippingDate"),
+                  firstShippingDate.get("exceptionalDate").equals("1") ? Optional.of(1) : Optional.empty()).get(0)
+                  .getId());
    }
 
    /**
@@ -149,14 +162,20 @@ public class CombinedServiceImpl implements CombinedService {
                         productId) != null ? 1
                               : 0)
                   : 0,
-            null, null, imageProductService.getImagesProductByProductId(productId),
+            null, null, null, imageProductService.getImagesProductByProductId(productId),
             productDetailService.getProductDetailsByProductId(productId));
       combinedProductDetailDTO.setMerchantDirection(merchantJpaRepository.findAddressByMerchantId(merchantId));
-      combinedProductDetailDTO.setFirstShippingDate(findFirstShippingDate(merchantId));
+      Map<String, String> firstShippingDate = findFirstShippingDate(merchantId);
+      combinedProductDetailDTO.setFirstShippingDate(firstShippingDate.get("firstShippingDate"));
+      calendarJpaRepository.findCalendarIdByMerchantId(merchantId);
+      combinedProductDetailDTO.setBatchId(batchService.getBatchesByCalendarId(
+            calendarJpaRepository.findCalendarIdByMerchantId(merchantId).get(), firstShippingDate.get("day"),
+            firstShippingDate.get("firstShippingDate"),
+            firstShippingDate.get("exceptionalDate").equals("1") ? Optional.of(1) : Optional.empty()).get(0).getId());
       return combinedProductDetailDTO;
    }
 
-   private String findFirstShippingDate(
+   private Map<String, String> findFirstShippingDate(
          Long merchantId) {
       Date actuallyDate;
       // ! Tener en cosideracion los batches y las reservas.
@@ -178,6 +197,8 @@ public class CombinedServiceImpl implements CombinedService {
       List<String> workingDays = CalendarDay.getDays(batchJpaRepository
             .findDaysByCalendarId(calendarJpaRepository.findCalendarIdByMerchantId(merchantId).get()));
       List<String> disabledDates;
+      List<String> exceptionalDates;
+      var exceptionalDate = "0";
       try {
          disabledDates = disabledDateJpaRepository.findDisabedDatesByCalendarIdRange(
                DateUtils.changeDateFormat(actuallyDate),
@@ -185,6 +206,11 @@ public class CombinedServiceImpl implements CombinedService {
                      YearMonth.of(Integer.valueOf(dateActuallySplit[0]), Integer.valueOf(dateActuallySplit[1]))
                            .atEndOfMonth().toString()),
                calendarId);
+         exceptionalDates = batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,
+               DateUtils.convertStringToDateWithoutTime(DateUtils.convertDateToStringWithoutTime(calendar.getTime())),
+               DateUtils.convertStringToDateWithoutTime(
+                     YearMonth.of(Integer.valueOf(dateActuallySplit[0]), Integer.valueOf(dateActuallySplit[1]))
+                           .atEndOfMonth().toString()));
       } catch (NumberFormatException e) {
          throw new RuntimeException("Error al convertir la fecha");
       } catch (ParseException e) {
@@ -194,6 +220,9 @@ public class CombinedServiceImpl implements CombinedService {
       if (!workingDays.contains(CalendarDay.getDayNumber(calendar.get(Calendar.DAY_OF_WEEK))) && !disabledDates
             .contains(DateUtils.convertDateToStringWithoutTime(calendar.getTime()))) {
          calendar.add(Calendar.DAY_OF_YEAR, 1);
+      }
+      if (exceptionalDates.contains(DateUtils.convertDateToStringWithoutTime(calendar.getTime()))) {
+         exceptionalDate = "1";
       }
       // } else {
       // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -211,7 +240,8 @@ public class CombinedServiceImpl implements CombinedService {
       // }
       // combinedProductDetailDTO.setFirstShippingDate(DateUtils.convertDateToStringWithoutTime(calendar.getTime()));
       // }
-      return DateUtils.convertDateToStringWithoutTime(calendar.getTime());
+      return Map.of("firstShippingDate", DateUtils.convertDateToStringWithoutTime(calendar.getTime()), "day",
+            CalendarDay.getDayNumber(calendar.get(Calendar.DAY_OF_WEEK)), "exceptionalDate", exceptionalDate);
    }
 
    /**

@@ -24,6 +24,8 @@ public class CombinedProductDetailDTO {
    @JsonProperty
    private String firstShippingDate;
    @JsonProperty
+   private Long batchId;
+   @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty
    private List<ProductDetailDTO> details;
