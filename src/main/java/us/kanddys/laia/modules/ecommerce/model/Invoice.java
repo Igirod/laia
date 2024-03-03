@@ -146,7 +146,7 @@ public class Invoice {
     * @param merchantId
     * @throws ParseException
     */
-   public Invoice(Long userId, Long merchantId) throws ParseException {
+   public Invoice(Long userId, Long merchantId) {
       super();
       this.id = null;
       this.userId = (userId == null) ? null : userId;

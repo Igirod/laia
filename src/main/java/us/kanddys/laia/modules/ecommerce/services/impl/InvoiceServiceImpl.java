@@ -88,8 +88,6 @@ public class InvoiceServiceImpl implements InvoiceService {
          return new InvoiceDTO(invoiceJpaRepository.save(new Invoice(userId, merchantId)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
-      } catch (ParseException e) {
-         throw new RuntimeException(e);
       }
    }
 
