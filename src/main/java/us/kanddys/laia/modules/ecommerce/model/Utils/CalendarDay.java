@@ -7,7 +7,7 @@ import java.util.List;
  * Esta clase contiene los días del calendario.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class CalendarDay {
 
@@ -29,25 +29,25 @@ public class CalendarDay {
             String day = null;
             switch (dayNumber) {
                case 1:
-                  day = "MON";
+                  day = "SUN";
                   break;
                case 2:
-                  day = "TUE";
+                  day = "MON";
                   break;
                case 3:
-                  day = "WED";
+                  day = "TUE";
                   break;
                case 4:
-                  day = "THU";
+                  day = "WED";
                   break;
                case 5:
-                  day = "FRI";
+                  day = "TUE";
                   break;
                case 6:
-                  day = "SAT";
+                  day = "FRI";
                   break;
                case 7:
-                  day = "SUN";
+                  day = "SAT";
                   break;
                default:
                   System.out.println("Número de día inválido: " + dayNumber);
@@ -73,25 +73,25 @@ public class CalendarDay {
    public static Integer getDayNumber(String day) {
       Integer dayNumber = null;
       switch (day) {
-         case "MON":
+         case "SUN":
             dayNumber = 1;
             break;
-         case "TUE":
+         case "MON":
             dayNumber = 2;
             break;
-         case "WED":
+         case "TUE":
             dayNumber = 3;
             break;
-         case "THU":
+         case "WED":
             dayNumber = 4;
             break;
-         case "FRI":
+         case "THU":
             dayNumber = 5;
             break;
-         case "SAT":
+         case "FRI":
             dayNumber = 6;
             break;
-         case "SUN":
+         case "SAT":
             dayNumber = 7;
             break;
          default:
@@ -101,41 +101,41 @@ public class CalendarDay {
    }
 
    /**
-    * Este método tiene la obligación de devolver el nombre del día de la semana
-    * correspondiente al número pasado por parámetro.
+    * Este método tiene la obligacion de devolver el dia correspondiente a la
+    * cadena de caracteres pasada por parametro.
     * 
-    * @param day el número del día de la semana (1 para lunes, 2 para martes, etc.)
-    * @return el nombre abreviado del día (por ejemplo, "MON" para lunes)
+    * @author Igirod0
+    * @version 1.0.0
+    * @param numberDay
+    * @return String
     */
-   public static String getDayNumber(Integer day) {
-      String dayName = null;
-      switch (day) {
+   public static String getDayNumber(Integer numberDay) {
+      String dayNumber = null;
+      switch (numberDay) {
          case 1:
-            dayName = "SUN";
+            dayNumber = "SUN";
             break;
          case 2:
-            dayName = "MON";
+            dayNumber = "MON";
             break;
          case 3:
-            dayName = "TUE";
+            dayNumber = "TUE";
             break;
          case 4:
-            dayName = "WED";
+            dayNumber = "WED";
             break;
          case 5:
-            dayName = "THU";
+            dayNumber = "TUE";
             break;
          case 6:
-            dayName = "FRI";
+            dayNumber = "FRI";
             break;
          case 7:
-            dayName = "SAT";
+            dayNumber = "SAT";
             break;
          default:
-            System.out.println("Número de día inválido: " + day);
-            break;
+            System.out.println("Día inválido: " + numberDay);
       }
-      return dayName;
+      return dayNumber;
    }
-
 }

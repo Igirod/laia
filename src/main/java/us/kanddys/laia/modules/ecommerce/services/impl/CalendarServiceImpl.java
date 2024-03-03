@@ -47,7 +47,7 @@ public class CalendarServiceImpl implements CalendarService {
                disabledDateJpaRepository.findDisabedDatesByCalendarIdRange(
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate, calendarId),
                CalendarDay.getDays(batchJpaRepository.findDaysByCalendarId(calendarId)),
-               batchJpaRepository.findExceptionBatchesByCalendarIdAndDateNotNull(calendarId,
+               batchJpaRepository.findExceptionBatchesDatesByCalendarIdAndDateNotNull(calendarId,
                      DateUtils.convertStringToDateWithoutTime(startDate), endDate));
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");

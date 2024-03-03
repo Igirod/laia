@@ -26,6 +26,10 @@ public class CombinedProductDetailDTO {
    @JsonProperty
    private Long batchId;
    @JsonProperty
+   private String batchFrom;
+   @JsonProperty
+   private String batchTo;
+   @JsonProperty
    private List<ImageProductDTO> images;
    @JsonProperty
    private List<ProductDetailDTO> details;

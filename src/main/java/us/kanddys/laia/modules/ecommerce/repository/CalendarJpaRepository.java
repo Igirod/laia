@@ -15,6 +15,6 @@ public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
    @Query(value = "SELECT type, delay, id FROM calendars WHERE merchant_id = ?1", nativeQuery = true)
    Map<String, Object> findTypeAndDelayAndCalendarIdByMerchantId(Long merchantId);
 
-   @Query(value = "SELECT id FROM calendars WHERE merchant_id = ?1", nativeQuery = true)
-   Optional<Long> findCalendarIdByMerchantId(Long merchantId);
+   @Query(value = "SELECT id, type, delay FROM calendars WHERE merchant_id = ?1", nativeQuery = true)
+   Optional<Long> findCalendarIdAndTypeAndDelayByMerchantId(Long merchantId);
 }
