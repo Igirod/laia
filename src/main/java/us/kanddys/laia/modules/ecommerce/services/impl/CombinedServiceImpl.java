@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
-import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Batch;
@@ -139,13 +138,11 @@ public class CombinedServiceImpl implements CombinedService {
          invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
                InvoiceStatus.INITIAL.toString());
          if (invoice == null) {
-            invoice = createNewInvoice(userId.get(), merchantId);
+            invoice = new Invoice(userId.get(), merchantId);
          }
-         if (invoice == null)
-            throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       } else {
          User user = new User(true);
-         invoice = createNewInvoice(userJpaRepository.save(user).getId(), merchantId);
+         invoice = new Invoice(userJpaRepository.save(user).getId(), merchantId);
       }
       return invoice;
    }
@@ -229,24 +226,6 @@ public class CombinedServiceImpl implements CombinedService {
             batchData.get("batchId").toString(), "from",
             batchData.get("from").toString(), "to",
             batchData.get("to").toString());
-   }
-
-   /**
-    * Este método se encarga de crear una nueva factura.
-    *
-    * @author Igirod0
-    * @version 1.0.0
-    * @param userId
-    * @param merchantId
-    * @return Invoice
-    */
-   private Invoice createNewInvoice(Long userId, Long merchantId) {
-      var newInvoice = new Invoice();
-      newInvoice.setUserId(userId);
-      newInvoice.setMerchantId(merchantId);
-      newInvoice.setStatus(InvoiceStatus.INITIAL);
-      newInvoice.setTotal(0.0);
-      return invoiceJpaRepository.save(newInvoice);
    }
 
    /**

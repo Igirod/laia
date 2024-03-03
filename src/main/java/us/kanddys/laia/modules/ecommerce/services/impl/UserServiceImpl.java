@@ -32,8 +32,10 @@ public class UserServiceImpl implements UserService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    public Integer checkEmail(@Argument Long userId, @Argument String email) {
       var userAtributes = userJpaRepository.findUserIdByEmail(email);
-
       if (userAtributes.get("email") == null) {
+         if (!email.equals(userJpaRepository.findEmailByUserId(userId))) {
+            return -1;
+         }
          userJpaRepository.updateEmailByUserId(userId, email);
          try {
             mailSenderService.sendEmailChangePassword(new MailDTO(email, "Bienvenido", "", ""));
