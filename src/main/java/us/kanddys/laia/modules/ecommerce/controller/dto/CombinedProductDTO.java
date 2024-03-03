@@ -40,6 +40,12 @@ public class CombinedProductDTO {
    private String firstShippingDate;
    @JsonProperty
    private String merchantDirection;
+   @JsonProperty
+   private Long batchId;
+   @JsonProperty
+   private String batchFrom;
+   @JsonProperty
+   private String batchTo;
 
    public CombinedProductDTO() {
    }

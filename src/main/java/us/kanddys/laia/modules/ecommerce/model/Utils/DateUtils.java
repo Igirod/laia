@@ -77,6 +77,21 @@ public class DateUtils {
    }
 
    /**
+    * Este método tiene la obligacion de devolver la fecha actual.
+    * con el formato yyyy-MM-dd HH:mm:ss.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @return Date
+    * @throws ParseException
+    */
+   public static Date getCurrentDate() throws ParseException {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      String dateString = dateFormat.format(new Date());
+      return dateFormat.parse(dateString);
+   }
+
+   /**
     * Convierte un String a Date con el formato yyyy-MM-dd.
     *
     * @author Igirod0

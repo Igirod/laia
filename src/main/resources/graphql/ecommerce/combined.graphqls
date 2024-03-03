@@ -27,6 +27,9 @@ type CombinedProductDTO {
    check: Int
    merchantDirection: String
    firstShippingDate: String
+   batchId: Int
+   batchFrom: String
+   batchTo: String
 }
 
 type CombinedProductDetailDTO {
@@ -36,4 +39,7 @@ type CombinedProductDetailDTO {
    firstShippingDate: String
    images: [ImageProductDTO]
    details: [ProductDetailDTO]
+   batchId: Int
+   batchFrom: String
+   batchTo: String
 }
