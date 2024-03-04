@@ -199,13 +199,13 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setStatus(Status.PENDING);
       order.setReservation(date);
       order.setMerchantId(merchantId);
+      var newOrder = orderJpaRepository.save(order);
       List<OrderProduct> listOrderProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId)
             .stream().map(t -> {
                productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
-               return new OrderProduct(t, order.getId());
+               return new OrderProduct(t, newOrder.getId());
             }).collect(Collectors.toList());
       // * Guardado de la orden y sus productos.
-      orderJpaRepository.save(order);
       orderProductJpaRepository.saveAll(listOrderProducts);
       try {
          reservationJpaRepository.save(
