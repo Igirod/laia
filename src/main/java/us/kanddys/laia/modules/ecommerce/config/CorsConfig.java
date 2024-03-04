@@ -19,21 +19,21 @@ public class CorsConfig implements WebMvcConfigurer {
    public void addCorsMappings(CorsRegistry registry) {
       registry.addMapping("/**")
             .allowedOrigins("http://localhost:4200", "https://laia-development.netlify.app",
-                  "https://laia-dev.up.railway.app")
+                  "https://laia-dev.up.railway.app", "https://kanddys-1088e.web.app")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*");
 
       // Permitir solicitudes CORS para la ruta de GraphQL
       registry.addMapping("/graphql")
             .allowedOrigins("http://localhost:4200", "https://laia-dev.up.railway.app",
-                  "https://laia-development.netlify.app")
+                  "https://laia-development.netlify.app", "https://kanddys-1088e.web.app")
             .allowedMethods("POST", "GET") // Por lo general, las solicitudes GraphQL son POST
             .allowedHeaders("*");
 
       // Permitir solicitudes CORS para la URL de GraphiQL
       registry.addMapping("/graphiql")
             .allowedOrigins("http://localhost:4200", "https://laia-dev.up.railway.app",
-                  "https://laia-development.netlify.app")
+                  "https://laia-development.netlify.app", "https://kanddys-1088e.web.app")
             .allowedMethods("GET", "POST") // Por lo general, GraphiQL usa solicitudes GET
             .allowedHeaders("*");
    }
