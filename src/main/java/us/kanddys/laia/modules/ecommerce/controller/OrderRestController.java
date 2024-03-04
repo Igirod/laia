@@ -11,16 +11,16 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 import us.kanddys.laia.modules.ecommerce.services.OrderService;
 
 @RestController
+@RequestMapping("/orders")
 public class OrderRestController {
 
    @Autowired
    private OrderService orderService;
 
-   @RequestMapping(method = { RequestMethod.POST }, value = "/update-voucher", produces = {
+   @RequestMapping(method = { RequestMethod.PUT }, value = "/update-voucher", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public OrderPaymentDTO updateOrderVoucher(@RequestPart MultipartFile voucher,
-         @RequestPart String orderId,
-         @RequestPart String paymentId) {
+         @RequestPart String orderId) {
       return orderService.updateVoucher(voucher, Long.valueOf(orderId));
    }
 

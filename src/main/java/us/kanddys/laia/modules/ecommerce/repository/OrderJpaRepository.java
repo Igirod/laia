@@ -25,4 +25,8 @@ public interface OrderJpaRepository extends JpaRepository<Order, Long> {
    @Modifying
    @Query(value = "UPDATE invoices SET code = :code WHERE id = :orderId", nativeQuery = true)
    public void updateCodeByOrderId(@Param("code") String code, @Param("orderId") Long orderId);
+
+   @Modifying
+   @Query(value = "UPDATE invoices SET voucher = :voucher WHERE id = :orderId", nativeQuery = true)
+   public void updateVoucherByOrderId(@Param("voucher") String voucher, @Param("orderId") Long orderId);
 }
