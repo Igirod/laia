@@ -19,6 +19,7 @@ type InvoiceDTO {
    addressNumber: Int
    merchantLat: String
    merchantLng: String
+   merchantDirection: String
 }
 
 input InvoiceInputDTO {
