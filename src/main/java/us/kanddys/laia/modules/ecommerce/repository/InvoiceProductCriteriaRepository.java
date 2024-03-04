@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -40,5 +42,15 @@ public class InvoiceProductCriteriaRepository {
       predicates.add(cBuilder.equal(rInvoiceProduct.get("id").get("invoiceId"), InvoiceProductId));
       cQueryInvoiceProduct.where(predicates.toArray(new Predicate[0]));
       return entityManager.createQuery(cQueryInvoiceProduct).getResultList();
+   }
+
+   @Transactional
+   public int deleteProductsByInvoiceId(Long invoiceId) {
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+      CriteriaDelete<InvoiceProduct> criteriaDelete = criteriaBuilder.createCriteriaDelete(InvoiceProduct.class);
+      Root<InvoiceProduct> root = criteriaDelete.from(InvoiceProduct.class);
+      criteriaDelete.where(criteriaBuilder.equal(root.get("id").get("invoiceId"), invoiceId));
+      int deletedCount = entityManager.createQuery(criteriaDelete).executeUpdate();
+      return deletedCount;
    }
 }

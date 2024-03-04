@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.InvoiceProductId;
 import us.kanddys.laia.modules.ecommerce.model.Order;
 import us.kanddys.laia.modules.ecommerce.model.OrderProduct;
 import us.kanddys.laia.modules.ecommerce.model.Reservation;
@@ -211,21 +213,24 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setStatus(Status.PENDING);
       order.setReservation(date);
       order.setMerchantId(merchantId);
+      var invoiceProductsIds = new ArrayList<InvoiceProductId>();
       var newOrder = orderJpaRepository.save(order);
       List<OrderProduct> listOrderProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId)
             .stream().map(t -> {
+               invoiceProductsIds.add(new InvoiceProductId(invoiceId, t.getProduct().getId()));
                productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
                return new OrderProduct(t, newOrder.getId());
             }).collect(Collectors.toList());
       // * Guardado de la orden y sus productos.
       orderProductJpaRepository.saveAll(listOrderProducts);
+      invoiceProductCriteriaRepository.deleteProductsByInvoiceId(invoiceId);
+      invoiceJpaRepository.deleteById(invoiceId);
       try {
          reservationJpaRepository.save(
                new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
       }
-
       try {
          mailSenderService.sendUserOrder(new MailDTO(userJpaRepository.findEmailByUserId(userId), "Factura disponible",
                "Order", "", newOrder.getId()));
