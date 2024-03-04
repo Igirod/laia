@@ -139,7 +139,7 @@ public class InvoiceServiceImpl implements InvoiceService {
          invoice.get().setCount(
                invoiceProductJpaRepository.countByInvoiceId(invoice.get() == null ? 0 : invoice.get().getId()));
          var selectedInvoiceDTO = new InvoiceDTO(invoice.get());
-         selectedInvoiceDTO.setMerchantAddress((String) map.get("address"));
+         selectedInvoiceDTO.setMerchantDirection((String) map.get("address"));
          selectedInvoiceDTO.setMerchantLat((String) map.get("lat"));
          selectedInvoiceDTO.setMerchantLng((String) map.get("lng"));
          return selectedInvoiceDTO;

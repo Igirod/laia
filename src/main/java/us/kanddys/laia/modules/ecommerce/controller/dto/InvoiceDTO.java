@@ -56,7 +56,7 @@ public class InvoiceDTO {
    @JsonProperty
    private String type;
    @JsonProperty
-   private String merchantAddress;
+   private String merchantDirection;
    @JsonProperty
    private String merchantLat;
    @JsonProperty

@@ -22,8 +22,8 @@ public class ProductDetailRestController {
    @RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public ProductDetailDTO uploadProductDetail(@RequestPart Optional<String> title,
-         @RequestPart Optional<MultipartFile> frontPage, @RequestPart String productId,
+         @RequestPart Optional<MultipartFile> image, @RequestPart String productId,
          @RequestPart Optional<String> description) {
-      return productDetailService.createProductDetail(title, frontPage, Long.valueOf(productId), description);
+      return productDetailService.createProductDetail(title, image, Long.valueOf(productId), description);
    }
 }
