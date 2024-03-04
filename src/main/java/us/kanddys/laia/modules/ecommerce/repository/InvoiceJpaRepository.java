@@ -12,9 +12,6 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 @Repository
 public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
 
-   @Query(value = "SELECT MAX(id) FROM invoices WHERE mer_id = :merchantId AND status IN ('PENDING', 'COMPLETE')", nativeQuery = true)
-   public Long findMaxInvoiceIdByMerchantIdAndStatus(@Param("merchantId") Long merchantId);
-
    @Query(value = "SELECT id from invoices where id = :invoiceId", nativeQuery = true)
    public Long existByInvoiceId(@Param("invoiceId") Long invoiceId);
 
@@ -72,8 +69,4 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    @Query(value = "UPDATE invoices SET batch_id = :batchId, payment_id = :paymentId, status = :status WHERE id = :invoiceId", nativeQuery = true)
    public void updateBatchIdAndPaymentIdAndStatusByInvoiceId(@Param("batchId") Long batchId,
          @Param("paymentId") Long paymentId, @Param("status") String status, @Param("invoiceId") Long invoiceId);
-
-   @Modifying
-   @Query(value = "UPDATE invoices SET code = :code WHERE id = :invoiceId", nativeQuery = true)
-   public void updateCodeByInvoiceId(@Param("code") String code, @Param("invoiceId") Long invoiceId);
 }

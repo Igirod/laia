@@ -8,5 +8,5 @@ import us.kanddys.laia.modules.ecommerce.model.OrderProductId;
 
 @Repository
 public interface OrderProductJpaRepository extends JpaRepository<OrderProduct, OrderProductId> {
-
+   
 }

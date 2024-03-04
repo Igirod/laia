@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
          }
          userJpaRepository.updateEmailByUserId(userId, email);
          try {
-            mailSenderService.sendEmailChangePassword(new MailDTO(email, "Bienvenido", "", ""));
+            mailSenderService.sendEmailChangePassword(new MailDTO(email, "Bienvenido", "", "", null));
          } catch (MessagingException e) {
             throw new RuntimeException("Error al enviar el correo");
          }

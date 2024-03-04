@@ -22,6 +22,8 @@ public class OrderDTO {
    @JsonProperty
    private Long merchantId;
    @JsonProperty
+   private String createAt;
+   @JsonProperty
    private Long userId;
    @JsonProperty
    private String code;
@@ -44,12 +46,12 @@ public class OrderDTO {
    @JsonProperty
    private String addressDirection;
    @JsonProperty
-   private List<ProductDTO> products;
+   private List<OrderProductDTO> products;
 
    public OrderDTO() {
    }
 
-   public OrderDTO(Order order) {
+   public OrderDTO(Order order, List<OrderProductDTO> products) {
       super();
       this.id = (order.getId() == null) ? null : order.getId();
       this.merchantId = (order.getMerchantId() == null) ? null : order.getMerchantId();
@@ -65,5 +67,7 @@ public class OrderDTO {
       this.addressDirection = (order.getAddressDirection() == null) ? null : order.getAddressDirection();
       this.addressLat = (order.getAddressLat() == null) ? null : order.getAddressLat();
       this.addressLng = (order.getAddressLng() == null) ? null : order.getAddressLng();
+      this.createAt = (order.getCreateAt() == null) ? null : order.getCreateAt().toString();
+      this.products = products;
    }
 }
