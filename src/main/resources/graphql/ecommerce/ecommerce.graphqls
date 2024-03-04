@@ -29,6 +29,7 @@ type Query {
    rProduct(productId: Int!, invoiceId: Int, merchantId: Int!): CombinedProductDetailDTO
    gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
+   gOrder(orderId: Int!): OrderDTO
 }
 
 type Mutation {

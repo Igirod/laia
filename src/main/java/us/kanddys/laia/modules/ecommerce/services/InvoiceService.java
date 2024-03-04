@@ -113,12 +113,15 @@ public interface InvoiceService {
     * @param batchId
     * @param merchantId
     * @param userId
+    * @param addressLat
+    * @param addressLng
+    * @param addressDirection
     * @return String
     */
    public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
-         Long userId);
+         Long userId, String addressLat, String addressLng, String addressDirection);
 
    /**
     * Este método se encarga de actualizar la dirección de una factura.

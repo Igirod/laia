@@ -8,7 +8,7 @@ package us.kanddys.laia.modules.ecommerce.services.check;
  * @version 1.0.0
  */
 public interface ProductCheckStockService {
-   
+
    /**
     * Este método verifica si hay suficiente stock para el producto.
     *
