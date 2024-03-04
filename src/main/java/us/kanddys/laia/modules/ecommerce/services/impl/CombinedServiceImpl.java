@@ -127,7 +127,7 @@ public class CombinedServiceImpl implements CombinedService {
     * existe crea una nueva factura.
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @param userId
     * @param merchantId
     * @return Invoice
@@ -138,11 +138,11 @@ public class CombinedServiceImpl implements CombinedService {
          invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
                InvoiceStatus.INITIAL.toString());
          if (invoice == null) {
-            invoice = new Invoice(userId.get(), merchantId);
+            invoice = invoiceJpaRepository.save(new Invoice(userId.get(), merchantId));
          }
       } else {
          User user = new User(true);
-         invoice = new Invoice(userJpaRepository.save(user).getId(), merchantId);
+         invoice = invoiceJpaRepository.save(new Invoice(userJpaRepository.save(user).getId(), merchantId));
       }
       return invoice;
    }
