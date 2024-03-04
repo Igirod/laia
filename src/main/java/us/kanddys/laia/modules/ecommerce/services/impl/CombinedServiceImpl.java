@@ -21,8 +21,9 @@ import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Batch;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
 import us.kanddys.laia.modules.ecommerce.model.User;
+import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.CalendarJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.DisabledDateJpaRepository;
@@ -80,15 +81,23 @@ public class CombinedServiceImpl implements CombinedService {
 
    @Override
    public CombinedShopDTO findCombinedShop(String slug, Optional<Long> userId) {
-      Map<String, Object> merchant = merchantJpaRepository.findMerchantIdAndTitle(slug);
+      Map<String, Object> merchant = merchantJpaRepository.findMerchantIdAndTitleAndAddress(slug);
       if (merchant == null)
          throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
       Long merchantId = merchant.get("id") == null ? null : Long.valueOf(merchant.get("id").toString());
       String merchantTitle = (merchant.get("title") == null ? null : merchant.get("title").toString());
       var products = productService.getProductsPaginated(1, merchantId, Optional.of(1));
       Invoice invoice = invoiceIfUserPresent(userId, merchantId);
+      Map<String, Object> calendarData = calendarJpaRepository.findTypeAndDelayAndCalendarIdByMerchantId(merchantId);
+      var firstShippingDate = findFirstShippingDate(merchantId, Long.valueOf(calendarData.get("id").toString()),
+            calendarData.get("type").toString(), Integer.valueOf(calendarData.get("delay").toString()));
       return new CombinedShopDTO(merchantId, merchantTitle, products, invoice.getId(),
-            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()), invoice.getUserId());
+            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()), invoice.getUserId(),
+            firstShippingDate.get("firstShippingDate"),
+            (firstShippingDate.get("batchId").equals("0") ? null : Long.valueOf(firstShippingDate.get("batchId"))),
+            (firstShippingDate.get("from").toString().equals("null") ? null : firstShippingDate.get("from").toString()),
+            (firstShippingDate.get("to").toString().equals("null") ? null : firstShippingDate.get("to").toString()),
+            merchant.get("address").toString());
    }
 
    @Override
@@ -136,7 +145,7 @@ public class CombinedServiceImpl implements CombinedService {
       Invoice invoice;
       if (userId.isPresent()) {
          invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
-               InvoiceStatus.INITIAL.toString());
+               Status.INITIAL.toString());
          if (invoice == null) {
             invoice = invoiceJpaRepository.save(new Invoice(userId.get(), merchantId));
          }
@@ -245,6 +254,7 @@ public class CombinedServiceImpl implements CombinedService {
    private Map<String, Object> settingBatchAtributes(String type, Calendar calendar, Integer delay, List<Batch> batches,
          Long batchId,
          Time from, Time to) {
+      List<String> workingDays = CalendarDay.getDays(batches.stream().map(Batch::getDays).toList());
       if (type.equals("HR") || type.equals("MN")) {
          calendar.add(Calendar.HOUR, delay);
          for (Batch batch : batches) {
@@ -260,6 +270,13 @@ public class CombinedServiceImpl implements CombinedService {
             }
          }
          if (batchId == null) {
+            System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+            for (String day : workingDays) {
+               if (!day.equals(CalendarDay.getDayNumber(calendar.get(Calendar.DAY_OF_WEEK)))) {
+                  calendar.add(Calendar.DAY_OF_YEAR, 1);
+                  break;
+               }
+            }
             for (Batch batch : batches) {
                if (batch.getDays().toString().contains(String.valueOf(calendar.get(Calendar.DAY_OF_WEEK)))) {
                   return Map.of("batchId", batch.getId(), "from", batch.getFrom(), "to",

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceUpdatePaymentDTO;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la
@@ -33,7 +33,7 @@ public interface InvoiceService {
     */
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
          Optional<String> userEmail,
-         Optional<InvoiceStatus> status);
+         Optional<Status> status);
 
    /**
     * Este método se encarga de crear una factura.
@@ -79,22 +79,6 @@ public interface InvoiceService {
    public Integer updateInvoiceMessage(Long invoiceId, String message);
 
    /**
-    * Este método se encarga de actualizar el pago de una factura.
-    *
-    * @author Igirod0
-    * @version 1.0.0
-    * @param invoiceId
-    * @param payment
-    * @param date
-    * @param batchId
-    * @param merchantId
-    * @param userId
-    * @return Integer
-    */
-   public Integer updateInvoicePayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
-         Long userId);
-
-   /**
     * Este método se encarga de actualizar la nota de una factura.
     *
     * @author Igirod0
@@ -114,7 +98,7 @@ public interface InvoiceService {
     * @param status
     * @return Integer
     */
-   public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status);
+   public Integer updateInvoiceStatus(Long invoiceId, Status status);
 
    /**
     * Este método se encarga de actualizar el comprobante de una factura.
@@ -131,7 +115,7 @@ public interface InvoiceService {
     * @param userId
     * @return String
     */
-   public InvoiceUpdatePaymentDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
+   public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
          Long userId);

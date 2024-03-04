@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta clase representa una factura.
@@ -48,7 +48,7 @@ public class Invoice {
    private String message;
    @Enumerated(EnumType.STRING)
    @Column(name = "status")
-   private InvoiceStatus status;
+   private Status status;
    @Column(name = "voucher")
    private String voucher;
    @Column(name = "note")
@@ -151,7 +151,7 @@ public class Invoice {
       this.id = null;
       this.userId = (userId == null) ? null : userId;
       this.merchantId = (merchantId == null) ? null : merchantId;
-      this.status = InvoiceStatus.INITIAL;
+      this.status = Status.INITIAL;
       this.total = 0.0;
    }
 }

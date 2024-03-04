@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
 
 @Controller
@@ -19,7 +19,7 @@ public class CombinedController {
    private CombinedService combinedService;
 
    @QueryMapping("combinedShop")
-   public CombinedShopDTO getCombinedShop(@Argument String slug, @Argument InvoiceStatus invoiceStatus,
+   public CombinedShopDTO getCombinedShop(@Argument String slug, @Argument Status invoiceStatus,
          @Argument Optional<Long> userId) {
       return combinedService.findCombinedShop(slug, userId);
    }

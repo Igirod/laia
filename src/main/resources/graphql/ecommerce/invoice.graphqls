@@ -7,7 +7,7 @@ type InvoiceDTO {
    reservation: String
    total: Float
    message: String
-   status: InvoiceStatus
+   status: Status
    voucher: String
    note: String
    count: Int
@@ -17,6 +17,8 @@ type InvoiceDTO {
    batchId: Int
    type: String
    addressNumber: Int
+   merchantLat: String
+   merchantLng: String
 }
 
 input InvoiceInputDTO {
@@ -28,7 +30,7 @@ input InvoiceInputDTO {
    reservation: String
    total: Float
    message: String
-   status: InvoiceStatus
+   status: Status
    voucher: String
    note: String
    addressLat: String
@@ -39,7 +41,7 @@ input InvoiceInputDTO {
    addressNumber: Int
 }
 
-enum InvoiceStatus {
+enum Status {
    INITIAL,
    PENDING,
    COMPLETE

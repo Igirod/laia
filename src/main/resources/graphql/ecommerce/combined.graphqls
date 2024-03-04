@@ -9,6 +9,10 @@ type CombinedShopDTO {
    invoiceId: Int
    invoiceCount: Int
    userId: Int
+   firstShippingDate: String
+   batchId: Int
+   batchFrom: String
+   batchTo: String
 }
 
 type CombinedProductDTO {

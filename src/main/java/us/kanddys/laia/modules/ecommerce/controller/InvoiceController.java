@@ -10,7 +10,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 
 @Controller
@@ -23,7 +23,7 @@ public class InvoiceController {
    public List<InvoiceDTO> getInvoicesByMerchantIdAndOptionalParamsPaginated(@Argument Integer page,
          @Argument Long merchantId,
          @Argument Optional<String> userEmail,
-         @Argument Optional<InvoiceStatus> status) {
+         @Argument Optional<Status> status) {
       return invoiceService.findInvoicesByMerchantIdAndOptionalParamsPaginated(page, merchantId, userEmail, status);
    }
 
@@ -47,19 +47,13 @@ public class InvoiceController {
       return invoiceService.updateInvoiceMessage(invoiceId, message);
    }
 
-   @MutationMapping("uInvoiceP")
-   public Integer updateInvoicePayment(@Argument Long invoiceId, @Argument Long paymentId, @Argument String date,
-         @Argument Long batchId, @Argument Long merchantId, @Argument Long userId) {
-      return invoiceService.updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
-   }
-
    @MutationMapping("uInvoiceN")
    public Integer updateInvoiceNote(@Argument Long invoiceId, @Argument String note) {
       return invoiceService.updateInvoiceNote(invoiceId, note);
    }
 
    @MutationMapping("uInvoiceS")
-   public Integer updateInvoiceStatus(@Argument Long invoiceId, @Argument InvoiceStatus status) {
+   public Integer updateInvoiceStatus(@Argument Long invoiceId, @Argument Status status) {
       return invoiceService.updateInvoiceStatus(invoiceId, status);
    }
 

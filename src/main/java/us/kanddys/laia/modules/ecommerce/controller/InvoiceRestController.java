@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceUpdatePaymentDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 
 @RestController
@@ -19,11 +18,11 @@ public class InvoiceRestController {
 
    @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public InvoiceUpdatePaymentDTO updateInvoiceVoucher(@RequestPart MultipartFile voucher,
+   public OrderPaymentDTO updateOrderVoucher(@RequestPart MultipartFile voucher,
          @RequestPart String invoiceId,
          @RequestPart String paymentId, @RequestPart String date, @RequestPart String batchId,
          @RequestPart String merchantId, @RequestPart String userId) {
-      return invoiceService.updateInvoiceVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
+      return invoiceService.updateOrderVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
             Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId));
    }
 

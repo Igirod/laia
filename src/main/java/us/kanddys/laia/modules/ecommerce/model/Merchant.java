@@ -37,6 +37,10 @@ public class Merchant {
    private String address;
    @Column(name = "phone")
    private String phone;
+   @Column(name = "lat")
+   private String lat;
+   @Column(name = "lng")
+   private String lng;
 
    public Merchant() {
    }

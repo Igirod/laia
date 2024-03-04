@@ -7,12 +7,12 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class InvoiceUpdatePaymentDTO {
+public class OrderPaymentDTO {
    @JsonProperty
    private String url;
    @JsonProperty
    private String code;
 
-   public InvoiceUpdatePaymentDTO() {
+   public OrderPaymentDTO() {
    }
 }

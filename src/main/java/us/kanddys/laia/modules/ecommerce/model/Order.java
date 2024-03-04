@@ -1,98 +1,89 @@
-package us.kanddys.laia.modules.ecommerce.controller.dto;
+package us.kanddys.laia.modules.ecommerce.model;
 
-import java.io.IOException;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.model.Invoice;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
- * Esta clase representa un data transfer object (DTO) para la factura.
+ * Esta clase representa la entidad Order.
  * 
  * @author Igirod0
- * @version 1.0.3
+ * @version 1.0.0
  */
 @Data
 @AllArgsConstructor
-public class InvoiceDTO {
-   @JsonProperty
+@Entity
+@Table(name = "orders")
+public class Order {
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
    private Long id;
-   @JsonProperty
-   private Long merchantId;
-   @JsonProperty
+   @Column(name = "user_id")
    private Long userId;
-   @JsonProperty
+   @Column(name = "mer_id")
+   private Long merchantId;
+   @Column(name = "payment_id")
    private Long paymentId;
-   @JsonProperty
+   @Column(name = "code")
    private String code;
-   @JsonProperty
-   private Long shoppingCartId;
-   @JsonProperty
+   @Column(name = "reservation")
    private String reservation;
-   @JsonProperty
+   @Column(name = "total")
    private Double total;
-   @JsonProperty
+   @Column(name = "message")
    private String message;
-   @JsonProperty
+   @Enumerated(EnumType.STRING)
+   @Column(name = "status")
    private Status status;
-   @JsonProperty
+   @Column(name = "voucher")
    private String voucher;
-   @JsonProperty
+   @Column(name = "note")
    private String note;
-   @JsonProperty
-   private Integer count;
-   @JsonProperty
+   @Column(name = "address_lat")
    private String addressLat;
-   @JsonProperty
+   @Column(name = "address_lng")
    private String addressLng;
-   @JsonProperty
+   @Column(name = "address_direction")
    private String addressDirection;
-   @JsonProperty
+   @Column(name = "batch_id")
    private Long batchId;
-   @JsonProperty
+   @Column(name = "address_number")
    private Integer addressNumber;
-   @JsonProperty
+   @Column(name = "type")
    private String type;
-   @JsonProperty
-   private String merchantAddress;
-   @JsonProperty
-   private String merchantLat;
-   @JsonProperty
-   private String merchantLng;
 
-   public InvoiceDTO() {
+   public Order() {
    }
 
-   /**
-    * Constructor personalizado utilizado en diferentes servicios.
-    *
-    * @author Igirod0
-    * @version 1.0.1
-    * @param invoice
-    * @throws IOException
-    */
-   public InvoiceDTO(Invoice invoice) throws IOException {
+   public Order(Invoice invoice) {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
       this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
       this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
-      this.code = (invoice.getCode() == null) ? null : invoice.getCode();
+      this.code = (invoice.getCode() == null) ? null
+            : invoice.getCode();
       this.reservation = (invoice.getReservation() == null) ? null
             : invoice.getReservation();
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
-      this.status = (invoice.getStatus().toString() == null) ? null : invoice.getStatus();
+      this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
-      this.count = (invoice.getCount() == null) ? null : invoice.getCount();
       this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
       this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
       this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
-      this.type = (invoice.getType() == null) ? null : invoice.getType();
       this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
+      this.type = (invoice.getType() == null) ? null : invoice.getType();
    }
 }

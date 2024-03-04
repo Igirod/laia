@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 @Repository
 public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
@@ -18,7 +18,7 @@ public interface InvoiceJpaRepository extends JpaRepository<Invoice, Long> {
    @Query(value = "SELECT id from invoices where id = :invoiceId", nativeQuery = true)
    public Long existByInvoiceId(@Param("invoiceId") Long invoiceId);
 
-   public Invoice findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, InvoiceStatus status);
+   public Invoice findInvoiceByUserIdAndMerchantIdAndStatus(Long userId, Long merchantId, Status status);
 
    @Modifying
    @Query(value = "UPDATE invoices SET message = :message WHERE id = :invoiceId", nativeQuery = true)

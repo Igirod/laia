@@ -8,6 +8,8 @@ type MerchantDTO {
    image: String
    address: String
    phone: String
+   lat: String
+   lng: String
 }
 
 enum TypeShipment {
