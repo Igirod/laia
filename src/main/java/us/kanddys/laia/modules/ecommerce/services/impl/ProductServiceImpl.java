@@ -15,7 +15,7 @@ import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.ProductRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
    private ProductCriteriaRepository productCriteriaRepository;
 
    @Autowired
-   private ProductRepository productRepository;
+   private ProductJpaRepository productJpaRepository;
 
    @Autowired
    private FirebaseStorageService firebaseStorageService;
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
    @Override
    public ProductDTO getProductById(Long productId) {
       try {
-         return new ProductDTO(productRepository.findById(productId)
+         return new ProductDTO(productJpaRepository.findById(productId)
                .orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND)));
       } catch (ProductNotFoundException e) {
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
    @Override
    public Integer updateFrontPage(Long productId, MultipartFile image) {
-      productRepository.updateFrontPage(productId, firebaseStorageService.uploadFile(image, "frontPages"));
+      productJpaRepository.updateFrontPage(productId, firebaseStorageService.uploadFile(image, "frontPages"));
       return 1;
    }
 

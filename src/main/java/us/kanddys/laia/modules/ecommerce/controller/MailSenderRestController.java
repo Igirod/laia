@@ -23,4 +23,10 @@ public class MailSenderRestController {
       mailSenderService.sendEmailChangePassword(mailDTO);
       return ResponseEntity.ok("Mail sent successfully!");
    }
+
+   @PostMapping("/send/user-invoice")
+   public ResponseEntity<String> sendInvoiceOrder(@RequestBody MailDTO mailDTO) throws MessagingException {
+      mailSenderService.sendUserOrder(mailDTO);
+      return ResponseEntity.ok("Mail sent successfully!");
+   }
 }

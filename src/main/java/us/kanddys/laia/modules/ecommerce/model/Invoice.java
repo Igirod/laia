@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,13 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta clase representa una factura.
  * 
  * @author Igirod0
- * @version 1.0.3
+ * @version 1.0.4
  */
 @Entity
 @Table(name = "invoices")
@@ -67,6 +69,8 @@ public class Invoice {
    private Integer addressNumber;
    @Column(name = "type")
    private String type;
+   @Column(name = "create_at")
+   private Date createAt;
 
    public Invoice() {
    }
@@ -101,6 +105,7 @@ public class Invoice {
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
       this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
       this.type = (invoice.getType() == null) ? null : invoice.getType();
+      this.createAt = (invoice.getCreateAt() == null) ? null : DateUtils.convertStringToDate(invoice.getCreateAt());
    }
 
    /**
@@ -153,5 +158,10 @@ public class Invoice {
       this.merchantId = (merchantId == null) ? null : merchantId;
       this.status = Status.INITIAL;
       this.total = 0.0;
+      try {
+         this.createAt = DateUtils.getCurrentDateWitheoutTime();
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al obtener la fecha actual");
+      }
    }
 }

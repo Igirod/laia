@@ -1,9 +1,10 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +16,11 @@ import lombok.Data;
 public class OrderProduct {
    @EmbeddedId
    private OrderProductId id;
-   @JsonProperty
+   @Column(name = "quantity")
    private Integer quantity;
+   @ManyToOne
+   @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
+   private Product product;
 
    public OrderProduct() {
    }
@@ -25,5 +29,6 @@ public class OrderProduct {
       super();
       this.id = new OrderProductId(invoiceProduct.getId().getProductId(), orderId);
       this.quantity = invoiceProduct.getQuantity();
+      this.product = invoiceProduct.getProduct();
    }
 }

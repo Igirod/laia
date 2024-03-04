@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
@@ -61,6 +62,8 @@ public class InvoiceDTO {
    private String merchantLat;
    @JsonProperty
    private String merchantLng;
+   @JsonProperty
+   private String createAt;
 
    public InvoiceDTO() {
    }
@@ -94,5 +97,6 @@ public class InvoiceDTO {
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
       this.type = (invoice.getType() == null) ? null : invoice.getType();
       this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
+      this.createAt = (invoice.getCreateAt() == null) ? null : DateUtils.convertDateToString(invoice.getCreateAt());
    }
 }

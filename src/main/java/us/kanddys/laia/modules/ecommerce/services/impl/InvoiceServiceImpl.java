@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.MailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
@@ -33,8 +34,10 @@ import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
+import us.kanddys.laia.modules.ecommerce.services.MailSenderService;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
 import us.kanddys.laia.modules.ecommerce.services.check.ProductCheckStockService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
@@ -83,6 +86,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Autowired
    private MerchantJpaRepository merchantJpaRepository;
+
+   @Autowired
+   private MailSenderService mailSenderService;
+
+   @Autowired
+   private UserJpaRepository userJpaRepository;
 
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
@@ -212,6 +221,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
+      }
+
+      try {
+         mailSenderService.sendUserOrder(new MailDTO(userJpaRepository.findEmailByUserId(userId), "Factura disponible",
+               "Order", "", newOrder.getId()));
+      } catch (MessagingException e) {
+         throw new RuntimeException("Error al enviar el correo");
       }
    }
 
