@@ -12,6 +12,8 @@ public class OrderPaymentDTO {
    private String url;
    @JsonProperty
    private String code;
+   @JsonProperty
+   private Long orderId;
 
    public OrderPaymentDTO() {
    }

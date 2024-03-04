@@ -56,6 +56,6 @@ public class OrderServiceImpl implements OrderService {
       var voucherUrl = firebaseStorageService.uploadFile(voucher, "vouchers");
       orderJpaRepository.updateVoucherByOrderId(voucherUrl, orderId);
       // * Se utiliza este tipo de DTO para no crear uno nuevo.
-      return new OrderPaymentDTO(voucherUrl, null);
+      return new OrderPaymentDTO(voucherUrl, null, null);
    }
 }

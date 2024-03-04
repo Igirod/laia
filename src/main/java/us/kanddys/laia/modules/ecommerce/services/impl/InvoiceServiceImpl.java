@@ -201,7 +201,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setAddressLat(addressLat);
       order.setAddressLng(addressLng);
       updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order);
-      return new OrderPaymentDTO(order.getVoucher(), order.getCode());
+      return new OrderPaymentDTO(order.getVoucher(), order.getCode(), order.getId());
    }
 
    private void updateOrderPayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
