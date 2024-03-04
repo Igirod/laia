@@ -21,9 +21,11 @@ public class InvoiceRestController {
    public OrderPaymentDTO updateOrderVoucher(@RequestPart MultipartFile voucher,
          @RequestPart String invoiceId,
          @RequestPart String paymentId, @RequestPart String date, @RequestPart String batchId,
-         @RequestPart String merchantId, @RequestPart String userId) {
+         @RequestPart String merchantId, @RequestPart String userId, @RequestPart String addressLat,
+         @RequestPart String addressLng, @RequestPart String addressDirection) {
       return invoiceService.updateOrderVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
-            Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId));
+            Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId), addressLat, addressLng,
+            addressDirection);
    }
 
 }

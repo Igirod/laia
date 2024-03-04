@@ -189,7 +189,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
-         Long userId) {
+         Long userId, String addressLat, String addressLng, String addressDirection) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
@@ -197,6 +197,9 @@ public class InvoiceServiceImpl implements InvoiceService {
       Order order = new Order(invoice.get());
       order.setCode(invoiceCodeService.generateInvoiceCode(merchantId, invoiceId));
       order.setVoucher(firebaseStorageService.uploadFile(voucher, "vouchers"));
+      order.setAddressDirection(addressDirection);
+      order.setAddressLat(addressLat);
+      order.setAddressLng(addressLng);
       updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order);
       return new OrderPaymentDTO(order.getVoucher(), order.getCode());
    }

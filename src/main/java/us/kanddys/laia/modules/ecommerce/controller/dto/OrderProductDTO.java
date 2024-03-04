@@ -39,6 +39,7 @@ public class OrderProductDTO {
 
    public OrderProductDTO(OrderProduct orderProduct) {
       super();
+      this.orderId = orderProduct.getId().getOrderId();
       this.productId = orderProduct.getId().getProductId();
       this.quantity = orderProduct.getQuantity();
       try {

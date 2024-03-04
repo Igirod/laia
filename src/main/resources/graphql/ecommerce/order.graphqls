@@ -1,4 +1,3 @@
-#import "./ecommerce/product.graphqls"
 
 type OrderDTO {
    id: Int!
@@ -14,5 +13,5 @@ type OrderDTO {
    addressLat: String
    addressLng: String
    addressDirection: String
-   products: [ProductDTO]
+   products: [OrderProductDTO]
 }
