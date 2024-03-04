@@ -3,6 +3,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,19 +14,24 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceUpdatePaymentDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceCheckCodeException;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.Order;
+import us.kanddys.laia.modules.ecommerce.model.OrderProduct;
 import us.kanddys.laia.modules.ecommerce.model.Reservation;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.OrderProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceCodeService;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
@@ -69,9 +75,18 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Autowired
    private InvoiceCodeService invoiceCodeService;
 
+   @Autowired
+   private OrderJpaRepository orderJpaRepository;
+
+   @Autowired
+   private OrderProductJpaRepository orderProductJpaRepository;
+
+   @Autowired
+   private MerchantJpaRepository merchantJpaRepository;
+
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
-         Optional<String> userEmail, Optional<InvoiceStatus> status) {
+         Optional<String> userEmail, Optional<Status> status) {
       return invoiceCriteriaRepository.findInvoicesPaginated(page, merchantId, userEmail, status).stream().map(t -> {
          try {
             return new InvoiceDTO(t);
@@ -119,9 +134,15 @@ public class InvoiceServiceImpl implements InvoiceService {
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       try {
+         Map<String, Object> map = merchantJpaRepository
+               .findLatAndLngAndAddressByMerchantId(invoice.get().getMerchantId());
          invoice.get().setCount(
                invoiceProductJpaRepository.countByInvoiceId(invoice.get() == null ? 0 : invoice.get().getId()));
-         return new InvoiceDTO(invoice.get());
+         var selectedInvoiceDTO = new InvoiceDTO(invoice.get());
+         selectedInvoiceDTO.setMerchantAddress((String) map.get("address"));
+         selectedInvoiceDTO.setMerchantLat((String) map.get("lat"));
+         selectedInvoiceDTO.setMerchantLng((String) map.get("lng"));
+         return selectedInvoiceDTO;
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }
@@ -136,25 +157,6 @@ public class InvoiceServiceImpl implements InvoiceService {
       return 1;
    }
 
-   public Integer updateInvoicePayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
-         Long userId) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false)
-         throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      invoiceJpaRepository.updateBatchIdAndPaymentIdAndStatusByInvoiceId(batchId, paymentId,
-            InvoiceStatus.PENDING.toString(), invoiceId);
-      invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId).stream().map(t -> {
-         productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
-         return t;
-      }).collect(Collectors.toList());
-      try {
-         reservationJpaRepository.save(
-               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
-      } catch (ParseException e) {
-         throw new RuntimeException("Error al convertir la fecha");
-      }
-      return 1;
-   }
-
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceNote(Long invoiceId, String note) {
@@ -166,7 +168,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer updateInvoiceStatus(Long invoiceId, InvoiceStatus status) {
+   public Integer updateInvoiceStatus(Long invoiceId, Status status) {
       if (invoiceJpaRepository.existsById(invoiceId) == false)
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       invoiceJpaRepository.updateStatusByInvoiceId(status.toString(), invoiceId);
@@ -175,16 +177,42 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public InvoiceUpdatePaymentDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
+   public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
          Long userId) {
-      if (invoiceJpaRepository.existsById(invoiceId) == false)
+      var invoice = invoiceJpaRepository.findById(invoiceId);
+      if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
-      var urlVoucher = firebaseStorageService.uploadFile(voucher, "vouchers");
-      invoiceJpaRepository.updateVoucherByInvoiceId(urlVoucher, invoiceId);
-      updateInvoicePayment(invoiceId, paymentId, date, batchId, merchantId, userId);
-      return new InvoiceUpdatePaymentDTO(urlVoucher, invoiceCodeService.generateInvoiceCode(merchantId, invoiceId));
+      // * Creación de la orden definitiva.
+      Order order = new Order(invoice.get());
+      order.setCode(invoiceCodeService.generateInvoiceCode(merchantId, invoiceId));
+      order.setVoucher(firebaseStorageService.uploadFile(voucher, "vouchers"));
+      updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order);
+      return new OrderPaymentDTO(order.getVoucher(), order.getCode());
+   }
+
+   private void updateOrderPayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
+         Long userId, Order order) {
+      order.setBatchId(batchId);
+      order.setPaymentId(paymentId);
+      order.setStatus(Status.PENDING);
+      order.setReservation(date);
+      order.setMerchantId(merchantId);
+      List<OrderProduct> listOrderProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId)
+            .stream().map(t -> {
+               productCheckStockService.checkStock(t.getProduct().getId(), t.getProduct().getStock(), t.getQuantity());
+               return new OrderProduct(t, order.getId());
+            }).collect(Collectors.toList());
+      // * Guardado de la orden y sus productos.
+      orderJpaRepository.save(order);
+      orderProductJpaRepository.saveAll(listOrderProducts);
+      try {
+         reservationJpaRepository.save(
+               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al convertir la fecha");
+      }
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })

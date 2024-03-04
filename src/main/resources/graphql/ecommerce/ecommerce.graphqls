@@ -16,7 +16,7 @@ type Query {
    merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
-   invoices(page: Int!, merchantId: Int!, userEmail: String, invoiceStatus: InvoiceStatus): [InvoiceDTO]
+   invoices(page: Int!, merchantId: Int!, userEmail: String, status: Status): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
    gInvoice(invoiceId: Int!): InvoiceDTO
@@ -37,13 +37,14 @@ type Mutation {
    aProductI(invoiceId: Int!, productId: Int!) : Int
    uProductI(invoiceId: Int!, listInvoiceProducts: [InvoiceProductInputDTO]) : Int
    uInvoiceM(invoiceId: Int!, message: String!) : Int
-   uInvoiceS(invoiceId: Int!, status: InvoiceStatus!) : Int
+   uInvoiceS(invoiceId: Int!, status: Status!) : Int
    uInvoiceN(invoiceId: Int!, note: String!) : Int
-   uInvoiceP(invoiceId: Int!, paymentId: Int!, date: String!, batchId: Int!, merchantId: Int!, userId: Int!) : Int
    uInvoiceR(invoiceId: Int!, batchId: Int!, date: String!) : Int
    uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
    uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String, type: String, addressNumber: Int) : Int
+   uOrderS(orderId: Int!, status: String!) : Int
+   uOrderN(orderId: Int!, note: String!) : Int
 }

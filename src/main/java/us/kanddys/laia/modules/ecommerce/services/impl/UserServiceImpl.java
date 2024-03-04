@@ -33,7 +33,8 @@ public class UserServiceImpl implements UserService {
    public Integer checkEmail(@Argument Long userId, @Argument String email) {
       var userAtributes = userJpaRepository.findUserIdByEmail(email);
       if (userAtributes.get("email") == null) {
-         if (!email.equals(userJpaRepository.findEmailByUserId(userId))) {
+         var userEmailDb = userJpaRepository.findEmailByUserId(userId);
+         if (userEmailDb != null && !email.equals(userEmailDb)) {
             return -1;
          }
          userJpaRepository.updateEmailByUserId(userId, email);

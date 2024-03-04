@@ -34,6 +34,10 @@ public class MerchantDTO {
    private String address;
    @JsonProperty
    private String phone;
+   @JsonProperty
+   private String lat;
+   @JsonProperty
+   private String lng;
 
    public MerchantDTO() {
    }
@@ -56,5 +60,7 @@ public class MerchantDTO {
       this.image = (merchant.getImage() == null) ? null : merchant.getImage();
       this.address = (merchant.getAddress() == null) ? null : merchant.getAddress();
       this.phone = (merchant.getPhone() == null) ? null : merchant.getPhone();
+      this.lat = (merchant.getLat() == null) ? null : merchant.getLat();
+      this.lng = (merchant.getLng() == null) ? null : merchant.getLng();
    }
 }

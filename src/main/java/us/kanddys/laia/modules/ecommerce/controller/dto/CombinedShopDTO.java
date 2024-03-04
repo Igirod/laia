@@ -22,6 +22,16 @@ public class CombinedShopDTO {
    private Integer invoiceCount;
    @JsonProperty
    private Long userId;
+   @JsonProperty
+   private String firstShippingDate;
+   @JsonProperty
+   private Long batchId;
+   @JsonProperty
+   private String batchFrom;
+   @JsonProperty
+   private String batchTo;
+   @JsonProperty
+   private String addressDirection;
 
    public CombinedShopDTO() {
    }

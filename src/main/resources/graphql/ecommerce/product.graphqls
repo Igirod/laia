@@ -9,6 +9,14 @@ type ProductDTO {
    createAt: String
 }
 
+type ProductInputDTO {
+   id: Int!
+   image: String
+   price: Float
+   stock: Int
+   quantity: Int
+}
+
 enum TypeFilter {
    CHEAP,
    EXPENSIVE,

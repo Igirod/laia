@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta clase representa el data transfer object (DTO) que se utiliza para la
@@ -34,7 +34,7 @@ public class InvoiceInputDTO {
    @JsonProperty
    private String message;
    @JsonProperty
-   private InvoiceStatus status;
+   private Status status;
    @JsonProperty
    private String voucher;
    @JsonProperty
