@@ -27,5 +27,4 @@ public class InvoiceRestController {
             Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId), addressLat, addressLng,
             addressDirection);
    }
-
 }
