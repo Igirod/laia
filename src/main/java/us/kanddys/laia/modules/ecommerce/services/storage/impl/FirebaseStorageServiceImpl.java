@@ -27,13 +27,13 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
    public String uploadFile(MultipartFile multipartFile, String folderName) {
       try {
          StorageOptions storageOptions = StorageOptions.newBuilder()
-               .setProjectId("kanddys-1088e")
+               .setProjectId("laia-c5d59")
                .setCredentials(
                      GoogleCredentials.fromStream(new ClassPathResource("firebase_admin.json").getInputStream()))
                .build();
          Storage storage = storageOptions.getService();
          String objectName = folderName + "/" + multipartFile.getOriginalFilename();
-         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of("kanddys-1088e.appspot.com", objectName))
+         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of("laia-c5d59.appspot.com", objectName))
                .setContentType("image/png")
                .build();
          storage.create(blobInfo, ImageFormatUtils.resizeImage(multipartFile));
