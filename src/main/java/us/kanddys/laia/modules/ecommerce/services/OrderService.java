@@ -5,6 +5,13 @@ import org.springframework.web.multipart.MultipartFile;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 
+/**
+ * Esta interfaz contiene las obligaciones que debe implementar la clase
+ * OrderServiceImpl.
+ * 
+ * @autor Igirod0
+ * @version 1.0.0
+ */
 public interface OrderService {
 
    /**
