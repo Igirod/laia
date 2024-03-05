@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.model;
 
 import java.text.ParseException;
 import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,18 +11,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceInputDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta clase representa una factura.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.4
  */
 @Entity
 @Table(name = "invoices")
@@ -32,31 +34,43 @@ public class Invoice {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
+   @Column(name = "user_id")
+   private Long userId;
    @Column(name = "mer_id")
    private Long merchantId;
-   @Column(name = "mer_email")
-   private String merchantEmail;
-   @Column(name = "user_email")
-   private String userEmail;
    @Column(name = "payment_id")
    private Long paymentId;
    @Column(name = "code")
    private String code;
-   @Column(name = "shopping_cart_id")
-   private Long shoppingCartId;
    @Column(name = "reservation")
-   private Date reservation;
+   private String reservation;
    @Column(name = "total")
-   private Float total;
+   private Double total;
    @Column(name = "message")
-   private Boolean message;
+   private String message;
    @Enumerated(EnumType.STRING)
    @Column(name = "status")
-   private InvoiceStatus status;
+   private Status status;
    @Column(name = "voucher")
    private String voucher;
    @Column(name = "note")
    private String note;
+   @Column(name = "address_lat")
+   private String addressLat;
+   @Column(name = "address_lng")
+   private String addressLng;
+   @Column(name = "address_direction")
+   private String addressDirection;
+   @Transient
+   private Integer count;
+   @Column(name = "batch_id")
+   private Long batchId;
+   @Column(name = "address_number")
+   private Integer addressNumber;
+   @Column(name = "type")
+   private String type;
+   @Column(name = "create_at")
+   private Date createAt;
 
    public Invoice() {
    }
@@ -65,82 +79,89 @@ public class Invoice {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @param invoice
     * @throws ParseException
     */
-   public Invoice(InvoiceDTO invoice) throws ParseException {
+   public Invoice(InvoiceDTO invoice, Integer count) throws ParseException {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
       this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
-      this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
+      this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
-      this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();
       this.reservation = (invoice.getReservation() == null) ? null
-            : DateUtils.convertStringToDate(invoice.getReservation());
+            : invoice.getReservation();
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
       this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
       this.note = (invoice.getNote() == null) ? null : invoice.getNote();
+      this.count = (count == null) ? null : count;
+      this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
+      this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
+      this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
+      this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
+      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
+      this.type = (invoice.getType() == null) ? null : invoice.getType();
+      this.createAt = (invoice.getCreateAt() == null) ? null : DateUtils.convertStringToDate(invoice.getCreateAt());
    }
 
    /**
     * Constructor personalizado para actualizar una factura existente.
     *
     * @author Igirod
-    * @version 1.0.0
+    * @version 1.0.1
     * @param invoiceId
     * @param invoiceDTO
     * @throws ParseException
     */
-   public Invoice(Long invoiceId, InvoiceInputDTO invoiceDTO) throws ParseException {
+   public Invoice(Long invoiceId, InvoiceInputDTO invoiceDTO, Integer count) throws ParseException {
       super();
       this.id = invoiceId;
+      this.userId = invoiceDTO.getUserId() != null ? invoiceDTO.getUserId() : this.userId;
       this.merchantId = invoiceDTO.getMerchantId() != null ? invoiceDTO.getMerchantId() : this.merchantId;
-      this.merchantEmail = invoiceDTO.getMerchantEmail() != null ? invoiceDTO.getMerchantEmail() : this.merchantEmail;
-      this.userEmail = invoiceDTO.getUserEmail() != null ? invoiceDTO.getUserEmail() : this.userEmail;
       this.paymentId = invoiceDTO.getPaymentId() != null ? invoiceDTO.getPaymentId() : this.paymentId;
       this.code = invoiceDTO.getCode() != null ? invoiceDTO.getCode() : this.code;
-      this.shoppingCartId = invoiceDTO.getShoppingCartId() != null ? invoiceDTO.getShoppingCartId()
-            : this.shoppingCartId;
       this.reservation = invoiceDTO.getReservation() != null
-            ? DateUtils.convertStringToDate(invoiceDTO.getReservation())
+            ? invoiceDTO.getReservation()
             : this.reservation;
       this.total = invoiceDTO.getTotal() != null ? invoiceDTO.getTotal() : this.total;
       this.message = invoiceDTO.getMessage() != null ? invoiceDTO.getMessage() : this.message;
       this.status = invoiceDTO.getStatus() != null ? invoiceDTO.getStatus() : this.status;
       this.voucher = invoiceDTO.getVoucher() != null ? invoiceDTO.getVoucher() : this.voucher;
       this.note = invoiceDTO.getNote() != null ? invoiceDTO.getNote() : this.note;
+      this.count = (count == null) ? null : count;
+      this.addressDirection = invoiceDTO.getAddressDirection() != null ? invoiceDTO.getAddressDirection()
+            : this.addressDirection;
+      this.addressLat = invoiceDTO.getAddressLat() != null ? invoiceDTO.getAddressLat() : this.addressLat;
+      this.addressLng = invoiceDTO.getAddressLng() != null ? invoiceDTO.getAddressLng() : this.addressLng;
+      this.batchId = invoiceDTO.getBatchId() != null ? invoiceDTO.getBatchId() : this.batchId;
+      this.addressNumber = invoiceDTO.getAddressNumber() != null ? invoiceDTO.getAddressNumber() : this.addressNumber;
+      this.type = invoiceDTO.getType() != null ? invoiceDTO.getType() : this.type;
    }
 
    /**
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.0
-    * @param invoice
+    * @version 1.0.1
+    * @param invoiceId
+    * @param merchantId
     * @throws ParseException
     */
-   public Invoice(InvoiceInputDTO invoice) throws ParseException {
+   public Invoice(Long userId, Long merchantId) {
       super();
-      this.id = (invoice.getId() == null) ? null : invoice.getId();
-      this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.merchantEmail = (invoice.getMerchantEmail() == null) ? null : invoice.getMerchantEmail();
-      this.userEmail = (invoice.getUserEmail() == null) ? null : invoice.getUserEmail();
-      this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
-      this.code = (invoice.getCode() == null) ? null
-            : invoice.getCode();
-      this.shoppingCartId = (invoice.getShoppingCartId() == null) ? null : invoice.getShoppingCartId();
-      this.reservation = (invoice.getReservation() == null) ? null
-            : DateUtils.convertStringToDate(invoice.getReservation());
-      this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
-      this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
-      this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
-      this.note = (invoice.getNote() == null) ? null : invoice.getNote();
+      this.id = null;
+      this.userId = (userId == null) ? null : userId;
+      this.merchantId = (merchantId == null) ? null : merchantId;
+      this.status = Status.INITIAL;
+      this.total = 0.0;
+      try {
+         this.createAt = DateUtils.getCurrentDateWitheoutTime();
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al obtener la fecha actual");
+      }
    }
 }

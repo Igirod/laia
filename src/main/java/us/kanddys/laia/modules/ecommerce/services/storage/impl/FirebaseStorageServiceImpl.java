@@ -24,8 +24,7 @@ import us.kanddys.laia.modules.ecommerce.services.storage.utils.ImageFormatUtils
 @Service
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
-   @Override
-   public String uploadImage(MultipartFile multipartFile, Boolean aspectRatio11) {
+   public String uploadFile(MultipartFile multipartFile, String folderName) {
       try {
          StorageOptions storageOptions = StorageOptions.newBuilder()
                .setProjectId("kanddys-1088e")
@@ -33,16 +32,11 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
                      GoogleCredentials.fromStream(new ClassPathResource("firebase_admin.json").getInputStream()))
                .build();
          Storage storage = storageOptions.getService();
-         BlobInfo blobInfo = null;
-         if (aspectRatio11)
-            blobInfo = BlobInfo
-                  .newBuilder(BlobId.of("kanddys-1088e.appspot.com", multipartFile.getOriginalFilename() + "_1:1"))
-                  .setContentType("image/png").build();
-         else
-            blobInfo = BlobInfo
-                  .newBuilder(BlobId.of("kanddys-1088e.appspot.com", multipartFile.getOriginalFilename() + "_16:9"))
-                  .setContentType("image/png").build();
-         storage.create(blobInfo, ImageFormatUtils.resizeImage(multipartFile, aspectRatio11));
+         String objectName = folderName + "/" + multipartFile.getOriginalFilename();
+         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of("kanddys-1088e.appspot.com", objectName))
+               .setContentType("image/png")
+               .build();
+         storage.create(blobInfo, ImageFormatUtils.resizeImage(multipartFile, true));
          return storage.signUrl(blobInfo, 3650, TimeUnit.DAYS).toString();
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());

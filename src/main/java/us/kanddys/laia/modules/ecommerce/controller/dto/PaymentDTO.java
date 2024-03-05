@@ -13,6 +13,10 @@ public class PaymentDTO {
    @JsonProperty
    private Long id;
    @JsonProperty
+   private Long merchantId;
+   @JsonProperty
+   private Integer status;
+   @JsonProperty
    private TypePayment typePayment;
    @JsonProperty
    private String title;
@@ -31,9 +35,11 @@ public class PaymentDTO {
     */
    public PaymentDTO(Payment payment) {
       super();
-      this.id = payment.getId();
-      this.typePayment = payment.getTypePayment();
-      this.title = payment.getTitle();
-      this.cvu = payment.getCvu();
+      this.id = (payment.getId() == null ? 0 : payment.getId());
+      this.typePayment = (payment.getType() == null ? null : payment.getType());
+      this.title = (payment.getTitle() == null ? null : payment.getTitle());
+      this.cvu = (payment.getCvu() == null ? null : payment.getCvu());
+      this.merchantId = (payment.getMerchantId() == null ? 0 : payment.getMerchantId());
+      this.status = (payment.getStatus() == null ? 0 : payment.getStatus());
    }
 }

@@ -18,6 +18,6 @@ public class ImageProductController {
 
    @QueryMapping("imagesPId")
    public List<ImageProductDTO> getImagesProductByProductId(@Argument Long productId) {
-      return imageProductService.findImagesProductByProductId(productId);
+      return imageProductService.getImagesProductByProductId(productId);
    }
 }

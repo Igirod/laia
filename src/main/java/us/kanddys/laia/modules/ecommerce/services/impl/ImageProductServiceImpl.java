@@ -36,13 +36,15 @@ public class ImageProductServiceImpl implements ImageProductService {
    @Transactional(rollbackOn = Exception.class)
    @Override
    public ImageProductDTO uploadImageProduct(MultipartFile multipartFile, Long productId) {
-      if (productJpaRepository.findProductIdIfExists(productId).isEmpty()) throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      if (productJpaRepository.findProductIdIfExists(productId).isEmpty())
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       return new ImageProductDTO(imageProductJpaRepository
-            .save(new ImageProduct(null, productId, firebaseStorageService.uploadImage(multipartFile, true), firebaseStorageService.uploadImage(multipartFile, false))));
+            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(multipartFile, "imageProducts"),
+                  null)));
    }
 
    @Override
-   public List<ImageProductDTO> findImagesProductByProductId(Long productId) {
+   public List<ImageProductDTO> getImagesProductByProductId(Long productId) {
       return imageProductJpaRepository.findAllByProductId(productId).stream().map(ImageProductDTO::new)
             .toList();
    }

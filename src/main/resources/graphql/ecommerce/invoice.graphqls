@@ -1,36 +1,49 @@
 type InvoiceDTO {
    id: Int!
-   merchantId: Int
-   merchantEmail: String
-   userEmail: String
+   merchantId: Int!
+   userId: Int!
    paymentId: Int
    code: String
-   shoppingCartId: Int
    reservation: String
    total: Float
-   message: Boolean
-   status: InvoiceStatus
+   message: String
+   status: Status
    voucher: String
    note: String
+   count: Int
+   addressLat: String
+   addressLng: String
+   addressDirection: String
+   batchId: Int
+   type: String
+   addressNumber: Int
+   merchantLat: String
+   merchantLng: String
+   merchantDirection: String
+   createAt: String
 }
 
 input InvoiceInputDTO {
    id: Int
    merchantId: Int!
-   merchantEmail: String!
-   userEmail: String!
+   userId : Int!
    paymentId: Int
    code: String
-   shoppingCartId: Int!
    reservation: String
    total: Float
-   message: Boolean
-   status: InvoiceStatus
+   message: String
+   status: Status
    voucher: String
    note: String
+   addressLat: String
+   addressLng: String
+   addressDirection: String
+   batchId: Int   
+   type: String
+   addressNumber: Int
 }
 
-enum InvoiceStatus {
+enum Status {
    INITIAL,
    PENDING,
    COMPLETE

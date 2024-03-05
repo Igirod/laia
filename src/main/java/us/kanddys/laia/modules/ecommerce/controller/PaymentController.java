@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -17,7 +18,7 @@ public class PaymentController {
    private PaymentService paymentService;
 
    @QueryMapping("payments")
-   public List<PaymentDTO> findPaymentsPaginated(@Argument Integer page) {
-      return paymentService.findPaymentsPaginated(page);
+   public List<PaymentDTO> findPaymentsPaginated(@Argument Integer page, @Argument Optional<Long> merchantId, @Argument Optional<Integer> status) {
+      return paymentService.findPaymentsPaginated(page, merchantId, status);
    }
 }

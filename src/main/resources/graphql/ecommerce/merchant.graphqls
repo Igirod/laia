@@ -4,6 +4,12 @@ type MerchantDTO {
    slug: String
    message: Int
    typeShipment: TypeShipment
+   title: String
+   image: String
+   address: String
+   phone: String
+   lat: String
+   lng: String
 }
 
 enum TypeShipment {

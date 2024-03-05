@@ -65,8 +65,8 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       try {
          return new ProductDetailDTO(productDetailJpaRepository.save(new ProductDetail(null, productId,
                title.orElse(null), description.orElse(null),
-               (frontPage.isPresent()) ? firebaseStorageService.uploadImage(frontPage.get(), true) : null,
-               (frontPage.isPresent()) ? firebaseStorageService.uploadImage(frontPage.get(), false) : null)));
+               (frontPage.isPresent()) ? firebaseStorageService.uploadFile(frontPage.get(), "imageProducts") : null,
+               null)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }

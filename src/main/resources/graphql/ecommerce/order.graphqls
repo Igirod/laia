@@ -1,0 +1,17 @@
+
+type OrderDTO {
+   id: Int!
+   merchantId: Int!
+   userId: Int!
+   code: String
+   reservation: String
+   total: Float
+   message: String
+   status: String
+   voucher: String
+   note: String
+   addressLat: String
+   addressLng: String
+   addressDirection: String
+   products: [OrderProductDTO]
+}

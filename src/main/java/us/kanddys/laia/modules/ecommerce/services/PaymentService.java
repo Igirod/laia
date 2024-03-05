@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.PaymentDTO;
 
@@ -19,7 +20,9 @@ public interface PaymentService {
     * @author Igirod0
     * @version 1.0.0
     * @param page
+    * @param merchantId
+    * @param status
     * @return List<PaymentDTO>
     */
-   public List<PaymentDTO> findPaymentsPaginated(Integer page);
+   public List<PaymentDTO> findPaymentsPaginated(Integer page, Optional<Long> merchantId, Optional<Integer> status);
 }

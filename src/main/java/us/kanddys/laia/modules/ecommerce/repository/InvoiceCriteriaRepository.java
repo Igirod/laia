@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import us.kanddys.laia.modules.ecommerce.model.Invoice;
-import us.kanddys.laia.modules.ecommerce.model.Utils.InvoiceStatus;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 @Repository
 public class InvoiceCriteriaRepository {
@@ -19,8 +19,8 @@ public class InvoiceCriteriaRepository {
    @Autowired
    private EntityManager entityManager;
 
-   public List<Invoice> findinvoicesPaginated(Integer page, Long merchantId, Optional<String> userEmail,
-         Optional<InvoiceStatus> status) {
+   public List<Invoice> findInvoicesPaginated(Integer page, Long merchantId, Optional<String> userEmail,
+         Optional<Status> status) {
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Invoice> cQueryinvoice = cBuilder.createQuery(Invoice.class);
       Root<Invoice> rInvoice = cQueryinvoice.from(Invoice.class);

@@ -9,26 +9,26 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * Esta clase representa un producto en el carrito de compras.
- * 
- * @author Igirod
- * @version 1.0.1
- */
-@Entity
-@Table(name = "shopping_carts_products")
 @AllArgsConstructor
 @Data
-public class ShoppingCartProduct {
-
+@Entity
+@Table(name = "orders_products")
+public class OrderProduct {
    @EmbeddedId
-   private ShoppingCartProductId id;
+   private OrderProductId id;
    @Column(name = "quantity")
    private Integer quantity;
    @ManyToOne
    @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
    private Product product;
 
-   public ShoppingCartProduct() {
+   public OrderProduct() {
+   }
+
+   public OrderProduct(InvoiceProduct invoiceProduct, Long orderId) {
+      super();
+      this.id = new OrderProductId(invoiceProduct.getId().getProductId(), orderId);
+      this.quantity = invoiceProduct.getQuantity();
+      this.product = invoiceProduct.getProduct();
    }
 }

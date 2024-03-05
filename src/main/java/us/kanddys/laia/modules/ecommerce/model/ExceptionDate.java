@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -12,27 +13,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Esta clase representa un carro de compras.
+ * Esta clase representa una excepción de fecha.
  * 
  * @author Igirod0
  * @version 1.0.0
  */
-@Entity
-@Table(name = "shopping_carts")
-@Data
 @AllArgsConstructor
-public class ShoppingCart {
-   
+@Data
+@Entity
+@Table(name = "date_exceptions")
+public class ExceptionDate {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "merchant_id")
-   private Long merchantId;
-   @Column(name = "user_id")
-   private Long userId;
-   @Column(name = "createAt")
-   private Date createAt;
+   @Column(name = "date")
+   private Date date;
+   @Column(name = "from")
+   private Time from;
+   @Column(name = "to")
+   private Time to;
+   @Column(name = "max_limit")
+   private Integer limit;
+   @Column(name = "title")
+   private String title;
 
-   public ShoppingCart() {}
+   public ExceptionDate() {}
 }

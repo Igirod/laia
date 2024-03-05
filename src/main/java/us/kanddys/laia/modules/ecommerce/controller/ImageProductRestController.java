@@ -17,7 +17,7 @@ public class ImageProductRestController {
    @Autowired
    private ImageProductService imageProductService;
 
-   @RequestMapping(method = RequestMethod.POST, value = "/upload", produces = {
+   @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public ImageProductDTO uploadImageProduct(@RequestPart MultipartFile image, @RequestPart String productId) {
       return imageProductService.uploadImageProduct(image, Long.valueOf(productId));

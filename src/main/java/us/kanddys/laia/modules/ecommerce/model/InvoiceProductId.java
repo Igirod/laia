@@ -14,11 +14,11 @@ import lombok.Data;
 @Embeddable
 @Data
 @AllArgsConstructor
-public class ShoppingCartProductId {
+public class InvoiceProductId {
    
-   private Long shoppingCartId;
+   private Long invoiceId;
    private Long productId;
 
-   public ShoppingCartProductId() {
+   public InvoiceProductId() {
    }
 }

@@ -1,5 +1,7 @@
 type PaymentDTO {
    id: Int!
+   merchantId: Int!
+   status: Int
    typePayment: TypePayment
    title: String
    cvu: String
