@@ -48,40 +48,6 @@ public class MailSenderServiceImpl implements MailSenderService {
                   "    <meta charset=\"UTF-8\">\n" +
                   "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
                   "    <title>Acceso a LAIA</title>\n" +
-                  "    <style>\n" +
-                  "        body {\n" +
-                  "            font-family: Arial, sans-serif;\n" +
-                  "            background-color: #f4f4f4;\n" +
-                  "            margin: 0;\n" +
-                  "            padding: 0;\n" +
-                  "        }\n" +
-                  "        .container {\n" +
-                  "            max-width: 600px;\n" +
-                  "            margin: 0 auto;\n" +
-                  "            padding: 20px;\n" +
-                  "            background-color: #fff;\n" +
-                  "            border-radius: 10px;\n" +
-                  "            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n" +
-                  "        }\n" +
-                  "        h2 {\n" +
-                  "            color: #333;\n" +
-                  "        }\n" +
-                  "        p {\n" +
-                  "            color: #666;\n" +
-                  "        }\n" +
-                  "        strong {\n" +
-                  "            font-weight: bold;\n" +
-                  "            color: #9747ff;\n" +
-                  "        }\n" +
-                  "        a {\n" +
-                  "            text-decoration: none;\n" +
-                  "            background-color: #4CAF50;\n" +
-                  "            color: white;\n" +
-                  "            padding: 10px 20px;\n" +
-                  "            border-radius: 5px;\n" +
-                  "            display: inline-block;\n" +
-                  "        }\n" +
-                  "    </style>\n" +
                   "</head>\n" +
                   "<body>\n" +
                   "    <div class=\"container\">\n" +
