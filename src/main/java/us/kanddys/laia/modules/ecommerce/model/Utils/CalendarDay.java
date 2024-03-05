@@ -41,7 +41,7 @@ public class CalendarDay {
                   day = "WED";
                   break;
                case 5:
-                  day = "TUE";
+                  day = "THU";
                   break;
                case 6:
                   day = "FRI";
@@ -125,7 +125,7 @@ public class CalendarDay {
             dayNumber = "WED";
             break;
          case 5:
-            dayNumber = "TUE";
+            dayNumber = "THU";
             break;
          case 6:
             dayNumber = "FRI";
