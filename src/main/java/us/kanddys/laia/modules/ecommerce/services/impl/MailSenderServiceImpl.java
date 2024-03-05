@@ -48,14 +48,40 @@ public class MailSenderServiceImpl implements MailSenderService {
                   "    <meta charset=\"UTF-8\">\n" +
                   "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
                   "    <title>Acceso a LAIA</title>\n" +
+                  "    <style>\n" +
+                  "        body {\n" +
+                  "            font-family: Arial, sans-serif;\n" +
+                  "            background-color: #f4f4f4;\n" +
+                  "            margin: 0;\n" +
+                  "            padding: 0;\n" +
+                  "        }\n" +
+                  "        .container {\n" +
+                  "            max-width: 600px;\n" +
+                  "            margin: 0 auto;\n" +
+                  "            padding: 20px;\n" +
+                  "            background-color: #fff;\n" +
+                  "            border-radius: 10px;\n" +
+                  "            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n" +
+                  "        }\n" +
+                  "        h2 {\n" +
+                  "            color: #333;\n" +
+                  "        }\n" +
+                  "        p {\n" +
+                  "            color: #666;\n" +
+                  "        }\n" +
+                  "        strong {\n" +
+                  "            font-weight: bold;\n" +
+                  "            color: #9747ff;\n" +
+                  "        }\n" +
+                  "    </style>\n" +
                   "</head>\n" +
                   "<body>\n" +
                   "    <div class=\"container\">\n" +
                   "        <h2>Acceso a tu LAIA</h2>\n" +
                   "        <p>Aquí te dejamos tu contraseña para futuros ingresos en la misma:</p>\n" +
                   "        <p><strong>" + getPassword(mailDTO.getTo()) + "</strong></p>\n" +
-                  "        <p>LAIA entrenada por Daviel -</p>\n" +
-                  "        <p><strong>Coordinador de tu Experiencia con LAIA</strong></p>\n" +
+                  "        <p>LAIA entrenada por Daviel - <strong>Coordinador de tu Experiencia con LAIA</strong></p>\n"
+                  +
                   "    </div>\n" +
                   "</body>\n" +
                   "</html>",
@@ -99,7 +125,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             "<h1 style=\"text-align: center;\">Factura</h1>" +
             "<p><strong>Reserva:</strong> " + orderDTO.getReservation() + "</p>" +
             "<p><strong>Estado:</strong> " + getOrderStatus(orderDTO.getStatus()) + "</p>" +
-            "<p><strong>Destinatario:</strong>" + mailDTO.getTo() + "</p>" +
+            "<p><strong>Destinatario:</strong> " + mailDTO.getTo() + "</p>" +
             "<p><strong>Dirección de envío:</strong> " + orderDTO.getAddressDirection() + "</p>" +
             "<p><strong>Creación:</strong> " + orderDTO.getCreateAt() + "</p>" +
             "<table style=\"width: 100%; border-collapse: collapse; margin-top: 20px;\">" +
