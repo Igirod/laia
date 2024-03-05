@@ -213,6 +213,13 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setStatus(Status.PENDING);
       order.setReservation(date);
       order.setMerchantId(merchantId);
+      try {
+         reservationJpaRepository.save(
+               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
+         order.setCreateAt(DateUtils.getCurrentDate());
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al convertir la fecha");
+      }
       var invoiceProductsIds = new ArrayList<InvoiceProductId>();
       var newOrder = orderJpaRepository.save(order);
       List<OrderProduct> listOrderProducts = invoiceProductCriteriaRepository.findInvoiceProductsByInvoiceId(invoiceId)
@@ -223,19 +230,14 @@ public class InvoiceServiceImpl implements InvoiceService {
             }).collect(Collectors.toList());
       // * Guardado de la orden y sus productos.
       orderProductJpaRepository.saveAll(listOrderProducts);
+      // ! Eliminamos los datos asociados a la factura anterior.
       invoiceProductCriteriaRepository.deleteProductsByInvoiceId(invoiceId);
       invoiceJpaRepository.deleteById(invoiceId);
       try {
-         reservationJpaRepository.save(
-               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
-      } catch (ParseException e) {
-         throw new RuntimeException("Error al convertir la fecha");
-      }
-      try {
-         mailSenderService.sendUserOrder(new MailDTO(userJpaRepository.findEmailByUserId(userId), "Factura disponible",
-               "Order", "", newOrder.getId()));
+         mailSenderService.sendUserOrder(new MailDTO(userJpaRepository.findEmailByUserId(userId), "Order - Detail",
+               "user", "", newOrder.getId()));
          mailSenderService.sendUserOrder(new MailDTO(merchantJpaRepository.findEmailByMerchantId(merchantId),
-               "Nueva orden", "Order", "", newOrder.getId()));
+               "New sale - Detail", "merchant", "", newOrder.getId()));
       } catch (MessagingException e) {
          throw new RuntimeException("Error al enviar el correo");
       }

@@ -98,8 +98,8 @@ public class MailSenderServiceImpl implements MailSenderService {
             +
             "<h1 style=\"text-align: center;\">Factura</h1>" +
             "<p><strong>Reserva:</strong> " + orderDTO.getReservation() + "</p>" +
-            "<p><strong>Estado:</strong> " + orderDTO.getStatus() + "</p>" +
-            "<p><strong>Destinatario:</strong></p>" +
+            "<p><strong>Estado:</strong> " + getOrderStatus(orderDTO.getStatus()) + "</p>" +
+            "<p><strong>Destinatario:</strong>" + mailDTO.getTo() + "</p>" +
             "<p><strong>Dirección de envío:</strong> " + orderDTO.getAddressDirection() + "</p>" +
             "<p><strong>Creación:</strong> " + orderDTO.getCreateAt() + "</p>" +
             "<table style=\"width: 100%; border-collapse: collapse; margin-top: 20px;\">" +
@@ -121,25 +121,46 @@ public class MailSenderServiceImpl implements MailSenderService {
          emailContent += "<tr>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getProduct().getTitle() + "</td>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getQuantity() + "</td>" +
-               "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getProduct().getPrice() + "</td>";
+               "<td style=\"border: 1px solid #ddd; padding: 8px;\"> $" + product.getProduct().getPrice() + "</td>";
          double productTotal = product.getProduct().getPrice() * product.getQuantity();
          total += productTotal; // Suma el total de cada producto al total general
-         emailContent += "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + productTotal + "</td>" +
+         emailContent += "<td style=\"border: 1px solid #ddd; padding: 8px;\"> $" + productTotal + "</td>" +
                "</tr>";
       }
       // Agregar fila para el total
       emailContent += "<tr>" +
             "<td colspan=\"3\" style=\"border: 1px solid #ddd; padding: 8px; text-align: right;\">Total</td>" +
-            "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + total + "</td>" +
+            "<td style=\"border: 1px solid #ddd; padding: 8px;\"> $" + total + "</td>" +
             "</tr>" +
             "</tbody>" +
             "</table>" +
-            "<img src=\"" + orderDTO.getVoucher()
+            "<div style=text-align: center;>"
+            + "<img src=\"" + orderDTO.getVoucher()
             + "\" alt=\"Imagen de la factura\" style=\"display: block; max-width: 100%; margin-top: 20px;\">" +
             "</div>" +
             "</div>";
-      ;
       helper.setText(emailContent, true);
       javaMailSender.send(message);
+   }
+
+   /**
+    * Método que retorna el estado de la orden en español.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param status
+    * @return
+    */
+   private String getOrderStatus(String status) {
+      switch (status) {
+         case "PENDING":
+            return "PENDIENTE";
+         case "COMPLETE":
+            return "COMPLETADO";
+         case "INITIAL":
+            return "INICIAL";
+         default:
+            return "DESCONOCIDO";
+      }
    }
 }
