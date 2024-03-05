@@ -160,9 +160,11 @@ public class MailSenderServiceImpl implements MailSenderService {
             "</tr>" +
             "</tbody>" +
             "</table>" +
-            "<div style=text-align: center;>"
-            + "<img src=\"" + orderDTO.getVoucher()
-            + "\" alt=\"Imagen de la factura\" style=\"display: block; max-width: 100%; margin-top: 20px;\">" +
+            "<div style=\"text-align: center;\">" +
+            "<div style=\"display: inline-block;\">" + // Div contenedor para centrar la imagen
+            "<img src=\"" + orderDTO.getVoucher() +
+            "\" alt=\"Imagen de la factura\" style=\"max-width: 100%; margin-top: 20px;\">" +
+            "</div>" +
             "</div>" +
             "</div>";
       helper.setText(emailContent, true);
