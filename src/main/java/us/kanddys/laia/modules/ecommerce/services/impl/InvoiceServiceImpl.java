@@ -234,6 +234,8 @@ public class InvoiceServiceImpl implements InvoiceService {
       try {
          mailSenderService.sendUserOrder(new MailDTO(userJpaRepository.findEmailByUserId(userId), "Factura disponible",
                "Order", "", newOrder.getId()));
+         mailSenderService.sendUserOrder(new MailDTO(merchantJpaRepository.findEmailByMerchantId(merchantId),
+               "Nueva orden", "Order", "", newOrder.getId()));
       } catch (MessagingException e) {
          throw new RuntimeException("Error al enviar el correo");
       }
