@@ -2,8 +2,8 @@ package us.kanddys.laia.modules.ecommerce.services.check.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.check.InvoiceCheckService;
@@ -39,7 +39,7 @@ public class InvoiceCheckServiceImpl implements InvoiceCheckService {
       return false;
    }
 
-   @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public void updateTotal(Long invoiceId, Double total) {
       invoiceJpaRepository.updateTotal(invoiceId, total);

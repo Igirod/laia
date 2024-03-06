@@ -66,4 +66,44 @@ public interface ProductService {
     */
    @Modifying
    public Integer updateFrontPage(Long productId, MultipartFile image);
+
+   /**
+    * Este método tiene la obligación de crear un producto.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param merchantId
+    * @param title
+    * @param price
+    * @param stock
+    * @param status
+    * @return Integer
+    */
+   public Integer createProduct(Long merchantId, Optional<String> title, Optional<Double> price,
+         Optional<Integer> stock, Optional<Integer> status);
+
+   /**
+    * Este método tiene la obligación de actualizar un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param title
+    * @param price
+    * @param stock
+    * @param status
+    * @return Integer
+    */
+   public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
+         Optional<Integer> status);
+
+   /**
+    * Este método tiene la obligación de eliminar un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return Integer
+    */
+   public Integer deleteProduct(Long productId);
 }

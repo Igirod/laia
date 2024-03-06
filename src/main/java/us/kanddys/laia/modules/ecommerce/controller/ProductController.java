@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
@@ -29,5 +30,23 @@ public class ProductController {
    public List<ProductDTO> getProductsByFilterPaginated(@Argument(name = "page") Integer page,
          @Argument(name = "typeFilter") TypeFilter typeFilter) {
       return productService.getProductsByTypeFilterPaginated(page, typeFilter);
+   }
+
+   @MutationMapping("cProduct")
+   public Integer createProduct(@Argument Long merchantId, @Argument Optional<String> title,
+         @Argument Optional<Double> price, @Argument Optional<Integer> stock, @Argument Optional<Integer> status) {
+      return productService.createProduct(merchantId, title, price, stock, status);
+   }
+
+   @MutationMapping("uProduct")
+   public Integer updateProduct(@Argument Long productId, @Argument Optional<String> title,
+         @Argument Optional<Double> price,
+         @Argument Optional<Integer> stock, @Argument Optional<Integer> status) {
+      return productService.updateProduct(productId, title, price, stock, status);
+   }
+
+   @MutationMapping("dProduct")
+   public Integer deleteProduct(@Argument Long productId) {
+      return productService.deleteProduct(productId);
    }
 }
