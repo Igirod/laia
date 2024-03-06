@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDetailShortDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
@@ -55,18 +55,22 @@ public class ProductDetailServiceImpl implements ProductDetailService {
             .collect(Collectors.toList());
    }
 
-   @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public ProductDetailDTO createProductDetail(Optional<String> title, Optional<MultipartFile> frontPage, Long productId,
+   public ProductDetailDTO createProductDetail(Optional<String> title, Optional<MultipartFile> frontPage,
+         Long productId,
          Optional<String> description) {
-      if (productJpaRepository.findProductIdIfExists(productId).isEmpty()) throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      if (productJpaRepository.findProductIdIfExists(productId).isEmpty())
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       try {
          return new ProductDetailDTO(productDetailJpaRepository.save(new ProductDetail(null, productId,
-               title.orElse(null), description.orElse(null), (frontPage.isPresent()) ? firebaseStorageService.uploadFile(frontPage.get(), "imageProducts") : null)));
+               title.orElse(null), description.orElse(null),
+               (frontPage.isPresent()) ? firebaseStorageService.uploadFile(frontPage.get(), "imageProducts") : null)));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }
    }
+
    @Override
    public ProductDetailShortDTO getProductDetailShort(Long productId) {
       return new ProductDetailShortDTO(productDetailShortJpaRepository.findProductDetailsByProductId(productId)

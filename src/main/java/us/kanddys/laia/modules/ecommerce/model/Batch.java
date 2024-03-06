@@ -35,6 +35,8 @@ public class Batch {
    private Integer limit;
    @Column(name = "title")
    private String title;
-   
-   public Batch() {}
+
+   public Batch() {
+   }
+
 }

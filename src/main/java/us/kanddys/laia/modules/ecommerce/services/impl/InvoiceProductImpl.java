@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 import us.kanddys.laia.modules.ecommerce.exception.InvoiceNotFoundException;
@@ -66,7 +66,7 @@ public class InvoiceProductImpl implements InvoiceProductService {
       }
    }
 
-   @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateInvoiceProduct(Long invoiceId, List<InvoiceProductInputDTO> listInvoiceProducts) {
       var listInvoiceProductsInputIds = listInvoiceProducts.stream().map(InvoiceProductInputDTO::getProductId).toList();

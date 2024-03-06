@@ -47,4 +47,10 @@ type Mutation {
    uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String, type: String, addressNumber: Int) : Int
    uOrderS(orderId: Int!, status: String!) : Int
    uOrderN(orderId: Int!, note: String!) : Int
+   cProduct(merchantId: Int!, title: String, price: Float, stock: Int, status: Int) : Int
+   uProduct(productId: Int!, title: String, price: Float, stock: Int, status: Int) : Int
+   dProduct(productId: Int!) : Int
+   cBatch(calendarId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
+   uBatch(batchId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
+   dBatch(batchId: Int!) : Int
 }
