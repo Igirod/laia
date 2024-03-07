@@ -5,6 +5,10 @@ type OrderDTO {
    userId: Int!
    code: String
    reservation: String
+   reservationType: String
+   userEmail: String
+   userLastName: String
+   userName: String
    total: Float
    message: String
    status: String

@@ -25,9 +25,17 @@ public class OrderDTO {
    @JsonProperty
    private Long userId;
    @JsonProperty
+   private String userEmail;
+   @JsonProperty
+   private String userName;
+   @JsonProperty
+   private String userLastName;
+   @JsonProperty
    private String code;
    @JsonProperty
    private String reservation;
+   @JsonProperty
+   private String reservationType;
    @JsonProperty
    private Double total;
    @JsonProperty
@@ -66,14 +74,16 @@ public class OrderDTO {
     * @param toTime
     * @param products
     */
-   public OrderDTO(Order order, String fromTime, String toTime, List<OrderProductDTO> products) {
+   public OrderDTO(Order order, String fromTime, String toTime, String reservationType, String userEmail,
+         String userName, String userLastName,
+         List<OrderProductDTO> products) {
       super();
       this.id = (order.getId() == null) ? null : order.getId();
       this.merchantId = (order.getMerchantId() == null) ? null : order.getMerchantId();
       this.userId = (order.getUserId() == null) ? null : order.getUserId();
       this.code = (order.getCode() == null) ? null : order.getCode();
       this.reservation = (order.getReservation() == null) ? null
-            : order.getReservation();
+            : DateUtils.convertDateToString(order.getReservation());
       this.total = (order.getTotal() == null) ? null : order.getTotal();
       this.message = (order.getMessage() == null) ? null : order.getMessage();
       this.status = (order.getStatus() == null) ? null : order.getStatus().toString();
@@ -86,6 +96,10 @@ public class OrderDTO {
       this.batchFrom = (fromTime == null) ? null : fromTime;
       this.batchTo = (toTime == null) ? null : toTime;
       this.updatedAt = (order.getUpdatedAt() == null) ? null : DateUtils.convertDateToString(order.getUpdatedAt());
+      this.reservationType = (reservationType == null) ? null : reservationType;
+      this.userEmail = (userEmail == null) ? null : userEmail;
+      this.userName = (userName == null) ? null : userName;
+      this.userLastName = (userLastName == null) ? null : userLastName;
       this.products = products;
    }
 }

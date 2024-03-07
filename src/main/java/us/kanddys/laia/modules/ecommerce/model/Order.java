@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
@@ -38,7 +40,7 @@ public class Order {
    @Column(name = "code")
    private String code;
    @Column(name = "reservation")
-   private String reservation;
+   private Date reservation;
    @Column(name = "total")
    private Double total;
    @Column(name = "message")
@@ -78,8 +80,12 @@ public class Order {
       this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
-      this.reservation = (invoice.getReservation() == null) ? null
-            : invoice.getReservation();
+      try {
+         this.reservation = (invoice.getReservation() == null) ? null
+               : DateUtils.convertStringToDate(invoice.getReservation());
+      } catch (ParseException e) {
+         throw new RuntimeException("Error al convertir la fecha de la reserva.");
+      }
       this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
       this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
       this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();

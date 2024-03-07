@@ -19,4 +19,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation, Lon
 
    @Query(value = "SELECT CAST(date AS CHAR) FROM reservations WHERE mer_id = :merchantId ORDER BY date DESC LIMIT 1", nativeQuery = true)
    String findLatestDateByMerchantId(Long merchantId);
+
+   @Query(value = "SELECT type FROM reservations WHERE mer_id = :merchantId AND date = :date AND user_id = :userId", nativeQuery = true)
+   String findTypeByMerchantIdAndDate(Long merchantId, Long userId, Date date);
 }

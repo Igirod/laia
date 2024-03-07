@@ -15,6 +15,8 @@ import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderProductCriteriaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ReservationJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.OrderService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
@@ -28,10 +30,16 @@ public class OrderServiceImpl implements OrderService {
    private BatchJpaRepository batchJpaRepository;
 
    @Autowired
+   private ReservationJpaRepository reservationJpaRepository;
+
+   @Autowired
    private FirebaseStorageService firebaseStorageService;
 
    @Autowired
    private OrderProductCriteriaRepository orderProductCriteriaRepository;
+
+   @Autowired
+   private UserJpaRepository userJpaRepository;
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
@@ -56,8 +64,15 @@ public class OrderServiceImpl implements OrderService {
             .map(OrderProductDTO::new)
             .collect(Collectors.toList());
       var batchData = batchJpaRepository.findFromTimeAndToTimeById(order.getBatchId());
+      var reservationData = reservationJpaRepository.findTypeByMerchantIdAndDate(order.getMerchantId(),
+            order.getUserId(), order.getReservation());
+      var userData = userJpaRepository.findUserNameAndLastNameAndEmailById(order.getUserId());
       return new OrderDTO(order, (batchData.get("from_time") == null ? null : batchData.get("from_time").toString()),
-            (batchData.get("to_time") == null ? null : batchData.get("to_time").toString()), listProducts);
+            (batchData.get("to_time") == null ? null : batchData.get("to_time").toString()),
+            (reservationData == null ? null : reservationData),
+            userData.get("email") == null ? null : userData.get("email").toString(),
+            userData.get("name") == null ? null : userData.get("name").toString(),
+            userData.get("lastName") == null ? null : userData.get("lastName").toString(), listProducts);
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
