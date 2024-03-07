@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
    public Integer createProduct(Long merchantId, Optional<String> title, Optional<Double> price,
          Optional<Integer> stock, Optional<Integer> status) {
       try {
-         productRepository
+         productJpaRepository
                .save(new Product(null, (title.isPresent() ? title.get() : null),
                      (price.isPresent() ? price.get() : null),
                      (stock.isPresent() ? stock.get() : null), null, merchantId,
@@ -102,14 +102,14 @@ public class ProductServiceImpl implements ProductService {
    @Override
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
          Optional<Integer> status) {
-      var product = productRepository.findById(productId);
+      var product = productJpaRepository.findById(productId);
       if (product.isPresent()) {
          var productToUpdate = product.get();
          title.ifPresent(productToUpdate::setTitle);
          price.ifPresent(productToUpdate::setPrice);
          stock.ifPresent(productToUpdate::setStock);
          status.ifPresent(productToUpdate::setStatus);
-         productRepository.save(productToUpdate);
+         productJpaRepository.save(productToUpdate);
          return 1;
       }
       return 0;
@@ -118,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer deleteProduct(Long productId) {
-      productRepository.deleteById(productId);
+      productJpaRepository.deleteById(productId);
       return 1;
    }
 }
