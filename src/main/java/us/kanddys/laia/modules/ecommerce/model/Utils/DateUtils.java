@@ -2,6 +2,8 @@ package us.kanddys.laia.modules.ecommerce.model.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -119,5 +121,16 @@ public class DateUtils {
       SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
       String formattedDate = outputDateFormat.format(date);
       return outputDateFormat.parse(formattedDate);
+   }
+
+   /**
+    * Obtiene la hora actual en formato HH:mm:ss.
+    *
+    * @return La hora actual en formato HH:mm:ss.
+    */
+   public static String getCurrentTime() {
+      LocalTime currentTime = LocalTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      return currentTime.format(formatter);
    }
 }
