@@ -34,6 +34,9 @@ public class Reservation {
    private Long batchId;
    @Column(name = "date")
    private Date date;
+   @Column(name = "type")
+   private String type;
 
-   public Reservation() {}
+   public Reservation() {
+   }
 }

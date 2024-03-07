@@ -191,7 +191,7 @@ public class InvoiceServiceImpl implements InvoiceService {
    public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
-         Long userId, String addressLat, String addressLng, String addressDirection) {
+         Long userId, String addressLat, String addressLng, String addressDirection, String reservationType) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
@@ -202,12 +202,12 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setAddressDirection(addressDirection);
       order.setAddressLat(addressLat);
       order.setAddressLng(addressLng);
-      updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order);
+      updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order, reservationType);
       return new OrderPaymentDTO(order.getVoucher(), order.getCode(), order.getId());
    }
 
    private void updateOrderPayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
-         Long userId, Order order) {
+         Long userId, Order order, String reservationType) {
       order.setBatchId(batchId);
       order.setPaymentId(paymentId);
       order.setStatus(Status.PENDING);
@@ -215,7 +215,8 @@ public class InvoiceServiceImpl implements InvoiceService {
       try {
          order.setReservation(DateUtils.convertStringToDate(date));
          reservationJpaRepository.save(
-               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
+               new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date),
+                     reservationType));
          order.setCreatedAt(DateUtils.getCurrentDate());
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");

@@ -43,9 +43,9 @@ public class InvoiceRestController {
          @RequestPart String invoiceId,
          @RequestPart String paymentId, @RequestPart String date, @RequestPart String batchId,
          @RequestPart String merchantId, @RequestPart String userId, @RequestPart String addressLat,
-         @RequestPart String addressLng, @RequestPart String addressDirection) {
+         @RequestPart String addressLng, @RequestPart String addressDirection, @RequestPart String reservationType) {
       return invoiceService.updateOrderVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
             Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId), addressLat, addressLng,
-            addressDirection);
+            addressDirection, reservationType);
    }
 }
