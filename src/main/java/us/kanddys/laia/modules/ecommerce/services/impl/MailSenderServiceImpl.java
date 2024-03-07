@@ -13,7 +13,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.MailDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.OrderDTO;
+import us.kanddys.laia.modules.ecommerce.model.Order;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderProductDTO;
 import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderProductCriteriaRepository;
@@ -114,7 +114,7 @@ public class MailSenderServiceImpl implements MailSenderService {
                   throw new RuntimeException(e.getMessage());
                }
             }).collect(Collectors.toList());
-      OrderDTO orderDTO = new OrderDTO(orderJpaRepository.findById(mailDTO.getOrderId()).get(), products);
+      Order order = orderJpaRepository.findById(mailDTO.getOrderId()).get();
       MimeMessage message = javaMailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(message, true); // HTML
       helper.setTo(mailDTO.getTo());
@@ -123,11 +123,11 @@ public class MailSenderServiceImpl implements MailSenderService {
             "<div style=\"max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;\">"
             +
             "<h1 style=\"text-align: center;\">Factura</h1>" +
-            "<p><strong>Reserva:</strong> " + orderDTO.getReservation() + "</p>" +
-            "<p><strong>Estado:</strong> " + getOrderStatus(orderDTO.getStatus()) + "</p>" +
+            "<p><strong>Reserva:</strong> " + order.getReservation() + "</p>" +
+            "<p><strong>Estado:</strong> " + getOrderStatus(order.getStatus().toString()) + "</p>" +
             "<p><strong>Destinatario:</strong> " + mailDTO.getTo() + "</p>" +
-            "<p><strong>Dirección de envío:</strong> " + orderDTO.getAddressDirection() + "</p>" +
-            "<p><strong>Creación:</strong> " + orderDTO.getCreateAt() + "</p>" +
+            "<p><strong>Dirección de envío:</strong> " + order.getAddressDirection() + "</p>" +
+            "<p><strong>Creación:</strong> " + order.getCreatedAt() + "</p>" +
             "<table style=\"width: 100%; border-collapse: collapse; margin-top: 20px;\">" +
             "<thead>" +
             "<tr>" +
@@ -143,7 +143,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             "</thead>" +
             "<tbody>";
       double total = 0.0;
-      for (OrderProductDTO product : orderDTO.getProducts()) {
+      for (OrderProductDTO product : products) {
          emailContent += "<tr>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getProduct().getTitle() + "</td>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getQuantity() + "</td>" +
@@ -162,7 +162,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             "</table>" +
             "<div style=\"text-align: center;\">" +
             "<div style=\"display: inline-block;\">" + // Div contenedor para centrar la imagen
-            "<img src=\"" + orderDTO.getVoucher() +
+            "<img src=\"" + order.getVoucher() +
             "\" alt=\"Imagen de la factura\" style=\"max-width: 100%; margin-top: 20px;\">" +
             "</div>" +
             "</div>" +

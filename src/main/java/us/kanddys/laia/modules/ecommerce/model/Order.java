@@ -62,8 +62,10 @@ public class Order {
    private Integer addressNumber;
    @Column(name = "type")
    private String type;
-   @Column(name = "create_at")
-   private Date createAt;
+   @Column(name = "created_at")
+   private Date createdAt;
+   @Column(name = "updated_at")
+   private Date updatedAt;
 
    public Order() {
    }
@@ -89,6 +91,6 @@ public class Order {
       this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
       this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
       this.type = (invoice.getType() == null) ? null : invoice.getType();
-      this.createAt = (invoice.getCreateAt() == null) ? null : invoice.getCreateAt();
+      this.createdAt = (invoice.getCreateAt() == null) ? null : invoice.getCreateAt();
    }
 }

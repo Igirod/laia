@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Order;
+import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 
 /**
  * Esta clase representa un data transfer object (DTO) para la entidad Order.
@@ -21,8 +22,6 @@ public class OrderDTO {
    private Long id;
    @JsonProperty
    private Long merchantId;
-   @JsonProperty
-   private String createAt;
    @JsonProperty
    private Long userId;
    @JsonProperty
@@ -40,6 +39,14 @@ public class OrderDTO {
    @JsonProperty
    private String note;
    @JsonProperty
+   private String batchFrom;
+   @JsonProperty
+   private String batchTo;
+   @JsonProperty
+   private String createdAt;
+   @JsonProperty
+   private String updatedAt;
+   @JsonProperty
    private String addressLat;
    @JsonProperty
    private String addressLng;
@@ -51,7 +58,15 @@ public class OrderDTO {
    public OrderDTO() {
    }
 
-   public OrderDTO(Order order, List<OrderProductDTO> products) {
+   /**
+    * Constructor personalizado utilizado en diferentes servicios.
+    * 
+    * @param order
+    * @param fromTime
+    * @param toTime
+    * @param products
+    */
+   public OrderDTO(Order order, String fromTime, String toTime, List<OrderProductDTO> products) {
       super();
       this.id = (order.getId() == null) ? null : order.getId();
       this.merchantId = (order.getMerchantId() == null) ? null : order.getMerchantId();
@@ -67,7 +82,10 @@ public class OrderDTO {
       this.addressDirection = (order.getAddressDirection() == null) ? null : order.getAddressDirection();
       this.addressLat = (order.getAddressLat() == null) ? null : order.getAddressLat();
       this.addressLng = (order.getAddressLng() == null) ? null : order.getAddressLng();
-      this.createAt = (order.getCreateAt() == null) ? null : order.getCreateAt().toString();
+      this.createdAt = (order.getCreatedAt() == null) ? null : DateUtils.convertDateToString(order.getCreatedAt());
+      this.batchFrom = (fromTime == null) ? null : fromTime;
+      this.batchTo = (toTime == null) ? null : toTime;
+      this.updatedAt = (order.getUpdatedAt() == null) ? null : DateUtils.convertDateToString(order.getUpdatedAt());
       this.products = products;
    }
 }

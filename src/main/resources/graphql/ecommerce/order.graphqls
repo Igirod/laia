@@ -12,6 +12,10 @@ type OrderDTO {
    note: String
    addressLat: String
    addressLng: String
+   batchFrom: String
+   batchTo: String
+   createdAt: String
+   updatedAt: String
    addressDirection: String
    products: [OrderProductDTO]
 }

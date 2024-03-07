@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +32,7 @@ public interface BatchJpaRepository extends JpaRepository<Batch, Long> {
 
    @Query(value = "SELECT * FROM batches WHERE calendar_id = ?1 AND date BETWEEN ?2 AND ?3 AND date IS NOT NULL", nativeQuery = true)
    List<Batch> findExceptionlBatchesByCalendarId(Long calendarId, Date startDate, Date endDate);
+
+   @Query(value = "SELECT from_time, to_time FROM batches WHERE id = :id", nativeQuery = true)
+   Map<String, Object> findFromTimeAndToTimeById(Long id);
 }

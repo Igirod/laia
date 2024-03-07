@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.OrderProductDTO;
+import us.kanddys.laia.modules.ecommerce.exception.OrderNotFoundException;
+import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
+import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.OrderProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.services.OrderService;
@@ -20,6 +23,9 @@ public class OrderServiceImpl implements OrderService {
 
    @Autowired
    private OrderJpaRepository orderJpaRepository;
+
+   @Autowired
+   private BatchJpaRepository batchJpaRepository;
 
    @Autowired
    private FirebaseStorageService firebaseStorageService;
@@ -44,10 +50,14 @@ public class OrderServiceImpl implements OrderService {
    @Override
    public OrderDTO getOrderById(Long orderId) {
       var order = orderJpaRepository.findById(orderId).orElse(null);
+      if (order == null)
+         throw new OrderNotFoundException(ExceptionMessage.ORDER_NOT_FOUND);
       var listProducts = orderProductCriteriaRepository.findOrderProductsByOrderId(orderId).stream()
             .map(OrderProductDTO::new)
             .collect(Collectors.toList());
-      return new OrderDTO(order, listProducts);
+      var batchData = batchJpaRepository.findFromTimeAndToTimeById(order.getBatchId());
+      return new OrderDTO(order, (batchData.get("from_time") == null ? null : batchData.get("from_time").toString()),
+            (batchData.get("to_time") == null ? null : batchData.get("to_time").toString()), listProducts);
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })

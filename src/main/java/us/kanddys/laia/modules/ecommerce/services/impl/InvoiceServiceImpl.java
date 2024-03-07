@@ -216,7 +216,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       try {
          reservationJpaRepository.save(
                new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date)));
-         order.setCreateAt(DateUtils.getCurrentDate());
+         order.setCreatedAt(DateUtils.getCurrentDate());
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
       }

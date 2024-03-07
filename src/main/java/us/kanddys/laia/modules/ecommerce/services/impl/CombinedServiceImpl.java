@@ -97,7 +97,7 @@ public class CombinedServiceImpl implements CombinedService {
             (firstShippingDate.get("batchId").equals("0") ? null : Long.valueOf(firstShippingDate.get("batchId"))),
             (firstShippingDate.get("from").toString().equals("null") ? null : firstShippingDate.get("from").toString()),
             (firstShippingDate.get("to").toString().equals("null") ? null : firstShippingDate.get("to").toString()),
-            merchant.get("address").toString());
+            (merchant.get("address") == null ? null : merchant.get("address").toString()));
    }
 
    @Override
