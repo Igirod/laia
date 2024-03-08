@@ -48,7 +48,7 @@ public class ProductRestController {
          @Parameter(name = "stock", description = "Stock del producto", required = true, example = "10"),
          @Parameter(name = "status", description = "Estado del producto", required = true, example = "1") })
    @ApiResponse(responseCode = "1", description = "Devuelve 1 si se creó correctamente el producto.")
-   @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
+   @RequestMapping(method = { RequestMethod.POST }, value = "/create-product", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public Integer createProduct(@RequestPart Optional<MultipartFile> frontPage, Optional<Long> merchantId,
          @RequestPart Optional<String> title, @RequestPart Optional<Long> productId,
