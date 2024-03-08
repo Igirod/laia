@@ -212,6 +212,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       order.setPaymentId(paymentId);
       order.setStatus(Status.PENDING);
       order.setMerchantId(merchantId);
+      order.setType(reservationType);
       try {
          order.setReservation(DateUtils.convertStringToDate(date + " " + DateUtils.getCurrentTime()));
          reservationJpaRepository.save(
