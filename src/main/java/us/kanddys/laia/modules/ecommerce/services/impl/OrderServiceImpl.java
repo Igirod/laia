@@ -64,15 +64,18 @@ public class OrderServiceImpl implements OrderService {
             .map(OrderProductDTO::new)
             .collect(Collectors.toList());
       var batchData = batchJpaRepository.findFromTimeAndToTimeById(order.getBatchId());
-      var reservationData = reservationJpaRepository.findTypeByMerchantIdAndDate(order.getMerchantId(),
-            order.getUserId(), order.getReservation());
+      String reservationType = "";
+      if (order.getType() == null) {
+         reservationType = reservationJpaRepository.findTypeByMerchantIdAndDate(order.getMerchantId(),
+               order.getUserId(), order.getReservation());
+      }
       var userData = userJpaRepository.findUserNameAndLastNameAndEmailById(order.getUserId());
       return new OrderDTO(order, (batchData.get("from_time") == null ? null : batchData.get("from_time").toString()),
             (batchData.get("to_time") == null ? null : batchData.get("to_time").toString()),
-            (reservationData == null ? null : reservationData),
+            (order.getType() == null ? reservationType : order.getType()),
             userData.get("email") == null ? null : userData.get("email").toString(),
             userData.get("name") == null ? null : userData.get("name").toString(),
-            userData.get("lastName") == null ? null : userData.get("lastName").toString(), listProducts);
+            userData.get("lastName") == null ? null : userData.get("last_name").toString(), listProducts);
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })

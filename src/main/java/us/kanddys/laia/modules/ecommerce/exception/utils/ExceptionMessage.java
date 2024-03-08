@@ -15,4 +15,5 @@ public class ExceptionMessage {
    public static final String PRODUCT_CHECK_STOCK_LIMITED = "El stock del producto no es suficiente para realizar la compra.";
    public static final String ADDRESS_NOT_FOUND = "La direccion buscada no existe.";
    public static final String ORDER_NOT_FOUND = "La orden buscada no existe.";
+   public static final String CATEGORY_NOT_FOUND = "La categoria buscada no existe.";
 }
