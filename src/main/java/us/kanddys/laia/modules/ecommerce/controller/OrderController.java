@@ -16,12 +16,12 @@ public class OrderController {
    private OrderService orderService;
 
    @MutationMapping("uOrderS")
-   public Integer updateOrderStatus(Long orderId, String status) {
+   public Integer updateOrderStatus(@Argument Long orderId, @Argument String status) {
       return orderService.updateOrderStatus(orderId, status);
    }
 
    @MutationMapping("uOrderN")
-   public Integer updateOrderNote(Long orderId, String note) {
+   public Integer updateOrderNote(@Argument Long orderId, @Argument String note) {
       return orderService.updateOrderNote(orderId, note);
    }
 
