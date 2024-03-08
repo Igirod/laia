@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,5 +35,26 @@ public class ProductRestController {
          "application/json" }, consumes = { "multipart/form-data" })
    public Integer uploadFrontPage(@RequestPart MultipartFile image, @RequestPart String productId) {
       return productService.updateFrontPage(Long.valueOf(productId), image);
+   }
+
+   @Operation(description = "Servicio que tiene la obligación de crear un producto.")
+   @Parameters({
+         @Parameter(name = "frontPage", description = "Imagen de la portada", required = true, example = "image"),
+         @Parameter(name = "merchantId", description = "Identificador del comerciante", required = true, example = "1"),
+         @Parameter(name = "title", description = "Título del producto", required = true, example = "Producto 1"),
+         @Parameter(name = "productId", description = "Identificador del producto", required = true, example = "1"),
+         @Parameter(name = "typeOfSale", description = "Tipo de venta", required = true, example = "Venta"),
+         @Parameter(name = "price", description = "Precio del producto", required = true, example = "100.0"),
+         @Parameter(name = "stock", description = "Stock del producto", required = true, example = "10"),
+         @Parameter(name = "status", description = "Estado del producto", required = true, example = "1") })
+   @ApiResponse(responseCode = "1", description = "Devuelve 1 si se creó correctamente el producto.")
+   @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
+         "application/json" }, consumes = { "multipart/form-data" })
+   public Integer createProduct(@RequestPart Optional<MultipartFile> frontPage, Optional<Long> merchantId,
+         @RequestPart Optional<String> title, @RequestPart Optional<Long> productId,
+         @RequestPart Optional<String> typeOfSale, @RequestPart Optional<Double> price,
+         @RequestPart Optional<Integer> stock,
+         @RequestPart Optional<Integer> status) {
+      return productService.createProduct(frontPage, productId, title, typeOfSale, price, stock, status, merchantId);
    }
 }

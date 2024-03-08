@@ -20,6 +20,8 @@ public class Merchant {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
+   @Column(name = "user_id")
+   private Long userId;
    @Column(name = "mer_email")
    private String email;
    @Column(name = "slug")
@@ -43,5 +45,11 @@ public class Merchant {
    private String lng;
 
    public Merchant() {
+   }
+
+   public Merchant(Long userId) {
+      super();
+      this.id = null;
+      this.userId = userId;
    }
 }

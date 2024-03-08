@@ -41,9 +41,16 @@ public class Product {
    private Integer status;
    @Column(name = "created_at")
    private Date createdAt;
+   @Column(name = "type_of_sale")
+   private String typeOfSale;
    @OneToMany(mappedBy = "product")
    private List<InvoiceProduct> invoiceProducts;
 
    public Product() {
+   }
+
+   public Product(Object object, Object object2, Double double1, Integer integer, Object object3, Object object4,
+         Long id2, Integer integer2, Date currentDate, Object object5, Object object6) {
+      //TODO Auto-generated constructor stub
    }
 }

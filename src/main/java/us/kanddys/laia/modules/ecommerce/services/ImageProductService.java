@@ -36,4 +36,13 @@ public interface ImageProductService {
     * @return List<ImageProductDTO>
     */
    public List<ImageProductDTO> getImagesProductByProductId(Long productId);
+
+   /**
+    * Este método tiene la obligación de cargar varias imagenes de un producto.
+    * 
+    * @param images
+    * @param productId
+    * @return Integer
+    */
+   public Integer uploadImagesProducts(List<MultipartFile> images, Long productId);
 }

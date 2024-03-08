@@ -32,17 +32,11 @@ public class ProductController {
       return productService.getProductsByTypeFilterPaginated(page, typeFilter);
    }
 
-   @MutationMapping("cProduct")
-   public Integer createProduct(@Argument Long merchantId, @Argument Optional<String> title,
-         @Argument Optional<Double> price, @Argument Optional<Integer> stock, @Argument Optional<Integer> status) {
-      return productService.createProduct(merchantId, title, price, stock, status);
-   }
-
    @MutationMapping("uProduct")
    public Integer updateProduct(@Argument Long productId, @Argument Optional<String> title,
          @Argument Optional<Double> price,
-         @Argument Optional<Integer> stock, @Argument Optional<Integer> status) {
-      return productService.updateProduct(productId, title, price, stock, status);
+         @Argument Optional<Integer> stock, @Argument Optional<Integer> status, Optional<String> typeOfSale) {
+      return productService.updateProduct(productId, title, price, stock, status, typeOfSale);
    }
 
    @MutationMapping("dProduct")

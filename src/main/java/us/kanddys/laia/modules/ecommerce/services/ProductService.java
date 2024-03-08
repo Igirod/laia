@@ -15,7 +15,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
  * clase ProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.3
  */
 public interface ProductService {
 
@@ -68,34 +68,20 @@ public interface ProductService {
    public Integer updateFrontPage(Long productId, MultipartFile image);
 
    /**
-    * Este método tiene la obligación de crear un producto.
-    * 
-    * @author Igirod0
-    * @version 1.0.0
-    * @param merchantId
-    * @param title
-    * @param price
-    * @param stock
-    * @param status
-    * @return Integer
-    */
-   public Integer createProduct(Long merchantId, Optional<String> title, Optional<Double> price,
-         Optional<Integer> stock, Optional<Integer> status);
-
-   /**
     * Este método tiene la obligación de actualizar un producto.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param productId
     * @param title
     * @param price
     * @param stock
     * @param status
+    * @param typeOfSale
     * @return Integer
     */
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
-         Optional<Integer> status);
+         Optional<Integer> status, Optional<String> typeOfSale);
 
    /**
     * Este método tiene la obligación de eliminar un producto.
@@ -106,4 +92,24 @@ public interface ProductService {
     * @return Integer
     */
    public Integer deleteProduct(Long productId);
+
+   /**
+    * Este método tiene la obligación de crear un producto.
+    * 
+    *
+    * @author Igirod0
+    * @version 1.0.1
+    * @param frontPage
+    * @param merchantId
+    * @param productId
+    * @param title
+    * @param typeOfSale
+    * @param price
+    * @param stock
+    * @param status
+    * @return Integer
+    */
+   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<Long> productId, Optional<String> title,
+         Optional<String> typeOfSale, Optional<Double> price, Optional<Integer> stock, Optional<Integer> status,
+         Optional<Long> merchantId);
 }

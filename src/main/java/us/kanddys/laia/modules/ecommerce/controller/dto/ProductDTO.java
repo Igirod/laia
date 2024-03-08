@@ -14,7 +14,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.ProductCheckStock;
  * Esta clase representa un data transfer object (DTO) de un producto.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Data
 @AllArgsConstructor
@@ -35,6 +35,8 @@ public class ProductDTO {
    private Integer status;
    @JsonProperty
    private String createAt;
+   @JsonProperty
+   private String typeOfSale;
 
    public ProductDTO() {
    }
@@ -43,7 +45,7 @@ public class ProductDTO {
     * Constructor personalizado utilizado en diferentes servicios.
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @throws IOException
     */
    public ProductDTO(Product product) throws IOException {
@@ -58,5 +60,6 @@ public class ProductDTO {
       this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
       this.status = (product.getStatus() != null) ? ProductCheckStock.returnStatusByStock(stock) : null;
       this.createAt = (product.getCreatedAt() != null) ? DateUtils.convertDateToString(product.getCreatedAt()) : null;
+      this.typeOfSale = (product.getTypeOfSale() != null) ? product.getTypeOfSale() : null;
    }
 }
