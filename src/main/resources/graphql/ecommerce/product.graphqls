@@ -8,6 +8,7 @@ type ProductDTO {
    status: Int
    createAt: String
    typeOfSale: String
+   manufacturingTime: Int
 }
 
 type ProductInputDTO {

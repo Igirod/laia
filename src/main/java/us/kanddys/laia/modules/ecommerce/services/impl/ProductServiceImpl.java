@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,10 +48,10 @@ public class ProductServiceImpl implements ProductService {
    private FirebaseStorageService firebaseStorageService;
 
    @Autowired
-   private UserJpaRepository userJpaRepository;
+   private MerchantJpaRepository merchantJpaRepository;
 
    @Autowired
-   private MerchantJpaRepository merchantJpaRepository;
+   private UserJpaRepository userJpaRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -95,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
-         Optional<Integer> status, Optional<String> typeOfSale) {
+         Optional<Integer> status, Optional<String> typeOfSale, Optional<Integer> manufacturingTime) {
       var product = productJpaRepository.findById(productId);
       if (product.isPresent()) {
          var productToUpdate = product.get();
@@ -103,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
          price.ifPresent(productToUpdate::setPrice);
          stock.ifPresent(productToUpdate::setStock);
          status.ifPresent(productToUpdate::setStatus);
+         manufacturingTime.ifPresent(productToUpdate::setManufacturingTime);
          typeOfSale.ifPresent(productToUpdate::setTypeOfSale);
          productJpaRepository.save(productToUpdate);
          return 1;
@@ -117,39 +119,56 @@ public class ProductServiceImpl implements ProductService {
       return 1;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<Long> productId, Optional<String> title,
+   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> productId, Optional<String> title,
          Optional<String> typeOfSale,
-         Optional<Double> price, Optional<Integer> stock, Optional<Integer> status, Optional<Long> merchantId) {
+         Optional<String> price, Optional<String> stock, Optional<String> status, Optional<String> merchantId,
+         Optional<String> manufacturingTime) {
       if (merchantId.isEmpty()) {
          // * Primero se crea el usuario y luego el merchant para asociarle el producto.
          try {
-            createProductAndDTO(new Product(null, (title.isEmpty() ? null : title.get()),
-                  (price.isPresent() ? price.get() : null), (stock.isPresent() ? stock.get() : null),
-                  (typeOfSale.isPresent() ? typeOfSale.get() : null), null,
-                  merchantJpaRepository.save(new Merchant(userJpaRepository.save(new User(true)).getId())).getId(),
-                  (status.isPresent() ? status.get() : null),
-                  DateUtils.getCurrentDate(), (typeOfSale.isPresent() ? typeOfSale.get() : null), null),
-                  frontPage.get());
+            Long newMerchantId = merchantJpaRepository
+                  .save(new Merchant(userJpaRepository.save(new User(true)).getId()))
+                  .getId();
+            createProductAndDTO(
+                  new Product(null, (title.isPresent() ? title.get() : null),
+                        (price.isPresent() ? Double.valueOf(price.get()) : null),
+                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null, newMerchantId,
+                        (status.isPresent() ? Integer.valueOf(status.get()) : null), DateUtils.getCurrentDate(),
+                        (typeOfSale.isPresent() ? typeOfSale.get() : null),
+                        (manufacturingTime.isPresent() ? Integer.valueOf(manufacturingTime.get()) : null),
+                        new ArrayList<>()),
+                  (frontPage.isPresent() ? frontPage.get() : null));
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
       } else {
-         if (merchantJpaRepository.existByMerchantId(merchantId.get()) == null)
+         if (merchantJpaRepository.existByMerchantId(Long.valueOf(merchantId.get())) == null)
             throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
          if (productId.isEmpty()) {
             // * Se crea el producto asociado a un merchant.
             try {
-               createProductAndDTO(new Product(null, (title.isEmpty() ? null : title.get()),
-                     (price.isPresent() ? price.get() : null), (stock.isPresent() ? stock.get() : null),
-                     (typeOfSale.isPresent() ? typeOfSale.get() : null), null, merchantId.get(),
-                     (status.isPresent() ? status.get() : null), DateUtils.getCurrentDate(),
-                     (typeOfSale.isPresent() ? typeOfSale.get() : null), null), frontPage.get());
+               createProductAndDTO(
+                     new Product(null, (title.isPresent() ? title.get() : null),
+                           (price.isPresent() ? Double.valueOf(price.get()) : null),
+                           (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null,
+                           Long.valueOf(merchantId.get()),
+                           (status.isPresent() ? Integer.valueOf(status.get()) : null), DateUtils.getCurrentDate(),
+                           (typeOfSale.isPresent() ? typeOfSale.get() : null),
+                           (manufacturingTime.isPresent() ? Integer.valueOf(manufacturingTime.get()) : null),
+                           new ArrayList<>()),
+                     (frontPage.isPresent() ? frontPage.get() : null));
             } catch (ParseException e) {
                throw new RuntimeException("Error al convertir la fecha");
             }
          } else {
-            updateProduct(productId.get(), title, price, stock, status, typeOfSale);
+            // * Se actualiza el producto.
+            if (!productJpaRepository.existsById(Long.valueOf(productId.get())))
+               throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+            updateProduct(Long.valueOf(productId.get()), title.map(String::toString), price.map(Double::valueOf),
+                  stock.map(Integer::valueOf), status.map(Integer::valueOf), typeOfSale.map(String::toString),
+                  manufacturingTime.map(Integer::valueOf));
          }
       }
       return 1;
@@ -158,9 +177,9 @@ public class ProductServiceImpl implements ProductService {
    private ProductDTO createProductAndDTO(Product product, MultipartFile frontPage) {
       try {
          var productDTO = new ProductDTO(productJpaRepository.save(product));
-         // ! Carga diferida de imagenes.
-         // TODO: Crear producto y subir las imagenes.
-         updateFrontPage(productDTO.getId(), frontPage);
+         // ! Carga solo la portada.
+         if (frontPage != null)
+            updateFrontPage(productDTO.getId(), frontPage);
          return productDTO;
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());

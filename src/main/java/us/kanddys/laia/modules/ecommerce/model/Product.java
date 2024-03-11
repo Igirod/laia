@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import jakarta.persistence.Column;
@@ -43,14 +44,11 @@ public class Product {
    private Date createdAt;
    @Column(name = "type_of_sale")
    private String typeOfSale;
+   @Column(name = "manufacturing_time")
+   private Integer manufacturingTime;
    @OneToMany(mappedBy = "product")
    private List<InvoiceProduct> invoiceProducts;
 
    public Product() {
-   }
-
-   public Product(Object object, Object object2, Double double1, Integer integer, Object object3, Object object4,
-         Long id2, Integer integer2, Date currentDate, Object object5, Object object6) {
-      //TODO Auto-generated constructor stub
    }
 }

@@ -37,6 +37,8 @@ public class ProductDTO {
    private String createAt;
    @JsonProperty
    private String typeOfSale;
+   @JsonProperty
+   private Integer manufacturingTime;
 
    public ProductDTO() {
    }
@@ -61,5 +63,6 @@ public class ProductDTO {
       this.status = (product.getStatus() != null) ? ProductCheckStock.returnStatusByStock(stock) : null;
       this.createAt = (product.getCreatedAt() != null) ? DateUtils.convertDateToString(product.getCreatedAt()) : null;
       this.typeOfSale = (product.getTypeOfSale() != null) ? product.getTypeOfSale() : null;
+      this.manufacturingTime = (product.getManufacturingTime() != null) ? product.getManufacturingTime() : null;
    }
 }
