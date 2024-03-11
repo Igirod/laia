@@ -1,0 +1,6 @@
+type InvestmentDTO {
+   id: Int!
+   productId: Int
+   amount: Float
+   note: String
+}

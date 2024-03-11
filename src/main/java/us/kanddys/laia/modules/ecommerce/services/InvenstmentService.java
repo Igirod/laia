@@ -1,0 +1,46 @@
+package us.kanddys.laia.modules.ecommerce.services;
+
+import java.util.Optional;
+
+/**
+ * Esta interfaz contiene las obligaciones que debe implementar la clase
+ * InventsmentServiceImpl.
+ * 
+ * @author Igirod0
+ * @version 1.0.0
+ */
+public interface InvenstmentService {
+
+   /**
+    * Este método crea una inversión asociada a un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param amount
+    * @param note
+    * @return Integer
+    */
+   public Integer createInvenstment(Long productId, Optional<Double> amount, Optional<String> note);
+
+   /**
+    * Este método elimina una inversión asociada a un producto.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return Integer
+    */
+   public Integer deleteInvenstment(Long invenstmentId);
+
+   /**
+    * Este método actualiza una inversión asociada a un producto.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param amount
+    * @param note
+    * @return Integer
+    */
+   public Integer updateInvenstment(Long invenstmentId, Optional<Double> amount, Optional<String> note);
+}

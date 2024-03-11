@@ -16,4 +16,5 @@ public class ExceptionMessage {
    public static final String ADDRESS_NOT_FOUND = "La direccion buscada no existe.";
    public static final String ORDER_NOT_FOUND = "La orden buscada no existe.";
    public static final String CATEGORY_NOT_FOUND = "La categoria buscada no existe.";
+   public static final String INVESTMENT_NOT_FOUND = "La inversion buscada no existe.";
 }
