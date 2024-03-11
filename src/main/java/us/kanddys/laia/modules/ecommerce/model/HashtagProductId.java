@@ -7,11 +7,11 @@ import lombok.Data;
 @Embeddable
 @Data
 @AllArgsConstructor
-public class OrderProductId {
+public class HashtagProductId {
 
+   private Long hashId;
    private Long productId;
-   private Long orderId;
 
-   public OrderProductId() {
+   public HashtagProductId() {
    }
 }

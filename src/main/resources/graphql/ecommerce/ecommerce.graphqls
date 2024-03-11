@@ -31,9 +31,6 @@ type Query {
    gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
    gOrder(orderId: Int!): OrderDTO
-   cInvenstment(productId: Int!, amount: Float, note: String): Int
-   uInvenstment(invenstmentId: Int!, amount: Float, note: String): Int
-   dInvenstment(invenstmentId: Int!): Int
 }
 
 type Mutation {
@@ -57,4 +54,12 @@ type Mutation {
    cBatch(calendarId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
    uBatch(batchId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
    dBatch(batchId: Int!) : Int
+   cInvenstment(productId: Int!, amount: Float, note: String) : Int
+   uInvenstment(invenstmentId: Int!, amount: Float, note: String) : Int
+   dInvenstment(invenstmentId: Int!) : Int
+   cHashtag(value: String!) : Int
+   uHashtag(hashtagId: Int!, value: String!) : Int
+   dHashtag(hashtagId: Int!) : Int
+   cHashtagProduct(productId: Int!, hashtagId: Int!) : Int
+   dHashtagProduct(productId: Int!, hashtagId: Int!) : Int
 }

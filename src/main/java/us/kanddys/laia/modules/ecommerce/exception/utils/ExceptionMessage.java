@@ -17,4 +17,8 @@ public class ExceptionMessage {
    public static final String ORDER_NOT_FOUND = "La orden buscada no existe.";
    public static final String CATEGORY_NOT_FOUND = "La categoria buscada no existe.";
    public static final String INVESTMENT_NOT_FOUND = "La inversion buscada no existe.";
+   public static final String HASHTAG_NOT_FOUND = "El hashtag buscado no existe.";
+   public static final String HASHTAG_PRODUCT_NOT_FOUND = "El hashtag del producto buscado no existe.";
+   public static final String EXISTING_HASHTAG_PRODUCT = "El hashtag del producto ya existe.";
+   public static final String EXISTING_HASHTAG = "El hashtag ya existe.";
 }
