@@ -13,7 +13,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
  * Esta clase representa un data transfer object (DTO) para la entidad Order.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Data
 @AllArgsConstructor
@@ -21,9 +21,7 @@ public class OrderDTO {
    @JsonProperty
    private Long id;
    @JsonProperty
-   private Long merchantId;
-   @JsonProperty
-   private Long userId;
+   private String merchantTitle;
    @JsonProperty
    private String userEmail;
    @JsonProperty
@@ -74,13 +72,9 @@ public class OrderDTO {
     * @param toTime
     * @param products
     */
-   public OrderDTO(Order order, String fromTime, String toTime, String reservationType, String userEmail,
-         String userName, String userLastName,
-         List<OrderProductDTO> products) {
+   public OrderDTO(Order order, List<OrderProductDTO> products) {
       super();
       this.id = (order.getId() == null) ? null : order.getId();
-      this.merchantId = (order.getMerchantId() == null) ? null : order.getMerchantId();
-      this.userId = (order.getUserId() == null) ? null : order.getUserId();
       this.code = (order.getCode() == null) ? null : order.getCode();
       this.reservation = (order.getReservation() == null) ? null
             : DateUtils.convertDateToString(order.getReservation());
@@ -93,13 +87,14 @@ public class OrderDTO {
       this.addressLat = (order.getAddressLat() == null) ? null : order.getAddressLat();
       this.addressLng = (order.getAddressLng() == null) ? null : order.getAddressLng();
       this.createdAt = (order.getCreatedAt() == null) ? null : DateUtils.convertDateToString(order.getCreatedAt());
-      this.batchFrom = (fromTime == null) ? null : fromTime;
-      this.batchTo = (toTime == null) ? null : toTime;
+      this.batchFrom = (order.getBatchFrom() == null) ? null : order.getBatchFrom();
+      this.batchTo = (order.getBatchTo() == null) ? null : order.getBatchTo();
       this.updatedAt = (order.getUpdatedAt() == null) ? null : DateUtils.convertDateToString(order.getUpdatedAt());
-      this.reservationType = (reservationType == null) ? null : reservationType;
-      this.userEmail = (userEmail == null) ? null : userEmail;
-      this.userName = (userName == null) ? null : userName;
-      this.userLastName = (userLastName == null) ? null : userLastName;
+      this.reservationType = (order.getType() == null) ? null : order.getType();
+      this.userEmail = (order.getUserEmail() == null) ? null : order.getUserEmail();
+      this.userName = (order.getUserName() == null) ? null : order.getUserName();
+      this.userLastName = (order.getUserLastName() == null) ? null : order.getUserLastName();
+      this.merchantTitle = (order.getMerchantTitle() == null) ? null : order.getMerchantTitle();
       this.products = products;
    }
 }

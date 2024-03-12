@@ -122,7 +122,7 @@ public interface InvoiceService {
    public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
-         Long userId, String addressLat, String addressLng, String addressDirection, String reservationType);
+         Long userId, String addressLat, String addressLng, String addressDirection);
 
    /**
     * Este método se encarga de actualizar la dirección de una factura.

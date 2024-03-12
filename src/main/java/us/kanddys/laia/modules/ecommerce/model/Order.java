@@ -31,12 +31,16 @@ public class Order {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "user_id")
-   private Long userId;
+   @Column(name = "user_name")
+   private String userName;
+   @Column(name = "user_last_name")
+   private String userLastName;
+   @Column(name = "user_email")
+   private String userEmail;
    @Column(name = "mer_id")
    private Long merchantId;
-   @Column(name = "payment_id")
-   private Long paymentId;
+   @Column(name = "merchant_title")
+   private String merchantTitle;
    @Column(name = "code")
    private String code;
    @Column(name = "reservation")
@@ -58,8 +62,6 @@ public class Order {
    private String addressLng;
    @Column(name = "address_direction")
    private String addressDirection;
-   @Column(name = "batch_id")
-   private Long batchId;
    @Column(name = "address_number")
    private Integer addressNumber;
    @Column(name = "type")
@@ -68,16 +70,26 @@ public class Order {
    private Date createdAt;
    @Column(name = "updated_at")
    private Date updatedAt;
+   @Column(name = "batch_to")
+   private String batchTo;
+   @Column(name = "batch_from")
+   private String batchFrom;
 
    public Order() {
    }
 
-   public Order(Invoice invoice) {
+   public Order(Invoice invoice, String merchantTitle, Long merchantId, String userName, String userLastName,
+         String userEmail, String batchTo, String batchFrom) {
       super();
       this.id = (invoice.getId() == null) ? null : invoice.getId();
-      this.merchantId = (invoice.getMerchantId() == null) ? null : invoice.getMerchantId();
-      this.userId = (invoice.getUserId() == null) ? null : invoice.getUserId();
-      this.paymentId = (invoice.getPaymentId() == null) ? null : invoice.getPaymentId();
+      // ! Siempre se deben tener disponibles estos datos.
+      this.merchantTitle = merchantTitle;
+      this.userLastName = userLastName;
+      this.userEmail = userEmail;
+      this.userName = userName;
+      this.batchFrom = batchFrom;
+      this.batchTo = batchTo;
+      this.merchantId = merchantId;
       this.code = (invoice.getCode() == null) ? null
             : invoice.getCode();
       try {
@@ -94,9 +106,8 @@ public class Order {
       this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
       this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
       this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
-      this.batchId = (invoice.getBatchId() == null) ? null : invoice.getBatchId();
       this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
-      this.type = (invoice.getType() == null) ? null : invoice.getType();
       this.createdAt = (invoice.getCreateAt() == null) ? null : invoice.getCreateAt();
+      this.type = (invoice.getType() == null) ? null : invoice.getType();
    }
 }

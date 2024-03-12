@@ -1,8 +1,7 @@
 
 type OrderDTO {
    id: Int!
-   merchantId: Int!
-   userId: Int!
+   merchantTitle: String
    code: String
    reservation: String
    reservationType: String

@@ -33,6 +33,6 @@ public interface BatchJpaRepository extends JpaRepository<Batch, Long> {
    @Query(value = "SELECT * FROM batches WHERE calendar_id = ?1 AND date BETWEEN ?2 AND ?3 AND date IS NOT NULL", nativeQuery = true)
    List<Batch> findExceptionlBatchesByCalendarId(Long calendarId, Date startDate, Date endDate);
 
-   @Query(value = "SELECT from_time, to_time FROM batches WHERE id = :id", nativeQuery = true)
-   Map<String, Object> findFromTimeAndToTimeById(Long id);
+   @Query(value = "SELECT CAST(from_time AS CHAR), CAST(to_time AS CHAR) FROM batches WHERE id = :id", nativeQuery = true)
+   Map<String, String> findFromTimeAndToTimeById(Long id);
 }

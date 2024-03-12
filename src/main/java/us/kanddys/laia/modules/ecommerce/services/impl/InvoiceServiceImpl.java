@@ -28,6 +28,7 @@ import us.kanddys.laia.modules.ecommerce.model.OrderProduct;
 import us.kanddys.laia.modules.ecommerce.model.Reservation;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
+import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
@@ -48,7 +49,7 @@ import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService
  * Esta clase implementa las obligaciones de la interface InvoiceService.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -94,6 +95,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
    @Autowired
    private UserJpaRepository userJpaRepository;
+
+   @Autowired
+   private BatchJpaRepository batchJpaRepository;
 
    @Override
    public List<InvoiceDTO> findInvoicesByMerchantIdAndOptionalParamsPaginated(Integer page, Long merchantId,
@@ -191,33 +195,36 @@ public class InvoiceServiceImpl implements InvoiceService {
    public OrderPaymentDTO updateOrderVoucher(MultipartFile voucher, Long invoiceId, Long paymentId,
          String date, Long batchId,
          Long merchantId,
-         Long userId, String addressLat, String addressLng, String addressDirection, String reservationType) {
+         Long userId, String addressLat, String addressLng, String addressDirection) {
       var invoice = invoiceJpaRepository.findById(invoiceId);
       if (invoice.isEmpty())
          throw new InvoiceNotFoundException(ExceptionMessage.INVOICE_NOT_FOUND);
       // * Creación de la orden definitiva.
-      Order order = new Order(invoice.get());
+      var merchantData = merchantJpaRepository.findEmailAndUserIdAndSlugByMerchantId(merchantId);
+      var userData = userJpaRepository.findUserNameAndLastNameAndEmailById(userId);
+      var batchData = batchJpaRepository.findFromTimeAndToTimeById(invoice.get().getBatchId());
+      Order order = new Order(invoice.get(), (String) merchantData.get("title"), merchantId,
+            (String) userData.get("name"),
+            (String) userData.get("last_name"), (String) userData.get("email"),
+            (String) batchData.get("CAST(to_time AS CHAR)"), (String) batchData.get("CAST(from_time AS CHAR)"));
       order.setCode(invoiceCodeService.generateInvoiceCode(merchantId, invoiceId));
       order.setVoucher(firebaseStorageService.uploadFile(voucher, "vouchers"));
       order.setAddressDirection(addressDirection);
       order.setAddressLat(addressLat);
       order.setAddressLng(addressLng);
-      updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order, reservationType);
+      order.setMerchantId(merchantId);
+      updateOrderPayment(invoiceId, paymentId, date, batchId, merchantId, userId, order);
       return new OrderPaymentDTO(order.getVoucher(), order.getCode(), order.getId());
    }
 
    private void updateOrderPayment(Long invoiceId, Long paymentId, String date, Long batchId, Long merchantId,
-         Long userId, Order order, String reservationType) {
-      order.setBatchId(batchId);
-      order.setPaymentId(paymentId);
+         Long userId, Order order) {
       order.setStatus(Status.PENDING);
-      order.setMerchantId(merchantId);
-      order.setType(reservationType);
       try {
          order.setReservation(DateUtils.convertStringToDate(date + " " + DateUtils.getCurrentTime()));
          reservationJpaRepository.save(
                new Reservation(null, merchantId, userId, batchId, DateUtils.convertStringToDateWithoutTime(date),
-                     reservationType));
+                     (order.getType() == null ? null : order.getType())));
          order.setCreatedAt(DateUtils.getCurrentDate());
       } catch (ParseException e) {
          throw new RuntimeException("Error al convertir la fecha");
