@@ -24,9 +24,10 @@ public class InvenstmentServiceImpl implements InvenstmentService {
    private InvenstmentJpaRepository invenstmentJpaRepository;
 
    @Override
-   public Integer createInvenstment(Long productId, Optional<Double> amount, Optional<String> note) {
+   public Integer createInvenstment(Long productId, Optional<Double> amount, Optional<String> note,
+         Optional<String> title) {
       invenstmentJpaRepository.save(new Invenstment(null, productId, (amount.isPresent() ? amount.get() : null),
-            (note.isPresent() ? note.get() : null)));
+            (note.isPresent() ? note.get() : null), (title.isPresent() ? title.get() : null)));
       return 1;
    }
 
@@ -38,13 +39,14 @@ public class InvenstmentServiceImpl implements InvenstmentService {
 
    @Override
    public Integer updateInvenstment(Long invenstmentId, Optional<Double> amount,
-         Optional<String> note) {
+         Optional<String> note, Optional<String> title) {
       var invenstment = invenstmentJpaRepository.findById(invenstmentId);
       if (invenstment.isEmpty())
          throw new InvenstmentNotFoundException(ExceptionMessage.INVESTMENT_NOT_FOUND);
       var invenstmentToUpdate = invenstment.get();
       amount.ifPresent(invenstmentToUpdate::setAmount);
       note.ifPresent(invenstmentToUpdate::setNote);
+      title.ifPresent(invenstmentToUpdate::setTitle);
       invenstmentJpaRepository.save(invenstmentToUpdate);
       return 1;
    }

@@ -29,11 +29,10 @@ public class HashtagServiceImpl implements HashtagService {
    }
 
    @Override
-   public Integer createHashtag(String hashtag) {
+   public Long createHashtag(String hashtag) {
       if (hashtagJpaRepository.findByValue(hashtag) != null)
          throw new ExistingHashtagException(ExceptionMessage.EXISTING_HASHTAG);
-      hashtagJpaRepository.save(new Hashtag(null, hashtag));
-      return 1;
+      return hashtagJpaRepository.save(new Hashtag(null, hashtag)).getId();
    }
 
    @Override

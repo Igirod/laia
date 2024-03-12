@@ -21,4 +21,6 @@ public class ExceptionMessage {
    public static final String HASHTAG_PRODUCT_NOT_FOUND = "El hashtag del producto buscado no existe.";
    public static final String EXISTING_HASHTAG_PRODUCT = "El hashtag del producto ya existe.";
    public static final String EXISTING_HASHTAG = "El hashtag ya existe.";
+   public static final String EXISTING_KEY_WORD = "La palabra clave ya existe.";
+   public static final String KEY_WORD_NOT_FOUND = "La palabra clave buscada no existe.";
 }

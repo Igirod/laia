@@ -25,9 +25,9 @@ public interface HashtagService {
     * @author Igirod0
     * @version 1.0.0
     * @param hashtag El hashtag a crear.
-    * @return Integer
+    * @return Long
     */
-   public Integer createHashtag(String hashtag);
+   public Long createHashtag(String hashtag);
 
    /**
     * Este método se encarga de eliminar un hashtag.

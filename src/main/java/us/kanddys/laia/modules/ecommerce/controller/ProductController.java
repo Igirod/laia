@@ -35,8 +35,8 @@ public class ProductController {
    @MutationMapping("uProduct")
    public Integer updateProduct(@Argument Long productId, @Argument Optional<String> title,
          @Argument Optional<Double> price, @Argument Optional<Integer> stock, @Argument Optional<Integer> status,
-         @Argument Optional<String> typeOfSale, @Argument Optional<Integer> manufacturingTime) {
-      return productService.updateProduct(productId, title, price, stock, status, typeOfSale, manufacturingTime);
+         @Argument Optional<String> typeOfSale) {
+      return productService.updateProduct(productId, title, price, stock, status, typeOfSale);
    }
 
    @MutationMapping("dProduct")

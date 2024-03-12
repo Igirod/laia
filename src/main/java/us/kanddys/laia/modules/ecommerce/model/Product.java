@@ -43,8 +43,6 @@ public class Product {
    private Date createdAt;
    @Column(name = "type_of_sale")
    private String typeOfSale;
-   @Column(name = "manufacturing_time")
-   private Integer manufacturingTime;
    @OneToMany(mappedBy = "product")
    private List<InvoiceProduct> invoiceProducts;
 

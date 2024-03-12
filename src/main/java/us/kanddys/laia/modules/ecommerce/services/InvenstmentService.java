@@ -15,13 +15,15 @@ public interface InvenstmentService {
     * Este método crea una inversión asociada a un producto.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param productId
     * @param amount
     * @param note
+    * @param title
     * @return Integer
     */
-   public Integer createInvenstment(Long productId, Optional<Double> amount, Optional<String> note);
+   public Integer createInvenstment(Long productId, Optional<Double> amount, Optional<String> note,
+         Optional<String> title);
 
    /**
     * Este método elimina una inversión asociada a un producto.
@@ -40,7 +42,9 @@ public interface InvenstmentService {
     * @version 1.0.0
     * @param amount
     * @param note
+    * @param title
     * @return Integer
     */
-   public Integer updateInvenstment(Long invenstmentId, Optional<Double> amount, Optional<String> note);
+   public Integer updateInvenstment(Long invenstmentId, Optional<Double> amount, Optional<String> note,
+         Optional<String> title);
 }

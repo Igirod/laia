@@ -54,12 +54,17 @@ type Mutation {
    cBatch(calendarId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
    uBatch(batchId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int
    dBatch(batchId: Int!) : Int
-   cInvenstment(productId: Int!, amount: Float, note: String) : Int
-   uInvenstment(invenstmentId: Int!, amount: Float, note: String) : Int
+   cInvenstment(productId: Int!, amount: Float, note: String, title: String) : Int
+   uInvenstment(invenstmentId: Int!, amount: Float, note: String, title: String) : Int
    dInvenstment(invenstmentId: Int!) : Int
    cHashtag(value: String!) : Int
    uHashtag(hashtagId: Int!, value: String!) : Int
    dHashtag(hashtagId: Int!) : Int
    cHashtagProduct(productId: Int!, hashtagId: Int!) : Int
    dHashtagProduct(productId: Int!, hashtagId: Int!) : Int
+   cKeyWord(word: String!) : Int
+   uKeyWord(keyWordId: Int!, word: String!) : Int
+   dKeyWord(keyWordId: Int!) : Int
+   cKeyWordProduct(productId: Int!, keyWordId: Int!) : Int
+   dKeyWordProduct(productId: Int!, keyWordId: Int!) : Int
 }

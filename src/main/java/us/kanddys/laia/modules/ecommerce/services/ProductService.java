@@ -82,7 +82,7 @@ public interface ProductService {
     * @return Integer
     */
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
-         Optional<Integer> status, Optional<String> typeOfSale, Optional<Integer> manufacturingTime);
+         Optional<Integer> status, Optional<String> typeOfSale);
 
    /**
     * Este método tiene la obligación de eliminar un producto.
@@ -108,9 +108,22 @@ public interface ProductService {
     * @param price
     * @param stock
     * @param status
+    * @param manufacturingTime
+    * @param invenstmentNote
+    * @param invenstmentAmount
+    * @param invenstmentTitle
+    * @param manufacturingType
+    * @param segmentTitle
+    * @param segmentDescription
+    * @param segmentMedia
+    * @param hashtagValue
+    * @param keywordValue
     * @return Integer
     */
    public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> productId, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
-         Optional<String> merchantId, Optional<String> manufacturingTime);
+         Optional<String> merchantId, Optional<Integer> manufacturingTime, Optional<String> invenstmentNote,
+         Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
+         Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
+         Optional<String> hashtagValue, Optional<String> keywordValue);
 }

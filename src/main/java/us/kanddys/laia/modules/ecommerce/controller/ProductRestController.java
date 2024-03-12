@@ -46,7 +46,15 @@ public class ProductRestController {
          @Parameter(name = "typeOfSale", description = "Tipo de venta", required = true, example = "Venta"),
          @Parameter(name = "price", description = "Precio del producto", required = true, example = "100.0"),
          @Parameter(name = "stock", description = "Stock del producto", required = true, example = "10"),
-         @Parameter(name = "status", description = "Estado del producto", required = true, example = "1") })
+         @Parameter(name = "status", description = "Estado del producto", required = true, example = "1"),
+         @Parameter(name = "manufacturingTime", description = "Tiempo de fabricación", required = true, example = "10"),
+         @Parameter(name = "invenstmentNote", description = "Nota de la inversión", required = true, example = "Nota"),
+         @Parameter(name = "invenstmentAmount", description = "Monto de la inversión", required = true, example = "100.0"),
+         @Parameter(name = "invenstmentTitle", description = "Título de la inversión", required = true, example = "Inversión"),
+         @Parameter(name = "manufacturingType", description = "Tipo de fabricación", required = true, example = "Tipo"),
+         @Parameter(name = "segmentTitle", description = "Título del segmento", required = true, example = "Título"),
+         @Parameter(name = "segmentDescription", description = "Descripción del segmento", required = true, example = "Descripción"),
+         @Parameter(name = "segmentMedia", description = "Medio del segmento", required = true, example = "Medio") })
    @ApiResponse(responseCode = "1", description = "Devuelve 1 si se creó correctamente el producto.")
    @RequestMapping(method = { RequestMethod.POST }, value = "/create", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
@@ -54,8 +62,13 @@ public class ProductRestController {
          @RequestPart Optional<String> title, @RequestPart Optional<String> productId,
          @RequestPart Optional<String> typeOfSale, @RequestPart Optional<String> price,
          @RequestPart Optional<String> stock, @RequestPart Optional<String> status,
-         @RequestPart Optional<String> manufacturingTime) {
-      return productService.createProduct(frontPage, productId, title, typeOfSale, price, stock, status, merchantId,
-            manufacturingTime);
+         @RequestPart Optional<Integer> manufacturingTime, @RequestPart Optional<String> invenstmentNote,
+         @RequestPart Optional<String> invenstmentAmount, @RequestPart Optional<String> invenstmentTitle,
+         @RequestPart Optional<String> manufacturingType, @RequestPart Optional<String> segmentTitle,
+         @RequestPart Optional<String> segmentDescription, @RequestPart Optional<MultipartFile> segmentMedia,
+         @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywordValue) {
+      return productService.createProduct(frontPage, productId, title, typeOfSale, price, stock, status,
+            merchantId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
+            segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue);
    }
 }

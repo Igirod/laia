@@ -17,8 +17,8 @@ public class InvenstmentController {
 
    @MutationMapping("cInvenstment")
    public Integer createInvenstment(@Argument Long productId, @Argument Optional<Double> amount,
-         @Argument Optional<String> note) {
-      return invenstmentService.createInvenstment(productId, amount, note);
+         @Argument Optional<String> note, @Argument Optional<String> title) {
+      return invenstmentService.createInvenstment(productId, amount, note, title);
    }
 
    @MutationMapping("dInvenstment")
@@ -28,7 +28,7 @@ public class InvenstmentController {
 
    @MutationMapping("uInvenstment")
    public Integer updateInvenstment(@Argument Long invenstmentId, @Argument Long productId,
-         @Argument Optional<Double> amount, @Argument Optional<String> note) {
-      return invenstmentService.updateInvenstment(invenstmentId, amount, note);
+         @Argument Optional<Double> amount, @Argument Optional<String> note, @Argument Optional<String> title) {
+      return invenstmentService.updateInvenstment(invenstmentId, amount, note, title);
    }
 }

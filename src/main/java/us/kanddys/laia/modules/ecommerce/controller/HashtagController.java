@@ -18,7 +18,7 @@ public class HashtagController {
    private HashtagProductService hashtagProductService;
 
    @MutationMapping("cHashtag")
-   public Integer createHashtag(@Argument String value) {
+   public Long createHashtag(@Argument String value) {
       return hashtagService.createHashtag(value);
    }
 

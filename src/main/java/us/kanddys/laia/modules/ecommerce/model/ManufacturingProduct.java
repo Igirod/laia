@@ -10,29 +10,34 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Esta clase representa una inversión asociada a un producto.
+ * Esta clase representa el tiempo de fabricación asociado a un producto.
  * 
  * @author Igirod0
  * @version 1.0.0
  */
 @AllArgsConstructor
 @Data
-@Table(name = "invenstments")
+@Table(name = "manufacturing_products")
 @Entity
-public class Invenstment {
+public class ManufacturingProduct {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
    @Column(name = "product_id")
    private Long productId;
-   @Column(name = "amount")
-   private Double amount;
-   @Column(name = "note")
-   private String note;
-   @Column(name = "title")
-   private String title;
+   @Column(name = "type")
+   private String type;
+   @Column(name = "time")
+   private Integer time;
 
-   public Invenstment() {
+   public ManufacturingProduct() {
+   }
+
+   public ManufacturingProduct(Long productId, String type, Integer time) {
+      this.productId = productId;
+      this.type = type;
+      this.time = time;
    }
 }
