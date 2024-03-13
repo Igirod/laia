@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +18,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 @Table(name = "sellers_questions")
+@Entity
 public class SellerQuestion {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class SellerQuestion {
    private Integer required;
    @Column(name = "type")
    private String type;
-   @Column(name = "limit")
+   @Column(name = "limit_value")
    private Integer limit;
 
    public SellerQuestion() {

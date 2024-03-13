@@ -67,4 +67,9 @@ type Mutation {
    dKeyWord(keyWordId: Int!) : Int
    cKeyWordProduct(productId: Int!, keyWordId: Int!) : Int
    dKeyWordProduct(productId: Int!, keyWordId: Int!) : Int
+   cSellerQuestion(question: String, required: Int, type: String, limit: Int) : Int
+   uSellerQuestion(sellerQuestionId: Int!, question: String, required: Int, type: String, limit: Int) : Int
+   dSellerQuestion(sellerQuestionId: Int!) : Int
+   cSellerQuestionProduct(productId: Int!, sellerQuestionId: Int!) : Int
+   dSellerQuestionProduct(productId: Int!, sellerQuestionId: Int!) : Int
 }

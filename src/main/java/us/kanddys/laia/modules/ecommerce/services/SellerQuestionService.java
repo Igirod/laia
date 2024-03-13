@@ -41,6 +41,7 @@ public interface SellerQuestionService {
     * @param question
     * @return Integer
     */
-   public Integer updateQuestion(Long questionId, String question, String type, Optional<Integer> limit,
-         Optional<Integer> required, Optional<String> newType, Optional<String> newQuestion);
+   public Integer updateQuestion(Long questionId, Optional<String> question, Optional<String> type,
+         Optional<Integer> limit,
+         Optional<Integer> required);
 }
