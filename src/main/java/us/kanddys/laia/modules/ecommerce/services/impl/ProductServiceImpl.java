@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
@@ -293,10 +294,11 @@ public class ProductServiceImpl implements ProductService {
          }
       }
       if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent()) {
-         var sellerQuestionId = sellerQuestionService.getQuestionIdByQuestionAndType(sellerQuestionValue.get(),
+         Long sellerQuestionId = sellerQuestionService.getQuestionIdByQuestionAndType(sellerQuestionValue.get(),
                sellerQuestionType.get());
          // * Si no existe la pregunta se crea.
-         if (sellerQuestionId == null) {
+         // TODO: Refactorizar en el caso de las preguntas multiples.
+         if (sellerQuestionId == null || sellerQuestionType.get().equals("MULTIPLE")) {
             sellerQuestionProductService.createSellerQuestionProduct(Long.valueOf(productId.get()),
                   sellerQuestionService.createQuestion(sellerQuestionValue.get(),
                         (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))

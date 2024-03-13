@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import us.kanddys.laia.modules.ecommerce.model.SellerQuestion;
 
 /**
  * Esta clase representa un data transfer object (DTO) de una pregunta
@@ -28,5 +29,14 @@ public class SellerQuestionDTO {
    private Integer limit;
 
    public SellerQuestionDTO() {
+   }
+
+   public SellerQuestionDTO(SellerQuestion sellerQuestion) {
+      super();
+      this.id = (sellerQuestion.getId() != null ? sellerQuestion.getId() : null);
+      this.limit = (sellerQuestion.getLimit() != null ? sellerQuestion.getLimit() : null);
+      this.question = (sellerQuestion.getQuestion() != null ? sellerQuestion.getQuestion() : null);
+      this.required = (sellerQuestion.getRequired() != null ? sellerQuestion.getRequired() : null);
+      this.type = (sellerQuestion.getType() != null ? sellerQuestion.getType() : null);
    }
 }

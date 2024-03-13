@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
 import us.kanddys.laia.modules.ecommerce.exception.SellerQuestionNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.SellerQuestion;
@@ -59,7 +61,12 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
 
    @Override
    public Long getQuestionIdByQuestionAndType(String question, String type) {
-      return sellerQuestionJpaRepository.getQuestionIdByQuestionAndType(question, type);
+      return sellerQuestionJpaRepository.findQuestionIdByQuestionAndType(question, type);
+   }
+
+   @Override
+   public SellerQuestionDTO getQuestionByQuestionAndType(String question, String type) {
+      return new SellerQuestionDTO(sellerQuestionJpaRepository.findQuestionByQuestionAndType(question, type));
    }
 
 }

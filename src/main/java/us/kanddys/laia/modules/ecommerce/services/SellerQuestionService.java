@@ -2,6 +2,8 @@ package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.Optional;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
+
 /**
  * Esta interfaz define las obligaciones que debe implementar la clase
  * SellerQuestionServiceImpl.
@@ -46,7 +48,8 @@ public interface SellerQuestionService {
          Optional<Integer> required);
 
    /**
-    * Este método se encarga de obtener una pregunta de un vendedor por su id.
+    * Este método se encarga de obtener una pregunta de un vendedor por su valor
+    * de pregunta y tipo.
     *
     * @author Igirod0
     * @version 1.0.0
@@ -55,4 +58,16 @@ public interface SellerQuestionService {
     * @return SellerQuestion
     */
    public Long getQuestionIdByQuestionAndType(String question, String type);
+
+   /**
+    * Este método se encarga de obtener una pregunta por su valor de pregunta
+    * y tipo.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param question
+    * @param type
+    * @return SellerQuestionDTO
+    */
+   public SellerQuestionDTO getQuestionByQuestionAndType(String question, String type);
 }

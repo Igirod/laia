@@ -10,5 +10,8 @@ import us.kanddys.laia.modules.ecommerce.model.SellerQuestion;
 public interface SellerQuestionJpaRepository extends JpaRepository<SellerQuestion, Long> {
 
    @Query(value = "SELECT id FROM sellers_questions WHERE question = ?1 AND type = ?2", nativeQuery = true)
-   public Long getQuestionIdByQuestionAndType(String question, String type);
+   public Long findQuestionIdByQuestionAndType(String question, String type);
+
+   @Query(value = "SELECT * FROM sellers_questions WHERE question = ?1 AND type = ?2", nativeQuery = true)
+   public SellerQuestion findQuestionByQuestionAndType(String question, String type);
 }
