@@ -9,6 +9,7 @@ type ProductDTO {
    createAt: String
    typeOfSale: String
    manufacturingTime: Int
+   typeOfPrice: String
 }
 
 type ProductInputDTO {

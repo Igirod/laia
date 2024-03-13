@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.HashtagDTO;
+
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
  * HashtagServiceImpl.
@@ -45,4 +47,12 @@ public interface HashtagService {
     * @return String
     */
    public Integer updateHashtag(Long id, String hashtag);
+
+   /**
+    * Este método se encarga de obtener todos los hashtags asociados a un producto.
+    *
+    * @param productId El id del producto.
+    * @return List
+    */
+   public HashtagDTO getHashtagsByProductId(Long productId);
 }

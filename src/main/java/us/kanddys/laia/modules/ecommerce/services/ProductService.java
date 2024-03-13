@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.multipart.MultipartFile;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -79,10 +80,11 @@ public interface ProductService {
     * @param status
     * @param typeOfSale
     * @param manufacturingTime
+    * @param typeOfPrice
     * @return Integer
     */
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
-         Optional<Integer> status, Optional<String> typeOfSale);
+         Optional<Integer> status, Optional<String> typeOfSale, Optional<String> typeOfPrice);
 
    /**
     * Este método tiene la obligación de eliminar un producto.
@@ -101,7 +103,7 @@ public interface ProductService {
     * @author Igirod0
     * @version 1.0.1
     * @param frontPage
-    * @param merchantId
+    * @param userId
     * @param productId
     * @param title
     * @param typeOfSale
@@ -125,12 +127,21 @@ public interface ProductService {
     * @param categoryTitle
     * @return Integer
     */
-   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> productId, Optional<String> title,
+   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
-         Optional<String> merchantId, Optional<Integer> manufacturingTime, Optional<String> invenstmentNote,
+         Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle);
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice);
+
+   /**
+    * Este método tiene la obligación de obtener un producto por su id.
+    *
+    * @param id
+    * @return ArticleDTO
+    * @throws ProductNotFoundException
+    */
+   public ArticleDTO getArticleById(Long id) throws ProductNotFoundException;
 }

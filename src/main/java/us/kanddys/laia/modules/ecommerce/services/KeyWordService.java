@@ -1,5 +1,9 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
+import java.util.List;
+
+import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
+
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
  * KeyWordServiceImpl.
@@ -44,4 +48,13 @@ public interface KeyWordService {
     * @return Long
     */
    public Long getKeywordId(String keywordValue);
+
+   /**
+    * Este método tiene la obligación de obtener todas las keywords asociadas a un
+    * producto.
+    *
+    * @param productId
+    * @return List
+    */
+   public List<KeyWordDTO> getKeywordsByProductId(Long productId);
 }

@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.HashtagDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ExistingHashtagException;
 import us.kanddys.laia.modules.ecommerce.exception.HashtagNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Hashtag;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.HashtagProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 
 /**
@@ -22,6 +24,9 @@ public class HashtagServiceImpl implements HashtagService {
 
    @Autowired
    private HashtagJpaRepository hashtagJpaRepository;
+
+   @Autowired
+   private HashtagProductCriteriaRepository hashtagProductCriteriaRepository;
 
    @Override
    public Long getHashtagIdByValue(String value) {
@@ -57,4 +62,12 @@ public class HashtagServiceImpl implements HashtagService {
       return 1;
    }
 
+   @Override
+   public HashtagDTO getHashtagsByProductId(Long productId) {
+      var hashtag = hashtagJpaRepository.findById(hashtagProductCriteriaRepository.getHashtagIdsByProductId(productId));
+      if (hashtag.isEmpty())
+         return new HashtagDTO();
+      else
+         return new HashtagDTO(hashtag.get());
+   }
 }

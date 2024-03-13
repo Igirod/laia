@@ -27,8 +27,8 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
    public Long createQuestion(String question, Optional<Integer> required, Optional<String> type,
          Optional<Integer> limit) {
       return sellerQuestionJpaRepository
-            .save(new SellerQuestion(null, question, (required.isPresent() ? required.get() : null),
-                  (type.isPresent() ? type.get() : null), (limit.isPresent() ? limit.get() : null)))
+            .save(new SellerQuestion(null, question, (required != null ? required.get() : null),
+                  (type != null ? type.get() : null), (limit != null ? limit.get() : null)))
             .getId();
    }
 
@@ -59,10 +59,7 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
 
    @Override
    public Long getQuestionIdByQuestionAndType(String question, String type) {
-      var sellerQuestion = sellerQuestionJpaRepository.getQuestionIdByQuestionAndType(question, type);
-      if (sellerQuestion.isEmpty())
-         throw new SellerQuestionNotFoundException(ExceptionMessage.SELLER_QUESTION_NOT_FOUND);
-      return sellerQuestion.get();
+      return sellerQuestionJpaRepository.getQuestionIdByQuestionAndType(question, type);
    }
 
 }

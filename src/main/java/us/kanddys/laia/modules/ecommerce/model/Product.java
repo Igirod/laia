@@ -43,6 +43,8 @@ public class Product {
    private Date createdAt;
    @Column(name = "type_of_sale")
    private String typeOfSale;
+   @Column(name = "type_of_price")
+   private String typeOfPrice;
    @OneToMany(mappedBy = "product")
    private List<InvoiceProduct> invoiceProducts;
 

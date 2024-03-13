@@ -9,6 +9,7 @@
 #import "./ecommerce/combined.graphqls"
 #import "./ecommerce/calendar.graphqls"
 #import "./ecommerce/invenstment.graphqls"
+#import "./ecommerce/article.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO

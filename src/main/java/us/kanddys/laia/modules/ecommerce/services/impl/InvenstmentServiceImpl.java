@@ -1,10 +1,12 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvenstmentDTO;
 import us.kanddys.laia.modules.ecommerce.exception.InvenstmentNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Invenstment;
@@ -49,6 +51,11 @@ public class InvenstmentServiceImpl implements InvenstmentService {
       title.ifPresent(invenstmentToUpdate::setTitle);
       invenstmentJpaRepository.save(invenstmentToUpdate);
       return 1;
+   }
+
+   @Override
+   public List<InvenstmentDTO> getInvenstmentByProductId(Long id) {
+      return invenstmentJpaRepository.findByProductId(id).stream().map(InvenstmentDTO::new).toList();
    }
 
 }

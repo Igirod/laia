@@ -40,7 +40,7 @@ public class ImageProductServiceImpl implements ImageProductService {
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       return new ImageProductDTO(imageProductJpaRepository
             .save(new ImageProduct(null, productId,
-                  firebaseStorageService.uploadFile(multipartFile, "imageProducts"))));
+                  firebaseStorageService.uploadFile(multipartFile, "imageProducts"), null)));
    }
 
    @Override
@@ -54,7 +54,7 @@ public class ImageProductServiceImpl implements ImageProductService {
       if (productJpaRepository.findProductIdIfExists(productId).isEmpty())
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       images.stream().map(image -> imageProductJpaRepository
-            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(image, "imageProducts"))))
+            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(image, "imageProducts"), null)))
             .toList();
       return 1;
    }

@@ -40,7 +40,7 @@ public class ProductRestController {
    @Operation(description = "Servicio que tiene la obligación de crear un producto.")
    @Parameters({
          @Parameter(name = "frontPage", description = "Imagen de la portada", required = true, example = "image"),
-         @Parameter(name = "merchantId", description = "Identificador del comerciante", required = true, example = "1"),
+         @Parameter(name = "userId", description = "Identificador del comerciante", required = true, example = "1"),
          @Parameter(name = "title", description = "Título del producto", required = true, example = "Producto 1"),
          @Parameter(name = "productId", description = "Identificador del producto", required = true, example = "1"),
          @Parameter(name = "typeOfSale", description = "Tipo de venta", required = true, example = "Venta"),
@@ -54,25 +54,32 @@ public class ProductRestController {
          @Parameter(name = "manufacturingType", description = "Tipo de fabricación", required = true, example = "Tipo"),
          @Parameter(name = "segmentTitle", description = "Título del segmento", required = true, example = "Título"),
          @Parameter(name = "segmentDescription", description = "Descripción del segmento", required = true, example = "Descripción"),
-         @Parameter(name = "segmentMedia", description = "Medio del segmento", required = true, example = "Medio") })
+         @Parameter(name = "segmentMedia", description = "Medio del segmento", required = true, example = "Medio"),
+         @Parameter(name = "hashtagValue", description = "Valor del hashtag", required = true, example = "Hashtag"),
+         @Parameter(name = "keywordValue", description = "Valor de la palabra clave", required = true, example = "Palabra clave"),
+         @Parameter(name = "sellerQuestionValue", description = "Valor de la pregunta del vendedor", required = true, example = "Pregunta"),
+         @Parameter(name = "sellerQuestionType", description = "Tipo de pregunta del vendedor", required = true, example = "MULTIPLE"),
+         @Parameter(name = "sellerQuestionLimit", description = "Límite de la pregunta del vendedor", required = true, example = "10"),
+         @Parameter(name = "sellerQuestionRequired", description = "Requerido de la pregunta del vendedor", required = true, example = "1"),
+         @Parameter(name = "categoryTitle", description = "Título de la categoría", required = true, example = "Categoría"),
+         @Parameter(name = "typeOfPrice", description = "Tipo de precio", required = true, example = "USD") })
    @ApiResponse(responseCode = "1", description = "Devuelve 1 si se creó correctamente el producto.")
    @RequestMapping(method = { RequestMethod.POST }, value = "/create", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public Integer createProduct(@RequestPart Optional<MultipartFile> frontPage, Optional<String> merchantId,
-         @RequestPart Optional<String> title, @RequestPart Optional<String> productId,
-         @RequestPart Optional<String> typeOfSale, @RequestPart Optional<String> price,
-         @RequestPart Optional<String> stock, @RequestPart Optional<String> status,
-         @RequestPart Optional<Integer> manufacturingTime, @RequestPart Optional<String> invenstmentNote,
+   public Integer createProduct(@RequestPart Optional<MultipartFile> frontPage, @RequestPart Optional<String> userId,
+         @RequestPart Optional<String> title, @RequestPart Optional<String> typeOfSale,
+         @RequestPart Optional<String> price, @RequestPart Optional<String> stock, @RequestPart Optional<String> status,
+         @RequestPart Optional<String> manufacturingTime, @RequestPart Optional<String> invenstmentNote,
          @RequestPart Optional<String> invenstmentAmount, @RequestPart Optional<String> invenstmentTitle,
          @RequestPart Optional<String> manufacturingType, @RequestPart Optional<String> segmentTitle,
          @RequestPart Optional<String> segmentDescription, @RequestPart Optional<MultipartFile> segmentMedia,
          @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywordValue,
          @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
          @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
-         @RequestPart Optional<String> categoryTitle) {
-      return productService.createProduct(frontPage, productId, title, typeOfSale, price, stock, status,
-            merchantId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
+         @RequestPart Optional<String> categoryTitle, @RequestPart Optional<String> typeOfPrice) {
+      return productService.createProduct(frontPage, title, typeOfSale, price, stock, status,
+            userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
             segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
-            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
+            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice);
    }
 }

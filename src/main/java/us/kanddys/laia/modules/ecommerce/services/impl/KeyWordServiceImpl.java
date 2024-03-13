@@ -1,8 +1,11 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ExistingKeyWordException;
 import us.kanddys.laia.modules.ecommerce.exception.KeyWordNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
@@ -53,10 +56,13 @@ public class KeyWordServiceImpl implements KeyWordService {
 
    @Override
    public Long getKeywordId(String keywordValue) {
-      var keywordId = keyWordJpaRepository.findKeyWordIdByWord(keywordValue);
-      if (keywordId == null)
-         throw new KeyWordNotFoundException(ExceptionMessage.KEY_WORD_NOT_FOUND);
-      return keywordId;
+      return keyWordJpaRepository.findKeyWordIdByWord(keywordValue);
+   }
+
+   @Override
+   public List<KeyWordDTO> getKeywordsByProductId(Long productId) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'getKeywordsByProductId'");
    }
 
 }

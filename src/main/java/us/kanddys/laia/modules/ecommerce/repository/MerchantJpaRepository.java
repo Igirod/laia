@@ -34,4 +34,7 @@ public interface MerchantJpaRepository extends JpaRepository<Merchant, Long> {
 
    @Query(value = "SELECT mer_email, user_id, slug FROM merchants WHERE id = :merchantId", nativeQuery = true)
    public Map<String, Object> findEmailAndUserIdAndSlugByMerchantId(Long merchantId);
+
+   @Query(value = "SELECT id FROM merchants WHERE user_id = :userId", nativeQuery = true)
+   public Long existUserId(Long userId);
 }

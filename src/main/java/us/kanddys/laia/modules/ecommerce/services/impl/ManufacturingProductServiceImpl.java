@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.ManufacturingProductDTO;
 import us.kanddys.laia.modules.ecommerce.model.ManufacturingProduct;
 import us.kanddys.laia.modules.ecommerce.repository.ManufacturingProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
@@ -28,6 +29,11 @@ public class ManufacturingProductServiceImpl implements ManufacturingProductServ
             .save(new ManufacturingProduct(null, productId, (type.isPresent() ? type.get() : null),
                   (time.isPresent() ? time.get() : null)));
       return 1;
+   }
+
+   @Override
+   public ManufacturingProductDTO getManufacturingByProductId(Long productId) {
+      return new ManufacturingProductDTO(manufacturingProductJpaRepository.findByProductId(productId));
    }
 
 }

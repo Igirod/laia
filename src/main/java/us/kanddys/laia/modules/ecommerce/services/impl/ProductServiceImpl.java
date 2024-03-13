@@ -12,24 +12,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
-import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Merchant;
 import us.kanddys.laia.modules.ecommerce.model.Product;
-import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CategoryProductService;
 import us.kanddys.laia.modules.ecommerce.services.CategoryService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
+import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 import us.kanddys.laia.modules.ecommerce.services.InvenstmentService;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordProductService;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
@@ -60,9 +59,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private MerchantJpaRepository merchantJpaRepository;
-
-   @Autowired
-   private UserJpaRepository userJpaRepository;
 
    @Autowired
    private ManufacturingProductService manufacturingProductService;
@@ -96,6 +92,9 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private CategoryProductService categoryProductService;
+
+   @Autowired
+   private ImageProductService imageProductService;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -140,7 +139,7 @@ public class ProductServiceImpl implements ProductService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateProduct(Long productId, Optional<String> title, Optional<Double> price, Optional<Integer> stock,
-         Optional<Integer> status, Optional<String> typeOfSale) {
+         Optional<Integer> status, Optional<String> typeOfSale, Optional<String> typeOfPrice) {
       var product = productJpaRepository.findById(productId);
       if (product.isPresent()) {
          var productToUpdate = product.get();
@@ -149,6 +148,7 @@ public class ProductServiceImpl implements ProductService {
          stock.ifPresent(productToUpdate::setStock);
          status.ifPresent(productToUpdate::setStatus);
          typeOfSale.ifPresent(productToUpdate::setTypeOfSale);
+         typeOfPrice.ifPresent(productToUpdate::setTypeOfPrice);
          productJpaRepository.save(productToUpdate);
          return 1;
       }
@@ -176,26 +176,29 @@ public class ProductServiceImpl implements ProductService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> productId, Optional<String> title,
+   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
-         Optional<String> merchantId, Optional<Integer> manufacturingTime, Optional<String> invenstmentNote,
+         Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle) {
-      if (merchantId.isEmpty()) {
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice) {
+      var userid = Long.valueOf(userId.get());
+      var merchantId = merchantJpaRepository.existUserId(Long.valueOf(userId.get()));
+      if (merchantId == null) {
          // * Primero se crea el usuario y luego el merchant para asociarle el producto.
          try {
-            Long newMerchantId = merchantJpaRepository
-                  .save(new Merchant(userJpaRepository.save(new User(true)).getId()))
+            merchantId = merchantJpaRepository
+                  .save(new Merchant(userid))
                   .getId();
             var newProductDTO = createProductAndDTO(
                   new Product(null, (title.isPresent() ? title.get() : null),
                         (price.isPresent() ? Double.valueOf(price.get()) : null),
-                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null, newMerchantId,
+                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null, merchantId,
                         (status.isPresent() ? Integer.valueOf(status.get()) : null), DateUtils.getCurrentDate(),
                         (typeOfSale.isPresent() ? typeOfSale.get() : null),
+                        (typeOfPrice.isPresent() ? typeOfPrice.get() : null),
                         new ArrayList<>()),
                   (frontPage.isPresent() ? frontPage.get() : null));
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
@@ -206,37 +209,23 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Error al convertir la fecha");
          }
       } else {
-         if (merchantJpaRepository.existByMerchantId(Long.valueOf(merchantId.get())) == null)
-            throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
-         if (productId.isEmpty()) {
-            // * Se crea el producto asociado a un merchant.
-            try {
-               var newProductDTO = createProductAndDTO(
-                     new Product(null, (title.isPresent() ? title.get() : null),
-                           (price.isPresent() ? Double.valueOf(price.get()) : null),
-                           (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null,
-                           Long.valueOf(merchantId.get()),
-                           (status.isPresent() ? Integer.valueOf(status.get()) : null), DateUtils.getCurrentDate(),
-                           (typeOfSale.isPresent() ? typeOfSale.get() : null),
-                           new ArrayList<>()),
-                     (frontPage.isPresent() ? frontPage.get() : null));
-               createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
-                     invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
-                     segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
-                     sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
-            } catch (ParseException e) {
-               throw new RuntimeException("Error al convertir la fecha");
-            }
-         } else {
-            // * Se actualiza el producto.
-            if (!productJpaRepository.existsById(Long.valueOf(productId.get())))
-               throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
-            updateProduct(Long.valueOf(productId.get()), title.map(String::toString), price.map(Double::valueOf),
-                  stock.map(Integer::valueOf), status.map(Integer::valueOf), typeOfSale.map(String::toString));
-            createProductExtraAtributes(productId, manufacturingTime, invenstmentAmount, invenstmentNote,
-                  invenstmentTitle, manufacturingType, segmentTitle, segmentDescription, segmentMedia, hashtagValue,
-                  keywordValue, sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired,
-                  categoryTitle);
+         // * Se crea el producto asociado a un merchant.
+         try {
+            var newProductDTO = createProductAndDTO(
+                  new Product(null, (title.isPresent() ? title.get() : null),
+                        (price.isPresent() ? Double.valueOf(price.get()) : null),
+                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null,
+                        merchantId, (status.isPresent() ? Integer.valueOf(status.get()) : null),
+                        DateUtils.getCurrentDate(), (typeOfSale.isPresent() ? typeOfSale.get() : null),
+                        (typeOfPrice.isPresent() ? typeOfPrice.get() : null),
+                        new ArrayList<>()),
+                  (frontPage.isPresent() ? frontPage.get() : null));
+            createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
+                  invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
+                  segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
+                  sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
+         } catch (ParseException e) {
+            throw new RuntimeException("Error al convertir la fecha");
          }
       }
       return 1;
@@ -264,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
     * @param sellerQuestionLimit
     * @param sellerQuestionRequired
     */
-   private void createProductExtraAtributes(Optional<String> productId, Optional<Integer> manufacturingTime,
+   private void createProductExtraAtributes(Optional<String> productId, Optional<String> manufacturingTime,
          Optional<String> invenstmentAmount, Optional<String> invenstmentNote, Optional<String> invenstmentTitle,
          Optional<String> manufacturingType, Optional<String> segmentTitle, Optional<String> segmentDescription,
          Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<String> keywordValue,
@@ -273,7 +262,7 @@ public class ProductServiceImpl implements ProductService {
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle) {
       if (manufacturingTime.isPresent() && manufacturingType.isPresent()) {
          manufacturingProductService.createManufacturingProduct(Long.valueOf(productId.get()),
-               manufacturingType, manufacturingTime);
+               manufacturingType, Optional.of(Integer.valueOf(manufacturingTime.get())));
       }
       if (invenstmentAmount.isPresent() || invenstmentNote.isPresent() || invenstmentTitle.isPresent()) {
          invenstmentService.createInvenstment(Long.valueOf(productId.get()),
@@ -312,7 +301,7 @@ public class ProductServiceImpl implements ProductService {
                   sellerQuestionService.createQuestion(sellerQuestionValue.get(),
                         (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))
                               : null),
-                        Optional.of(sellerQuestionType.get()),
+                        (sellerQuestionType.isPresent() ? Optional.of(sellerQuestionType.get()) : null),
                         (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get()))
                               : null)));
          } else {
@@ -328,5 +317,27 @@ public class ProductServiceImpl implements ProductService {
             categoryProductService.createCategoryProduct(categoryId, Long.valueOf(productId.get()));
          }
       }
+   }
+
+   @Override
+   public ArticleDTO getArticleById(Long id) throws ProductNotFoundException {
+      ProductDTO productDTO = getProductById(id);
+      if (productDTO == null)
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      ArticleDTO articleDTO = new ArticleDTO();
+      articleDTO.setProductId(id);
+      articleDTO.setMedias(imageProductService.getImagesProductByProductId(id));
+      articleDTO.setInvenstments(invenstmentService.getInvenstmentByProductId(id));
+      articleDTO.setManufacturingProduct(manufacturingProductService.getManufacturingByProductId(id));
+      articleDTO.setTitle(productDTO.getTitle());
+      articleDTO.setPrice(productDTO.getPrice());
+      articleDTO.setTypeOfPrice(productDTO.getTypeOfPrice());
+      articleDTO.setStock(productDTO.getStock());
+      articleDTO.setSegments(productDetailService.getProductDetailsByProductId(id));
+      articleDTO.setHashtag(hashtagService.getHashtagsByProductId(id));
+      // articleDTO.setKeywords();
+      // articleDTO.setQuestions();
+      // articleDTO.setCategories();
+      return articleDTO;
    }
 }

@@ -28,6 +28,8 @@ public class ImageProduct {
    private Long productId;
    @Column(name = "url")
    private String url;
+   @Column(name = "type")
+   private String type;
 
    public ImageProduct() {
    }
