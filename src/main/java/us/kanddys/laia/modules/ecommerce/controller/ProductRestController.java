@@ -66,9 +66,13 @@ public class ProductRestController {
          @RequestPart Optional<String> invenstmentAmount, @RequestPart Optional<String> invenstmentTitle,
          @RequestPart Optional<String> manufacturingType, @RequestPart Optional<String> segmentTitle,
          @RequestPart Optional<String> segmentDescription, @RequestPart Optional<MultipartFile> segmentMedia,
-         @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywordValue) {
+         @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywordValue,
+         @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
+         @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
+         @RequestPart Optional<String> categoryTitle) {
       return productService.createProduct(frontPage, productId, title, typeOfSale, price, stock, status,
             merchantId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
-            segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue);
+            segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
+            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
    }
 }

@@ -72,4 +72,9 @@ type Mutation {
    dSellerQuestion(sellerQuestionId: Int!) : Int
    cSellerQuestionProduct(productId: Int!, sellerQuestionId: Int!) : Int
    dSellerQuestionProduct(productId: Int!, sellerQuestionId: Int!) : Int
+   cCategory(title: String!) : Int
+   uCategory(categoryId: Int!, title: String!) : Int
+   dCategory(categoryId: Int!) : Int
+   cCategoryProduct(categoryId: Int!, productId: Int!) : Int
+   dCategoryProduct(categoryId: Int!, productId: Int!) : Int
 }

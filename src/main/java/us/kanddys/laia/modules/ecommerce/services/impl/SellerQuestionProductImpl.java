@@ -33,5 +33,4 @@ public class SellerQuestionProductImpl implements SellerQuestionProductService {
       sellerQuestionProductJpaRepository.deleteById(new SellerQuestionProductId(productId, sellerQuestionId));
       return 1;
    }
-
 }

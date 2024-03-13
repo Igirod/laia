@@ -26,6 +26,8 @@ import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
+import us.kanddys.laia.modules.ecommerce.services.CategoryProductService;
+import us.kanddys.laia.modules.ecommerce.services.CategoryService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 import us.kanddys.laia.modules.ecommerce.services.InvenstmentService;
@@ -34,6 +36,8 @@ import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
+import us.kanddys.laia.modules.ecommerce.services.SellerQuestionProductService;
+import us.kanddys.laia.modules.ecommerce.services.SellerQuestionService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
 /**
@@ -80,6 +84,18 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private KeyWordProductService keyWordProductService;
+
+   @Autowired
+   private SellerQuestionService sellerQuestionService;
+
+   @Autowired
+   private SellerQuestionProductService sellerQuestionProductService;
+
+   @Autowired
+   private CategoryService categoryService;
+
+   @Autowired
+   private CategoryProductService categoryProductService;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -165,7 +181,9 @@ public class ProductServiceImpl implements ProductService {
          Optional<String> merchantId, Optional<Integer> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
-         Optional<String> hashtagValue, Optional<String> keywordValue) {
+         Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
+         Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle) {
       if (merchantId.isEmpty()) {
          // * Primero se crea el usuario y luego el merchant para asociarle el producto.
          try {
@@ -182,7 +200,8 @@ public class ProductServiceImpl implements ProductService {
                   (frontPage.isPresent() ? frontPage.get() : null));
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
-                  segmentDescription, segmentMedia, hashtagValue, keywordValue);
+                  segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue, sellerQuestionType,
+                  sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
@@ -203,7 +222,8 @@ public class ProductServiceImpl implements ProductService {
                      (frontPage.isPresent() ? frontPage.get() : null));
                createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                      invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
-                     segmentDescription, segmentMedia, hashtagValue, keywordValue);
+                     segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
+                     sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
             } catch (ParseException e) {
                throw new RuntimeException("Error al convertir la fecha");
             }
@@ -215,7 +235,8 @@ public class ProductServiceImpl implements ProductService {
                   stock.map(Integer::valueOf), status.map(Integer::valueOf), typeOfSale.map(String::toString));
             createProductExtraAtributes(productId, manufacturingTime, invenstmentAmount, invenstmentNote,
                   invenstmentTitle, manufacturingType, segmentTitle, segmentDescription, segmentMedia, hashtagValue,
-                  keywordValue);
+                  keywordValue, sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired,
+                  categoryTitle);
          }
       }
       return 1;
@@ -238,12 +259,19 @@ public class ProductServiceImpl implements ProductService {
     * @param segmentMedia
     * @param hashtagValue
     * @param keywordValue
+    * @param sellerQuestionValue
+    * @param sellerQuestionType
+    * @param sellerQuestionLimit
+    * @param sellerQuestionRequired
     */
    private void createProductExtraAtributes(Optional<String> productId, Optional<Integer> manufacturingTime,
          Optional<String> invenstmentAmount, Optional<String> invenstmentNote, Optional<String> invenstmentTitle,
          Optional<String> manufacturingType, Optional<String> segmentTitle, Optional<String> segmentDescription,
-         Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<String> keywordValue) {
-      if (manufacturingTime.isPresent() || manufacturingType.isPresent()) {
+         Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<String> keywordValue,
+         Optional<String> sellerQuestionValue,
+         Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle) {
+      if (manufacturingTime.isPresent() && manufacturingType.isPresent()) {
          manufacturingProductService.createManufacturingProduct(Long.valueOf(productId.get()),
                manufacturingType, manufacturingTime);
       }
@@ -273,6 +301,31 @@ public class ProductServiceImpl implements ProductService {
                   keyWordService.createKeyWord(keywordValue.get()));
          } else {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
+         }
+      }
+      if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent()) {
+         var sellerQuestionId = sellerQuestionService.getQuestionIdByQuestionAndType(sellerQuestionValue.get(),
+               sellerQuestionType.get());
+         // * Si no existe la pregunta se crea.
+         if (sellerQuestionId == null) {
+            sellerQuestionProductService.createSellerQuestionProduct(Long.valueOf(productId.get()),
+                  sellerQuestionService.createQuestion(sellerQuestionValue.get(),
+                        (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))
+                              : null),
+                        Optional.of(sellerQuestionType.get()),
+                        (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get()))
+                              : null)));
+         } else {
+            sellerQuestionProductService.createSellerQuestionProduct(Long.valueOf(productId.get()), sellerQuestionId);
+         }
+      }
+      if (categoryTitle.isPresent()) {
+         var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
+         if (categoryId == null) {
+            categoryProductService.createCategoryProduct(categoryService.createCategory(categoryTitle.get()),
+                  Long.valueOf(productId.get()));
+         } else {
+            categoryProductService.createCategoryProduct(categoryId, Long.valueOf(productId.get()));
          }
       }
    }

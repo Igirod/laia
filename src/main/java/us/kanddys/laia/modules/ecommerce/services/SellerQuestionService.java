@@ -44,4 +44,15 @@ public interface SellerQuestionService {
    public Integer updateQuestion(Long questionId, Optional<String> question, Optional<String> type,
          Optional<Integer> limit,
          Optional<Integer> required);
+
+   /**
+    * Este método se encarga de obtener una pregunta de un vendedor por su id.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param question
+    * @param type
+    * @return SellerQuestion
+    */
+   public Long getQuestionIdByQuestionAndType(String question, String type);
 }

@@ -19,7 +19,7 @@ public interface CategoryService {
     * @param title El título de la categoría.
     * @return El id de la categoría creada.
     */
-   public Integer createCategory(String title);
+   public Long createCategory(String title);
 
    /**
     * Este método se encarga de actualizar una categoria.
@@ -40,4 +40,14 @@ public interface CategoryService {
     * @return Integer
     */
    public Integer deleteCategory(Long id);
+
+   /**
+    * Este método se encarga de obtener el id de una categoria por su title.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param title El título de la categoría.
+    * @return El id de la categoría.
+    */
+   public Long getCategoryIdByTitle(String title);
 }

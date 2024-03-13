@@ -118,6 +118,11 @@ public interface ProductService {
     * @param segmentMedia
     * @param hashtagValue
     * @param keywordValue
+    * @param sellerQuestionValue
+    * @param sellerQuestionType
+    * @param sellerQuestionLimit
+    * @param sellerQuestionRequired
+    * @param categoryTitle
     * @return Integer
     */
    public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> productId, Optional<String> title,
@@ -125,5 +130,7 @@ public interface ProductService {
          Optional<String> merchantId, Optional<Integer> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
-         Optional<String> hashtagValue, Optional<String> keywordValue);
+         Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
+         Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle);
 }

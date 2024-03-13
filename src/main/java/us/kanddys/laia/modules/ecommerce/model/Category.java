@@ -20,4 +20,7 @@ public class Category {
    private Long id;
    @Column(name = "title")
    private String title;
+
+   public Category() {
+   }
 }

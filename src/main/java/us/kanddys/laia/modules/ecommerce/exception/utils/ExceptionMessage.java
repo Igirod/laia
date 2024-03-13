@@ -25,4 +25,6 @@ public class ExceptionMessage {
    public static final String KEY_WORD_NOT_FOUND = "La palabra clave buscada no existe.";
    public static final String EXISTING_SELLER_QUESTION = "La pregunta del vendedor ya existe.";
    public static final String SELLER_QUESTION_NOT_FOUND = "La pregunta del vendedor buscada no existe.";
+   public static final String EXISTING_SELLER_ANSWER = "La respuesta del vendedor ya existe.";
+   public static final String EXISTING_CATEGORY = "La categoria ya existe.";
 }

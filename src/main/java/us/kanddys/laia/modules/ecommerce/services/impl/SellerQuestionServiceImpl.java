@@ -57,4 +57,12 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
       return 1;
    }
 
+   @Override
+   public Long getQuestionIdByQuestionAndType(String question, String type) {
+      var sellerQuestion = sellerQuestionJpaRepository.getQuestionIdByQuestionAndType(question, type);
+      if (sellerQuestion.isEmpty())
+         throw new SellerQuestionNotFoundException(ExceptionMessage.SELLER_QUESTION_NOT_FOUND);
+      return sellerQuestion.get();
+   }
+
 }

@@ -18,9 +18,12 @@ public class CategoryServiceImpl implements CategoryService {
    private CategoryJpaRepostory categoryJpaRepostory;
 
    @Override
-   public Integer createCategory(String title) {
-      categoryJpaRepostory.save(new Category(null, title));
-      return 1;
+   public Long createCategory(String title) {
+      if (categoryJpaRepostory.existsByTitle(title)) {
+         throw new CategoryNotFoundException(ExceptionMessage.EXISTING_CATEGORY);
+      }
+      return categoryJpaRepostory.save(new Category(null, title)).getId();
+
    }
 
    @Override
@@ -40,5 +43,10 @@ public class CategoryServiceImpl implements CategoryService {
    public Integer deleteCategory(Long id) {
       categoryJpaRepostory.deleteById(id);
       return 1;
+   }
+
+   @Override
+   public Long getCategoryIdByTitle(String title) {
+      return categoryJpaRepostory.findCategoryIdByTitle(title);
    }
 }
