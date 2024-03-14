@@ -5,11 +5,11 @@
 #import "./ecommerce/imageproduct.graphqls"
 #import "./ecommerce/invoice.graphqls"
 #import "./ecommerce/user.graphqls"
-#import "./ecommerce/invoiceproduct.graphqls"
 #import "./ecommerce/combined.graphqls"
 #import "./ecommerce/calendar.graphqls"
 #import "./ecommerce/invenstment.graphqls"
 #import "./ecommerce/article.graphqls"
+#import "./ecommerce/orderproduct.graphqls"
 
 type Query {
    merchantS(slug: String!): MerchantDTO
@@ -18,38 +18,34 @@ type Query {
    merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
-   invoices(page: Int!, merchantId: Int!, userEmail: String, status: Status): [InvoiceDTO]
    productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
-   gInvoice(invoiceId: Int!): InvoiceDTO
    cUserE(userId: Int!, email: String!): Int
    lUser(userId: Int!, email: String!, password: String!): UserDTO
-   gIProducts(invoiceId: Int!, page: Int!, limit: Int): [InvoiceProductDTO]
+   gOProducts(orderId: Int!, page: Int!, limit: Int): [OrderProductDTO]
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
    combinedProduct(productId: Int!, slug: String!, userId: Int): CombinedProductDTO
    rProduct(productId: Int!, invoiceId: Int, merchantId: Int!): CombinedProductDetailDTO
    gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
-   gOrder(orderId: Int!): OrderDTO
+   gInvoice(invoiceId: Int!): InvoiceDTO
 }
 
 type Mutation {
-   cInvoice(merchantId: Int!, userId: Int!): InvoiceDTO
-   uInvoice(invoiceInputDTO: InvoiceInputDTO!): InvoiceDTO
-   aProductI(invoiceId: Int!, productId: Int!) : Int
-   uProductI(invoiceId: Int!, listInvoiceProducts: [InvoiceProductInputDTO]) : Int
-   uInvoiceM(invoiceId: Int!, message: String!) : Int
-   uInvoiceS(invoiceId: Int!, status: Status!) : Int
-   uInvoiceN(invoiceId: Int!, note: String!) : Int
-   uInvoiceR(invoiceId: Int!, batchId: Int!, date: String!) : Int
+   aProductO(orderId: Int!, productId: Int!) : Int
+   uProductO(orderId: Int!, listInvoiceProducts: [OrderProductInputDTO]) : Int
+   uInvoiceS(orderId: Int!, status: String!) : Int
+   uInvoiceN(orderId: Int!, note: String!) : Int
    uUser(userId: Int!, email: String, password: String, phone: String, name: String, lastName: String) : Int
    dAddress(addressId: Int!) : Int
    uAddress(addressId: Int!, userId: Int, title: String, lng: String, lat: String, direction: String) : Int
    aAddress(userId: Int!, title: String, lng: String, lat: String, direction: String) : Int
-   uInvoiceA(invoiceId: Int!, direction: String, lat: String, lng: String, type: String, addressNumber: Int) : Int
    uOrderS(orderId: Int!, status: String!) : Int
    uOrderN(orderId: Int!, note: String!) : Int
+   uOrderA(orderId: Int!, direction: String, lat: String, lng: String, type: String, addressNumber: Int) : Int
+   uOrderR(orderId: Int!, date: String, batchId: Int) : Int
+   uOrderM(orderId: Int!, message: String) : Int
    uProduct(productId: Int!, title: String, price: Float, stock: Int, status: Int) : Int
    dProduct(productId: Int!) : Int
    cBatch(calendarId: Int!, days: String, date: String, title: String, fromTime: String, toTime: String, maxLimit: Int) : Int

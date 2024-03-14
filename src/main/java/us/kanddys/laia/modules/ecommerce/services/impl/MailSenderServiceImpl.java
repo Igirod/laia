@@ -8,15 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.MailDTO;
-import us.kanddys.laia.modules.ecommerce.model.Order;
-import us.kanddys.laia.modules.ecommerce.controller.dto.OrderProductDTO;
-import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.OrderProductCriteriaRepository;
+import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.MailSenderService;
 
@@ -30,10 +29,10 @@ public class MailSenderServiceImpl implements MailSenderService {
    private UserJpaRepository userJpaRepository;
 
    @Autowired
-   private OrderJpaRepository orderJpaRepository;
+   private InvoiceJpaRepository InvoiceJpaRepository;
 
    @Autowired
-   private OrderProductCriteriaRepository orderProductCriteriaRepository;
+   private InvoiceProductCriteriaRepository invoiceProductCriteriaRepository;
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    public void sendEmailChangePassword(MailDTO mailDTO) throws MessagingException {
@@ -106,15 +105,16 @@ public class MailSenderServiceImpl implements MailSenderService {
 
    @Override
    public void sendUserOrder(MailDTO mailDTO) throws MessagingException {
-      List<OrderProductDTO> products = orderProductCriteriaRepository.findOrderProductsByOrderId(mailDTO.getOrderId())
+      List<InvoiceProductDTO> products = invoiceProductCriteriaRepository
+            .findInvoiceProductsByInvoiceId(mailDTO.getInvoiceId())
             .stream().map(t -> {
                try {
-                  return new OrderProductDTO(t);
+                  return new InvoiceProductDTO(t);
                } catch (Exception e) {
                   throw new RuntimeException(e.getMessage());
                }
             }).collect(Collectors.toList());
-      Order order = orderJpaRepository.findById(mailDTO.getOrderId()).get();
+      Invoice invoice = InvoiceJpaRepository.findById(mailDTO.getInvoiceId()).get();
       MimeMessage message = javaMailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(message, true); // HTML
       helper.setTo(mailDTO.getTo());
@@ -123,11 +123,11 @@ public class MailSenderServiceImpl implements MailSenderService {
             "<div style=\"max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;\">"
             +
             "<h1 style=\"text-align: center;\">Factura</h1>" +
-            "<p><strong>Reserva:</strong> " + order.getReservation() + "</p>" +
-            "<p><strong>Estado:</strong> " + getOrderStatus(order.getStatus().toString()) + "</p>" +
+            "<p><strong>Reserva:</strong> " + invoice.getReservation() + "</p>" +
+            "<p><strong>Estado:</strong> " + getOrderStatus(invoice.getStatus().toString()) + "</p>" +
             "<p><strong>Destinatario:</strong> " + mailDTO.getTo() + "</p>" +
-            "<p><strong>Dirección de envío:</strong> " + order.getAddressDirection() + "</p>" +
-            "<p><strong>Creación:</strong> " + order.getCreatedAt() + "</p>" +
+            "<p><strong>Dirección de envío:</strong> " + invoice.getAddressDirection() + "</p>" +
+            "<p><strong>Creación:</strong> " + invoice.getCreatedAt() + "</p>" +
             "<table style=\"width: 100%; border-collapse: collapse; margin-top: 20px;\">" +
             "<thead>" +
             "<tr>" +
@@ -143,7 +143,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             "</thead>" +
             "<tbody>";
       double total = 0.0;
-      for (OrderProductDTO product : products) {
+      for (InvoiceProductDTO product : products) {
          emailContent += "<tr>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getProduct().getTitle() + "</td>" +
                "<td style=\"border: 1px solid #ddd; padding: 8px;\">" + product.getQuantity() + "</td>" +
@@ -162,7 +162,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             "</table>" +
             "<div style=\"text-align: center;\">" +
             "<div style=\"display: inline-block;\">" + // Div contenedor para centrar la imagen
-            "<img src=\"" + order.getVoucher() +
+            "<img src=\"" + invoice.getVoucher() +
             "\" alt=\"Imagen de la factura\" style=\"max-width: 100%; margin-top: 20px;\">" +
             "</div>" +
             "</div>" +

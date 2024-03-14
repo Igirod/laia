@@ -46,7 +46,7 @@ public class Product {
    @Column(name = "type_of_price")
    private String typeOfPrice;
    @OneToMany(mappedBy = "product")
-   private List<InvoiceProduct> invoiceProducts;
+   private List<OrderProduct> invoiceProducts;
 
    public Product() {
    }

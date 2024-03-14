@@ -7,8 +7,8 @@ package us.kanddys.laia.modules.ecommerce.services.check;
  * @author Igirod0
  * @version 1.0.0
  */
-public interface InvoiceCheckService {
-   
+public interface OrderCheckService {
+
    /**
     * Este método verifica si el id del comerciante existe.
     * 
@@ -18,8 +18,8 @@ public interface InvoiceCheckService {
     * @return true si existe y false si no.
     */
    public Boolean existsMerchantId(Long merchantId);
-   
-   /** 
+
+   /**
     * Este método verifica si el id del carro de compras existe.
     *
     * @author Igirod0
@@ -27,7 +27,7 @@ public interface InvoiceCheckService {
     * @param invoiceId
     * @return true si existe y false si no.
     */
-   public Boolean existInvoiceId(Long invoiceId);
+   public Boolean existOrderId(Long invoiceId);
 
    /**
     * Este método verifica si el id de pago existe.
@@ -40,7 +40,7 @@ public interface InvoiceCheckService {
    public Boolean existsPaymentId(Long paymentId);
 
    /**
-    * Este método actualiza el total de la factura.
+    * Este método actualiza el total de la orden.
     *
     * @author Igirod0
     * @version 1.0.0

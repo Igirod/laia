@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;

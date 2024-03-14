@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import us.kanddys.laia.modules.ecommerce.controller.dto.OrderPaymentDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.InvoicePaymentDTO;
 import us.kanddys.laia.modules.ecommerce.services.InvoiceService;
 
 @RestController
@@ -23,29 +23,15 @@ public class InvoiceRestController {
    @Autowired
    private InvoiceService invoiceService;
 
-   @Operation(description = "Servicio que tiene la obligación de subir un comprobante de pago asociado a una orden.")
+   @Operation(description = "Servicio que tiene la obligación de actualizar el voucher de una orden.")
    @Parameters({
-         @Parameter(name = "voucher", description = "Comprobante de pago", required = true, example = "voucher"),
-         @Parameter(name = "invoiceId", description = "Identificador de la factura", required = true, example = "1"),
-         @Parameter(name = "paymentId", description = "Identificador del pago", required = true, example = "1"),
-         @Parameter(name = "date", description = "Fecha del pago", required = true, example = "2021-10-10"),
-         @Parameter(name = "batchId", description = "Identificador del lote", required = true, example = "1"),
-         @Parameter(name = "merchantId", description = "Identificador del comercio", required = true, example = "1"),
-         @Parameter(name = "userId", description = "Identificador del usuario", required = true, example = "1"),
-         @Parameter(name = "addressLat", description = "Latitud de la dirección", required = true, example = "1"),
-         @Parameter(name = "addressLng", description = "Longitud de la dirección", required = true, example = "1"),
-         @Parameter(name = "addressDirection", description = "Dirección", required = true, example = "addressDirection")
-   })
-   @ApiResponse(responseCode = "200", description = "Devuelve el data transfer object de OrderPaymentDTO.")
-   @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
+         @Parameter(name = "voucher", description = "Voucher de la orden", required = true, example = "voucher"),
+         @Parameter(name = "orderId", description = "Identificador de la orden", required = true, example = "1") })
+   @ApiResponse(responseCode = "200", description = "Devuelve un data transfer object de OrderPaymentDTO.")
+   @RequestMapping(method = { RequestMethod.PUT }, value = "/update-voucher", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public OrderPaymentDTO updateOrderVoucher(@RequestPart MultipartFile voucher,
-         @RequestPart String invoiceId,
-         @RequestPart String paymentId, @RequestPart String date, @RequestPart String batchId,
-         @RequestPart String merchantId, @RequestPart String userId, @RequestPart String addressLat,
-         @RequestPart String addressLng, @RequestPart String addressDirection) {
-      return invoiceService.updateOrderVoucher(voucher, Long.valueOf(invoiceId), Long.valueOf(paymentId), date,
-            Long.valueOf(batchId), Long.valueOf(merchantId), Long.valueOf(userId), addressLat, addressLng,
-            addressDirection);
+   public InvoicePaymentDTO updateOrderVoucher(@RequestPart MultipartFile voucher,
+         @RequestPart String invoiceId) {
+      return invoiceService.updateInvoiceVoucher(voucher, Long.valueOf(invoiceId));
    }
 }

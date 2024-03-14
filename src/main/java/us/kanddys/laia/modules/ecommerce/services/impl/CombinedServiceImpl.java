@@ -19,7 +19,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.CombinedShopDTO;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Batch;
-import us.kanddys.laia.modules.ecommerce.model.Invoice;
+import us.kanddys.laia.modules.ecommerce.model.Order;
 import us.kanddys.laia.modules.ecommerce.model.User;
 import us.kanddys.laia.modules.ecommerce.model.Utils.CalendarDay;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
@@ -27,9 +27,9 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 import us.kanddys.laia.modules.ecommerce.repository.BatchJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.CalendarJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.DisabledDateJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.InvoiceJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.InvoiceProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.OrderJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.OrderProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CombinedService;
@@ -53,7 +53,7 @@ public class CombinedServiceImpl implements CombinedService {
    private CalendarJpaRepository calendarJpaRepository;
 
    @Autowired
-   private InvoiceJpaRepository invoiceJpaRepository;
+   private OrderJpaRepository orderJpaRepository;
 
    @Autowired
    private UserJpaRepository userJpaRepository;
@@ -68,7 +68,7 @@ public class CombinedServiceImpl implements CombinedService {
    private ImageProductService imageProductService;
 
    @Autowired
-   private InvoiceProductJpaRepository invoiceProductJpaRepository;
+   private OrderProductJpaRepository orderProductJpaRepository;
 
    @Autowired
    private ProductDetailService productDetailService;
@@ -87,12 +87,12 @@ public class CombinedServiceImpl implements CombinedService {
       Long merchantId = merchant.get("id") == null ? null : Long.valueOf(merchant.get("id").toString());
       String merchantTitle = (merchant.get("title") == null ? null : merchant.get("title").toString());
       var products = productService.getProductsPaginated(1, merchantId, Optional.of(1));
-      Invoice invoice = invoiceIfUserPresent(userId, merchantId);
+      Order order = orderIfUserPresent(userId, merchantId);
       Map<String, Object> calendarData = calendarJpaRepository.findTypeAndDelayAndCalendarIdByMerchantId(merchantId);
       var firstShippingDate = findFirstShippingDate(merchantId, Long.valueOf(calendarData.get("id").toString()),
             calendarData.get("type").toString(), Integer.valueOf(calendarData.get("delay").toString()));
-      return new CombinedShopDTO(merchantId, merchantTitle, products, invoice.getId(),
-            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()), invoice.getUserId(),
+      return new CombinedShopDTO(merchantId, merchantTitle, products, order.getId(),
+            orderProductJpaRepository.countByOrderId(order.getId()), order.getUserId(),
             firstShippingDate.get("firstShippingDate"),
             (firstShippingDate.get("batchId").equals("0") ? null : Long.valueOf(firstShippingDate.get("batchId"))),
             (firstShippingDate.get("from").toString().equals("null") ? null : firstShippingDate.get("from").toString()),
@@ -111,17 +111,17 @@ public class CombinedServiceImpl implements CombinedService {
       Map<String, Object> calendarData = calendarJpaRepository.findTypeAndDelayAndCalendarIdByMerchantId(merchantId);
       var details = productDetailService.getProductDetailsByProductId(productId);
       var product = productService.getProductById(productId);
-      var invoice = invoiceIfUserPresent(userId, merchantId);
+      var invoice = orderIfUserPresent(userId, merchantId);
       var firstShippingDate = findFirstShippingDate(merchantId, Long.valueOf(calendarData.get("id").toString()),
             calendarData.get("type").toString(), Integer.valueOf(calendarData.get("delay").toString()));
 
       return new CombinedProductDTO(merchantId, merchantTitle, product.getId(), product.getTitle(), product.getPrice(),
             product.getFrontPage(),
             images, details, product.getStock(), invoice.getId(),
-            invoiceProductJpaRepository.countByInvoiceId(invoice.getId()),
+            orderProductJpaRepository.countByOrderId(invoice.getId()),
             invoice.getUserId(),
-            (userId.isPresent() && invoiceProductJpaRepository.countByInvoiceId(invoice.getId()) > 0)
-                  ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoice.getId(),
+            (userId.isPresent() && orderProductJpaRepository.countByOrderId(invoice.getId()) > 0)
+                  ? (orderProductJpaRepository.existOrderProductsByOrderIdAndProductId(invoice.getId(),
                         productId) != null ? 1
                               : 0)
                   : 0,
@@ -141,19 +141,19 @@ public class CombinedServiceImpl implements CombinedService {
     * @param merchantId
     * @return Invoice
     */
-   private Invoice invoiceIfUserPresent(Optional<Long> userId, Long merchantId) {
-      Invoice invoice;
+   private Order orderIfUserPresent(Optional<Long> userId, Long merchantId) {
+      Order order;
       if (userId.isPresent()) {
-         invoice = invoiceJpaRepository.findInvoiceIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
+         order = orderJpaRepository.findOrderIdByUserIdAndMerchantIdAndStatus(userId.get(), merchantId,
                Status.INITIAL.toString());
-         if (invoice == null) {
-            invoice = invoiceJpaRepository.save(new Invoice(userId.get(), merchantId));
+         if (order == null) {
+            order = orderJpaRepository.save(new Order(userId.get(), merchantId));
          }
       } else {
          User user = new User(true);
-         invoice = invoiceJpaRepository.save(new Invoice(userJpaRepository.save(user).getId(), merchantId));
+         order = orderJpaRepository.save(new Order(userJpaRepository.save(user).getId(), merchantId));
       }
-      return invoice;
+      return order;
    }
 
    @Override
@@ -165,7 +165,7 @@ public class CombinedServiceImpl implements CombinedService {
             Integer.valueOf(calendarData.get("delay").toString()));
       CombinedProductDetailDTO combinedProductDetailDTO = new CombinedProductDetailDTO(
             productJpaRepository.findStockByProductId(productId), invoiceId.isPresent()
-                  ? (invoiceProductJpaRepository.existInvoiceProductByInvoiceIdAndProductId(invoiceId.get(),
+                  ? (orderProductJpaRepository.existOrderProductsByOrderIdAndProductId(invoiceId.get(),
                         productId) != null ? 1
                               : 0)
                   : 0,

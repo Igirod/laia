@@ -1,13 +1,12 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
-import java.util.List;
-
+import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import us.kanddys.laia.modules.ecommerce.model.Order;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
+import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 /**
  * Esta clase representa un data transfer object (DTO) para la entidad Order.
@@ -21,37 +20,27 @@ public class OrderDTO {
    @JsonProperty
    private Long id;
    @JsonProperty
-   private String merchantTitle;
+   private Long merchantId;
    @JsonProperty
-   private String userEmail;
+   private Long userId;
    @JsonProperty
-   private String userName;
-   @JsonProperty
-   private String userLastName;
+   private Long paymentId;
    @JsonProperty
    private String code;
    @JsonProperty
    private String reservation;
    @JsonProperty
-   private String reservationType;
-   @JsonProperty
    private Double total;
    @JsonProperty
    private String message;
    @JsonProperty
-   private String status;
+   private Status status;
    @JsonProperty
    private String voucher;
    @JsonProperty
    private String note;
    @JsonProperty
-   private String batchFrom;
-   @JsonProperty
-   private String batchTo;
-   @JsonProperty
-   private String createdAt;
-   @JsonProperty
-   private String updatedAt;
+   private Integer count;
    @JsonProperty
    private String addressLat;
    @JsonProperty
@@ -59,42 +48,52 @@ public class OrderDTO {
    @JsonProperty
    private String addressDirection;
    @JsonProperty
-   private List<OrderProductDTO> products;
+   private Long batchId;
+   @JsonProperty
+   private Integer addressNumber;
+   @JsonProperty
+   private String type;
+   @JsonProperty
+   private String merchantDirection;
+   @JsonProperty
+   private String merchantLat;
+   @JsonProperty
+   private String merchantLng;
+   @JsonProperty
+   private String createAt;
 
    public OrderDTO() {
    }
 
    /**
     * Constructor personalizado utilizado en diferentes servicios.
-    * 
+    *
+    * @author Igirod0
+    * @version 1.0.1
     * @param order
-    * @param fromTime
-    * @param toTime
-    * @param products
+    * @throws IOException
     */
-   public OrderDTO(Order order, List<OrderProductDTO> products) {
+   public OrderDTO(Order order) throws IOException {
       super();
       this.id = (order.getId() == null) ? null : order.getId();
+      this.merchantId = (order.getMerchantId() == null) ? null : order.getMerchantId();
+      this.userId = (order.getUserId() == null) ? null : order.getUserId();
+      this.paymentId = (order.getPaymentId() == null) ? null : order.getPaymentId();
       this.code = (order.getCode() == null) ? null : order.getCode();
       this.reservation = (order.getReservation() == null) ? null
-            : DateUtils.convertDateToString(order.getReservation());
+            : order.getReservation();
       this.total = (order.getTotal() == null) ? null : order.getTotal();
       this.message = (order.getMessage() == null) ? null : order.getMessage();
-      this.status = (order.getStatus() == null) ? null : order.getStatus().toString();
+      this.status = (order.getStatus().toString() == null) ? null : order.getStatus();
       this.voucher = (order.getVoucher() == null) ? null : order.getVoucher();
       this.note = (order.getNote() == null) ? null : order.getNote();
+      this.count = (order.getCount() == null) ? null : order.getCount();
       this.addressDirection = (order.getAddressDirection() == null) ? null : order.getAddressDirection();
       this.addressLat = (order.getAddressLat() == null) ? null : order.getAddressLat();
       this.addressLng = (order.getAddressLng() == null) ? null : order.getAddressLng();
-      this.createdAt = (order.getCreatedAt() == null) ? null : DateUtils.convertDateToString(order.getCreatedAt());
-      this.batchFrom = (order.getBatchFrom() == null) ? null : order.getBatchFrom();
-      this.batchTo = (order.getBatchTo() == null) ? null : order.getBatchTo();
-      this.updatedAt = (order.getUpdatedAt() == null) ? null : DateUtils.convertDateToString(order.getUpdatedAt());
-      this.reservationType = (order.getType() == null) ? null : order.getType();
-      this.userEmail = (order.getUserEmail() == null) ? null : order.getUserEmail();
-      this.userName = (order.getUserName() == null) ? null : order.getUserName();
-      this.userLastName = (order.getUserLastName() == null) ? null : order.getUserLastName();
-      this.merchantTitle = (order.getMerchantTitle() == null) ? null : order.getMerchantTitle();
-      this.products = products;
+      this.batchId = (order.getBatchId() == null) ? null : order.getBatchId();
+      this.type = (order.getType() == null) ? null : order.getType();
+      this.addressNumber = (order.getAddressNumber() == null) ? null : order.getAddressNumber();
+      this.createAt = (order.getCreateAt() == null) ? null : DateUtils.convertDateToString(order.getCreateAt());
    }
 }

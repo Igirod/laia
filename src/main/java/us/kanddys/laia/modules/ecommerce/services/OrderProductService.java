@@ -2,9 +2,8 @@ package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
 import java.util.Optional;
-
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderProductDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderProductInputDTO;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
@@ -13,29 +12,30 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
  * @author Igirod0
  * @version 1.0.1
  */
-public interface InvoiceProductService {
+public interface OrderProductService {
 
    /**
     * Este metodo se encarga de agregar un producto a una factura.
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param invoiceId
+    * @param orderId
     * @param productId
     * @return Integer
     */
-   public Integer addInvoiceProduct(Long invoiceId, Long productId);
+   public Integer addOrderProduct(Long orderId, Long productId);
 
    /**
-    * Este metodo se encarga de actualizar la cantidad de un producto en una factura.
+    * Este metodo se encarga de actualizar la cantidad de un producto en una
+    * factura.
     *
     * @author Igirod0
     * @version 1.0.1
-    * @param invoiceId
+    * @param orderId
     * @param listInvoiceProducts
     * @return Integer
     */
-   public Integer updateInvoiceProduct(Long invoiceId, List<InvoiceProductInputDTO> listInvoiceProducts);
+   public Integer updateOrderProduct(Long orderId, List<OrderProductInputDTO> listInvoiceProducts);
 
    /**
     * Este método tiene la obligación de obtener todos los productos asociados
@@ -43,10 +43,10 @@ public interface InvoiceProductService {
     *
     * @author Igirod0
     * @version 1.0.0
-    * @param invoiceId
+    * @param orderId
     * @param page
     * @param limit
-    * @return List<InvoiceProductDTO>
+    * @return List<OrderProductDTO>
     */
-   public List<InvoiceProductDTO> findInvoiceProductsByInvoiceId(Long invoiceId, Integer page, Optional<Integer> limit);
+   public List<OrderProductDTO> findInvoiceProductsByInvoiceId(Long orderId, Integer page, Optional<Integer> limit);
 }

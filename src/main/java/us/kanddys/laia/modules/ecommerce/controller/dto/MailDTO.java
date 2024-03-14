@@ -17,5 +17,5 @@ public class MailDTO {
    @JsonProperty
    private String accessUrl;
    @JsonProperty
-   private Long orderId;
+   private Long invoiceId;
 }

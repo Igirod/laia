@@ -11,8 +11,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import us.kanddys.laia.modules.ecommerce.controller.dto.OrderDTO;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
@@ -31,20 +33,16 @@ public class Order {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
-   @Column(name = "user_name")
-   private String userName;
-   @Column(name = "user_last_name")
-   private String userLastName;
-   @Column(name = "user_email")
-   private String userEmail;
+   @Column(name = "user_id")
+   private Long userId;
    @Column(name = "mer_id")
    private Long merchantId;
-   @Column(name = "merchant_title")
-   private String merchantTitle;
+   @Column(name = "payment_id")
+   private Long paymentId;
    @Column(name = "code")
    private String code;
    @Column(name = "reservation")
-   private Date reservation;
+   private String reservation;
    @Column(name = "total")
    private Double total;
    @Column(name = "message")
@@ -62,52 +60,73 @@ public class Order {
    private String addressLng;
    @Column(name = "address_direction")
    private String addressDirection;
+   @Transient
+   private Integer count;
+   @Column(name = "batch_id")
+   private Long batchId;
    @Column(name = "address_number")
    private Integer addressNumber;
    @Column(name = "type")
    private String type;
-   @Column(name = "created_at")
-   private Date createdAt;
-   @Column(name = "updated_at")
-   private Date updatedAt;
-   @Column(name = "batch_to")
-   private String batchTo;
-   @Column(name = "batch_from")
-   private String batchFrom;
+   @Column(name = "create_at")
+   private Date createAt;
 
    public Order() {
    }
 
-   public Order(Invoice invoice, String merchantTitle, Long merchantId, String userName, String userLastName,
-         String userEmail, String batchTo, String batchFrom) {
+   /**
+    * Constructor personalizado utilizado en diferentes servicios.
+    *
+    * @author Igirod0
+    * @version 1.0.2
+    * @param orderDTO
+    * @throws ParseException
+    */
+   public Order(OrderDTO orderDTO, Integer count) throws ParseException {
       super();
-      this.id = (invoice.getId() == null) ? null : invoice.getId();
-      // ! Siempre se deben tener disponibles estos datos.
-      this.merchantTitle = merchantTitle;
-      this.userLastName = userLastName;
-      this.userEmail = userEmail;
-      this.userName = userName;
-      this.batchFrom = batchFrom;
-      this.batchTo = batchTo;
-      this.merchantId = merchantId;
-      this.code = (invoice.getCode() == null) ? null
-            : invoice.getCode();
+      this.id = (orderDTO.getId() == null) ? null : orderDTO.getId();
+      this.merchantId = (orderDTO.getMerchantId() == null) ? null : orderDTO.getMerchantId();
+      this.userId = (orderDTO.getUserId() == null) ? null : orderDTO.getUserId();
+      this.paymentId = (orderDTO.getPaymentId() == null) ? null : orderDTO.getPaymentId();
+      this.code = (orderDTO.getCode() == null) ? null
+            : orderDTO.getCode();
+      this.reservation = (orderDTO.getReservation() == null) ? null
+            : orderDTO.getReservation();
+      this.total = (orderDTO.getTotal() == null) ? null : orderDTO.getTotal();
+      this.message = (orderDTO.getMessage() == null) ? null : orderDTO.getMessage();
+      this.status = (orderDTO.getStatus() == null) ? null : orderDTO.getStatus();
+      this.voucher = (orderDTO.getVoucher() == null) ? null : orderDTO.getVoucher();
+      this.note = (orderDTO.getNote() == null) ? null : orderDTO.getNote();
+      this.count = (count == null) ? null : count;
+      this.addressDirection = (orderDTO.getAddressDirection() == null) ? null : orderDTO.getAddressDirection();
+      this.addressLat = (orderDTO.getAddressLat() == null) ? null : orderDTO.getAddressLat();
+      this.addressLng = (orderDTO.getAddressLng() == null) ? null : orderDTO.getAddressLng();
+      this.batchId = (orderDTO.getBatchId() == null) ? null : orderDTO.getBatchId();
+      this.addressNumber = (orderDTO.getAddressNumber() == null) ? null : orderDTO.getAddressNumber();
+      this.type = (orderDTO.getType() == null) ? null : orderDTO.getType();
+      this.createAt = (orderDTO.getCreateAt() == null) ? null : DateUtils.convertStringToDate(orderDTO.getCreateAt());
+   }
+
+   /**
+    * Constructor personalizado utilizado en diferentes servicios.
+    *
+    * @author Igirod0
+    * @version 1.0.1
+    * @param orderDTOId
+    * @param merchantId
+    * @throws ParseException
+    */
+   public Order(Long userId, Long merchantId) {
+      super();
+      this.id = null;
+      this.userId = (userId == null) ? null : userId;
+      this.merchantId = (merchantId == null) ? null : merchantId;
+      this.status = Status.INITIAL;
+      this.total = 0.0;
       try {
-         this.reservation = (invoice.getReservation() == null) ? null
-               : DateUtils.convertStringToDate(invoice.getReservation());
+         this.createAt = DateUtils.getCurrentDateWitheoutTime();
       } catch (ParseException e) {
-         throw new RuntimeException("Error al convertir la fecha de la reserva.");
+         throw new RuntimeException("Error al obtener la fecha actual");
       }
-      this.total = (invoice.getTotal() == null) ? null : invoice.getTotal();
-      this.message = (invoice.getMessage() == null) ? null : invoice.getMessage();
-      this.status = (invoice.getStatus() == null) ? null : invoice.getStatus();
-      this.voucher = (invoice.getVoucher() == null) ? null : invoice.getVoucher();
-      this.note = (invoice.getNote() == null) ? null : invoice.getNote();
-      this.addressDirection = (invoice.getAddressDirection() == null) ? null : invoice.getAddressDirection();
-      this.addressLat = (invoice.getAddressLat() == null) ? null : invoice.getAddressLat();
-      this.addressLng = (invoice.getAddressLng() == null) ? null : invoice.getAddressLng();
-      this.addressNumber = (invoice.getAddressNumber() == null) ? null : invoice.getAddressNumber();
-      this.createdAt = (invoice.getCreateAt() == null) ? null : invoice.getCreateAt();
-      this.type = (invoice.getType() == null) ? null : invoice.getType();
    }
 }

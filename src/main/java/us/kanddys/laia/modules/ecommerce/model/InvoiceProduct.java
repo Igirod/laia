@@ -8,20 +8,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import us.kanddys.laia.modules.ecommerce.controller.dto.InvoiceProductInputDTO;
 
-/**
- * Esta clase representa un producto en el carrito de compras.
- * 
- * @author Igirod
- * @version 1.0.1
- */
-@Entity
-@Table(name = "invoices_products")
 @AllArgsConstructor
 @Data
+@Entity
+@Table(name = "invoices_products")
 public class InvoiceProduct {
-
    @EmbeddedId
    private InvoiceProductId id;
    @Column(name = "quantity")
@@ -33,32 +25,17 @@ public class InvoiceProduct {
    public InvoiceProduct() {
    }
 
-   /**
-    * Constructor personalizado utilizado en diferentes servicios.
-    *
-    * @author Igirod0
-    * @version 1.0.0
-    * @param invoiceId
-    * @param productId
-    */
-   public InvoiceProduct(Long productId, Long invoiceId, Product product) {
+   public InvoiceProduct(OrderProduct orderProduct, Long orderId) {
       super();
-      this.id = new InvoiceProductId(productId, invoiceId);
-      this.product = product;
-      this.quantity = 1;
+      this.id = new InvoiceProductId(orderId, orderProduct.getId().getProductId());
+      this.quantity = orderProduct.getQuantity();
+      this.product = orderProduct.getProduct();
    }
 
-   /**
-    * Constructor personalizado utilizado en diferentes servicios.
-    *
-    * @author Igirod0
-    * @version 1.0.1
-    * @param InvoiceProductInputDTO
-    */
-   public InvoiceProduct(InvoiceProductInputDTO InvoiceProductInputDTO) {
+   public InvoiceProduct(Long productId, Long orderId, Product product) {
       super();
-      this.id = new InvoiceProductId(InvoiceProductInputDTO.getInvoiceId(),
-            InvoiceProductInputDTO.getProductId());
-      this.quantity = InvoiceProductInputDTO.getQuantity();
+      this.id = new InvoiceProductId(orderId, productId);
+      this.quantity = 1;
+      this.product = product;
    }
 }

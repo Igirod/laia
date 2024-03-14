@@ -14,12 +14,12 @@ import us.kanddys.laia.modules.ecommerce.model.Order;
 import us.kanddys.laia.modules.ecommerce.model.Utils.Status;
 
 @Repository
-public class InvoiceCriteriaRepository {
+public class OrderCriteriaRepository {
 
    @Autowired
    private EntityManager entityManager;
 
-   public List<Order> findInvoicesPaginated(Integer page, Long merchantId, Optional<String> userEmail,
+   public List<Order> findOrdersPaginated(Integer page, Long merchantId, Optional<String> userEmail,
          Optional<Status> status) {
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Order> cQueryinvoice = cBuilder.createQuery(Order.class);

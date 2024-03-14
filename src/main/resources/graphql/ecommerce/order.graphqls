@@ -1,24 +1,30 @@
-
 type OrderDTO {
    id: Int!
-   merchantTitle: String
+   merchantId: Int!
+   userId: Int!
+   paymentId: Int
    code: String
    reservation: String
-   reservationType: String
-   userEmail: String
-   userLastName: String
-   userName: String
    total: Float
    message: String
-   status: String
+   status: Status
    voucher: String
    note: String
+   count: Int
    addressLat: String
    addressLng: String
-   batchFrom: String
-   batchTo: String
-   createdAt: String
-   updatedAt: String
    addressDirection: String
-   products: [OrderProductDTO]
+   batchId: Int
+   type: String
+   addressNumber: Int
+   merchantLat: String
+   merchantLng: String
+   merchantDirection: String
+   createAt: String
+}
+
+enum Status {
+   INITIAL,
+   PENDING,
+   COMPLETE
 }

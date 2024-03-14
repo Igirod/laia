@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class InvoiceProductInputDTO {
+public class OrderProductInputDTO {
    @JsonProperty
    private Long invoiceId;
    @JsonProperty

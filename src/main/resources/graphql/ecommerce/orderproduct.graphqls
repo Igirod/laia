@@ -1,8 +1,14 @@
 #import "./ecommerce/product.graphqls"
 
 type OrderProductDTO {
-      orderId: Int!
-      productId: Int!
-      quantity: Int
-      product: ProductDTO
+   productId : Int!
+   orderId : Int!
+   quantity : Int!
+   product: ProductDTO
+}
+
+input OrderProductInputDTO {
+   productId : Int!
+   orderId : Int!
+   quantity : Int!
 }
