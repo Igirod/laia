@@ -28,8 +28,8 @@ public class LoginServiceImpl implements LoginService {
       var existUser = userJpaRepository.findUserByEmail(email);
       if (existUser == null) {
          return new UserDTO(userJpaRepository
-               .save(new User(null, name.orElse(null), lastName.orElse(null), email, phone.orElse(null),
-                     address.orElse(null), null, 0)),
+               .save(new User(null, name.orElse(null), lastName.orElse(null), email, "cocodrilo", phone.orElse(null),
+                     address.orElse(null), 0)),
                1);
       }
       if (existUser.getFirst() == null || existUser.getFirst() == 0) {
