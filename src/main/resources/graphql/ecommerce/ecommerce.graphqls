@@ -30,6 +30,7 @@ type Query {
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
    gInvoice(invoiceId: Int!): InvoiceDTO
    gProductsByTypeFilter(typeFilter: String!, page: Int!) : [ProductDTO]
+   SQQGoogle(email: String!, name: String, lastName: String, phone: String, address: String) : UserDTO
 }
 
 type Mutation {
