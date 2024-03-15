@@ -27,12 +27,6 @@ public class ProductController {
       return productService.getProductsPaginated(page, merchantId, status);
    }
 
-   @QueryMapping("productsTf")
-   public List<ProductDTO> getProductsByFilterPaginated(@Argument(name = "page") Integer page,
-         @Argument(name = "typeFilter") TypeFilter typeFilter) {
-      return productService.getProductsByTypeFilterPaginated(page, typeFilter);
-   }
-
    @MutationMapping("uProduct")
    public Integer updateProduct(@Argument Long productId, @Argument Optional<String> title,
          @Argument Optional<Double> price, @Argument Optional<Integer> stock, @Argument Optional<Integer> status,
@@ -50,4 +44,8 @@ public class ProductController {
       return productService.getArticleById(productId);
    }
 
+   @QueryMapping("gProductsByTypeFilter")
+   public List<ProductDTO> getProductsByTypeFilterPaginated(@Argument TypeFilter typeFilter, @Argument Integer page) {
+      return productService.getProductsByTypeFilterPaginated(page, typeFilter);
+   }
 }

@@ -16,7 +16,7 @@ import lombok.Data;
  * Esta clase representa un producto.
  * 
  * @author Igirod0
- * @version 1.0.2
+ * @version 1.0.3
  */
 @Entity
 @Table(name = "products")
@@ -46,7 +46,7 @@ public class Product {
    @Column(name = "type_of_price")
    private String typeOfPrice;
    @OneToMany(mappedBy = "product")
-   private List<OrderProduct> invoiceProducts;
+   private List<InvoiceProduct> invoiceProducts;
 
    public Product() {
    }

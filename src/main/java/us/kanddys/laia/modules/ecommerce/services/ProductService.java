@@ -49,7 +49,7 @@ public interface ProductService {
     * el tipo de filtrado con un paginado de diez productos por página.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param page
     * @param typeFilter
     * @return List<ProductDTO>

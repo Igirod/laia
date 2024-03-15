@@ -54,29 +54,55 @@ public class ProductCriteriaRepository {
          case NEW:
             cQueryproduct.orderBy(cBuilder.desc(rProduct.get("createdAt")));
             break;
+         case OLD:
+            cQueryproduct.orderBy(cBuilder.asc(rProduct.get("createdAt")));
+            break;
          case CHEAP:
             cQueryproduct.orderBy(cBuilder.asc(rProduct.get("price")));
             break;
          case EXPENSIVE:
             cQueryproduct.orderBy(cBuilder.desc(rProduct.get("price")));
             break;
-         case RELEVANT:
-            CriteriaQuery<Long> subquery = cBuilder.createQuery(Long.class);
-            Root<InvoiceProduct> subRoot = subquery.from(InvoiceProduct.class);
-            subquery.select(subRoot.get("id").get("productId"));
-            subquery.groupBy(subRoot.get("id").get("productId"));
-            subquery.orderBy(cBuilder.desc(cBuilder.sum(subRoot.get("quantity"))));
-            cQueryproduct.select(rProduct);
-            Join<Product, InvoiceProduct> productShoppingCartJoin = rProduct.join("invoiceProducts");
-            cQueryproduct.groupBy(rProduct.get("id"));
-            cQueryproduct.where(rProduct.get("id").in(entityManager.createQuery(subquery)
-                  .setFirstResult((page - 1) * 10)
-                  .setMaxResults(10)
-                  .getResultList()));
-            cQueryproduct.orderBy(cBuilder.desc(cBuilder.sum(productShoppingCartJoin.get("quantity"))));
+         case LESSSOLD:
+            createCriteriaQueryRelevant("LESSSOLD", cBuilder, cQueryproduct, rProduct, page);
+            break;
+         case BESTSELLER:
+            createCriteriaQueryRelevant("BESTSELLER", cBuilder, cQueryproduct, rProduct, page);
+            break;
+         case MAXQUANTITY:
+            cQueryproduct.orderBy(cBuilder.desc(
+                  cBuilder.<Integer>selectCase()
+                        .when(cBuilder.equal(rProduct.get("stock"), -1), Integer.MAX_VALUE)
+                        .otherwise(rProduct.get("stock"))));
+            break;
+         case MINQUANTITY:
+            cQueryproduct.orderBy(cBuilder.asc(
+                  cBuilder.<Integer>selectCase()
+                        .when(cBuilder.equal(rProduct.get("stock"), -1), Integer.MAX_VALUE)
+                        .otherwise(rProduct.get("stock"))));
             break;
       }
       return entityManager.createQuery(cQueryproduct).setMaxResults(10)
             .setFirstResult((page - 1) * 10).getResultList();
+   }
+
+   private void createCriteriaQueryRelevant(String type, CriteriaBuilder cBuilder, CriteriaQuery<Product> cQueryproduct,
+         Root<Product> rProduct, Integer page) {
+      CriteriaQuery<Long> subquery = cBuilder.createQuery(Long.class);
+      Root<InvoiceProduct> subRoot = subquery.from(InvoiceProduct.class);
+      subquery.select(subRoot.get("id").get("productId"));
+      subquery.groupBy(subRoot.get("id").get("productId"));
+      subquery.orderBy(cBuilder.desc(cBuilder.sum(subRoot.get("quantity"))));
+      cQueryproduct.select(rProduct);
+      Join<Product, InvoiceProduct> productShoppingCartJoin = rProduct.join("invoiceProducts");
+      cQueryproduct.groupBy(rProduct.get("id"));
+      cQueryproduct.where(rProduct.get("id").in(entityManager.createQuery(subquery)
+            .setFirstResult((page - 1) * 10)
+            .setMaxResults(10)
+            .getResultList()));
+      if (type.equals("LESSSOLD"))
+         cQueryproduct.orderBy(cBuilder.asc(cBuilder.sum(productShoppingCartJoin.get("quantity"))));
+      else
+         cQueryproduct.orderBy(cBuilder.desc(cBuilder.sum(productShoppingCartJoin.get("quantity"))));
    }
 }

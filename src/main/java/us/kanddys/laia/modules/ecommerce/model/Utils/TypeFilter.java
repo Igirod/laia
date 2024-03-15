@@ -2,7 +2,11 @@ package us.kanddys.laia.modules.ecommerce.model.Utils;
 
 public enum TypeFilter {
    NEW,
-   CHEAP,
+   OLD,
    EXPENSIVE,
-   RELEVANT
+   CHEAP,
+   BESTSELLER,
+   LESSSOLD,
+   MAXQUANTITY,
+   MINQUANTITY
 }

@@ -18,7 +18,6 @@ type Query {
    merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
-   productsTf(page: Int!, typeFilter: TypeFilter): [ProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
    cUserE(userId: Int!, email: String!): Int
    lUser(userId: Int!, email: String!, password: String!): UserDTO
@@ -30,6 +29,7 @@ type Query {
    gCalendar(year: Int!, month: Int!, day: Int!, merchantId: Int!): CalendarDTO
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
    gInvoice(invoiceId: Int!): InvoiceDTO
+   gProductsByTypeFilter(typeFilter: String!, page: Int!) : [ProductDTO]
 }
 
 type Mutation {
