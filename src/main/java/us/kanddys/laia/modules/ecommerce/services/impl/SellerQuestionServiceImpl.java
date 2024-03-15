@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,20 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
    private SellerQuestionJpaRepository sellerQuestionJpaRepository;
 
    @Override
-   public Long createQuestion(String question, Optional<Integer> required, Optional<String> type,
-         Optional<Integer> limit) {
+   public Long createQuestion(String question, Optional<Integer> required, String type,
+         Optional<Integer> limit, Long productId, Optional<List<String>> options) {
+      if (type.equals("MULTIPLE")) {
+         if (limit.isEmpty())
+            throw new IllegalArgumentException(ExceptionMessage.LIMIT_REQUIRED);
+         if (options.isEmpty())
+            throw new IllegalArgumentException(ExceptionMessage.OPTIONS_REQUIRED);
+         else {
+            
+         }
+      }
       return sellerQuestionJpaRepository
-            .save(new SellerQuestion(null, question, (required != null ? required.get() : null),
-                  (type != null ? type.get() : null), (limit != null ? limit.get() : null)))
+            .save(new SellerQuestion(null, question, required.orElse(null), type, limit.orElse(null),
+                  productId))
             .getId();
    }
 

@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
@@ -9,7 +10,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
  * SellerQuestionServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public interface SellerQuestionService {
 
@@ -17,12 +18,17 @@ public interface SellerQuestionService {
     * Este método se encarga de crear una nueva pregunta para un vendedor.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param question
+    * @param required
+    * @param type
+    * @param limit
+    * @param productId
+    * @param options
     * @return Integer
     */
-   public Long createQuestion(String question, Optional<Integer> required, Optional<String> type,
-         Optional<Integer> limit);
+   public Long createQuestion(String question, Optional<Integer> required, String type,
+         Optional<Integer> limit, Long productId, Optional<List<String>> options);
 
    /**
     * Este método se encarga de eliminar una pregunta para un vendedor.

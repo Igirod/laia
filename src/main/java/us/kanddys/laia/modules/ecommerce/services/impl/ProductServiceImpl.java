@@ -35,7 +35,6 @@ import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
-import us.kanddys.laia.modules.ecommerce.services.SellerQuestionProductService;
 import us.kanddys.laia.modules.ecommerce.services.SellerQuestionService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
@@ -83,9 +82,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private SellerQuestionService sellerQuestionService;
-
-   @Autowired
-   private SellerQuestionProductService sellerQuestionProductService;
 
    @Autowired
    private CategoryService categoryService;
@@ -292,23 +288,14 @@ public class ProductServiceImpl implements ProductService {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
          }
       }
-      if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent()) {
-         Long sellerQuestionId = sellerQuestionService.getQuestionIdByQuestionAndType(sellerQuestionValue.get(),
-               sellerQuestionType.get());
-         // * Si no existe la pregunta se crea.
-         // TODO: Refactorizar en el caso de las preguntas multiples.
-         if (sellerQuestionId == null || sellerQuestionType.get().equals("MULTIPLE")) {
-            sellerQuestionProductService.createSellerQuestionProduct(Long.valueOf(productId.get()),
-                  sellerQuestionService.createQuestion(sellerQuestionValue.get(),
-                        (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))
-                              : null),
-                        (sellerQuestionType.isPresent() ? Optional.of(sellerQuestionType.get()) : null),
-                        (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get()))
-                              : null)));
-         } else {
-            sellerQuestionProductService.createSellerQuestionProduct(Long.valueOf(productId.get()), sellerQuestionId);
-         }
-      }
+      if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent())
+         sellerQuestionService.createQuestion(sellerQuestionValue.get(),
+               (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))
+                     : null),
+               sellerQuestionValue.get(),
+               (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get()))
+                     : null),
+               Long.valueOf(productId.get()));
       if (categoryTitle.isPresent()) {
          var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
          if (categoryId == null) {

@@ -32,6 +32,8 @@ public class SellerQuestion {
    private String type;
    @Column(name = "limit_value")
    private Integer limit;
+   @Column(name = "product_id")
+   private Long productId;
 
    public SellerQuestion() {
    }

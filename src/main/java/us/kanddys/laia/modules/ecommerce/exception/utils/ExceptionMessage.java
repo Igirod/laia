@@ -27,4 +27,6 @@ public class ExceptionMessage {
    public static final String SELLER_QUESTION_NOT_FOUND = "La pregunta del vendedor buscada no existe.";
    public static final String EXISTING_SELLER_ANSWER = "La respuesta del vendedor ya existe.";
    public static final String EXISTING_CATEGORY = "La categoria ya existe.";
+   public static final String LIMIT_REQUIRED = "El limite es requerido para una pregunta de tipo MULTIPLE.";
+   public static final String OPTIONS_REQUIRED = "Las opciones son requeridas para una pregunta de tipo MULTIPLE.";
 }
