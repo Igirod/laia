@@ -15,9 +15,9 @@ public class LoginController {
    @Autowired
    private LoginService loginService;
 
-   @QueryMapping("SQQGoogle")
-   public UserDTO SQQGoogle(@Argument String email, @Argument Optional<String> name,
-         @Argument Optional<String> lastName, @Argument Optional<String> phone, @Argument Optional<String> address) {
-      return loginService.SQQGoogle(email, name, lastName, phone, address);
+   @QueryMapping("sqqGoogle")
+   public UserDTO sqqGoogle(@Argument String email, @Argument Optional<String> name,
+         @Argument Optional<String> lastName, @Argument Optional<String> phone, @Argument Optional<String> image) {
+      return loginService.sqqGoogle(email, name, lastName, phone, image);
    }
 }

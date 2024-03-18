@@ -2,6 +2,8 @@ package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.Optional;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.RCheckEmailDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.RLoginUserDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
 
 /**
@@ -9,7 +11,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
  * LoginServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public interface LoginService {
 
@@ -22,10 +24,32 @@ public interface LoginService {
     * @param name
     * @param lastName
     * @param phone
-    * @param address
+    * @param image
     * @return UserDTO
     */
-   public UserDTO SQQGoogle(String email, Optional<String> name, Optional<String> lastName, Optional<String> phone,
-         Optional<String> address);
+   public UserDTO sqqGoogle(String email, Optional<String> name, Optional<String> lastName, Optional<String> phone,
+         Optional<String> image);
+
+   /**
+    * Este método verifica si el correo se encuentra registrado.
+    *
+    * @author Igirod0
+    * @version 1.0.2
+    * @param userId
+    * @param email
+    * @return Map<String, Object>
+    */
+   public RCheckEmailDTO sqqCheck(String email);
+
+   /**
+    * Este método verifica si el email y la contraseña son correctos.
+    *
+    * @author Igirod0
+    * @version 1.0.1
+    * @param userId
+    * @param password
+    * @return RLoginUserDTO
+    */
+   public RLoginUserDTO sqqLogin(Long userId, String password);
 
 }

@@ -32,6 +32,18 @@ public class User {
    private String image;
    @Column(name = "first")
    private Integer first;
+   @Column(name = "mer_phone")
+   private Integer merchantPhone;
+   @Column(name = "mer_email")
+   private String merchantEmail;
+   @Column(name = "mer_message")
+   private Integer merchantMessage;
+   @Column(name = "mer_image")
+   private String merchantImage;
+   @Column(name = "mer_slug")
+   private String merchantSlug;
+   @Column(name = "type_shipment")
+   private String typeShipment;
 
    public User() {
    }
@@ -39,5 +51,29 @@ public class User {
    public User(Boolean invoice) {
       super();
       this.password = "cocodrilo";
+   }
+
+   /**
+    * Constructor personalizado utilizado en diferentes servicios.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param name
+    * @param lastName
+    * @param mail
+    * @param password
+    * @param phone
+    */
+   public User(String name, String lastName, String mail, String password,
+         String phone, String image) {
+      super();
+      this.id = null;
+      this.name = name;
+      this.lastName = lastName;
+      this.mail = mail;
+      this.password = password;
+      this.phone = phone;
+      this.image = image;
+      this.first = 0;
    }
 }

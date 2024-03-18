@@ -4,8 +4,6 @@ import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
-
 /**
  * Esta interface contiene las obligaciones que debe implementar
  * la clase UserServiceImpl.
@@ -14,28 +12,6 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.UserDTO;
  * @version 1.0.1
  */
 public interface UserService {
-
-   /**
-    * Este método verifica si el correo se encuentra registrado.
-    *
-    * @author Igirod0
-    * @version 1.0.1
-    * @param userId
-    * @param email
-    * @return Integer
-    */
-   public Integer checkEmail(Long userId, String email);
-
-   /**
-    * Este método verifica si el email y la contraseña son correctos.
-    *
-    * @author Igirod0
-    * @version 1.0.1
-    * @param email
-    * @param password
-    * @return Integer
-    */
-   public UserDTO loginUser(Long userId, String email, String password);
 
    /**
     * Este método actualiza los datos del usuario.

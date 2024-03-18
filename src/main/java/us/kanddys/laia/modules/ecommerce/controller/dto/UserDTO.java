@@ -28,11 +28,23 @@ public class UserDTO {
    @JsonProperty
    private Integer first;
    @JsonProperty
-   private Integer operationStatus;
+   private Integer status;
    @JsonProperty
    private String password;
    @JsonProperty
    private String image;
+   @JsonProperty
+   private String merchantSlug;
+   @JsonProperty
+   private Integer merchantPhone;
+   @JsonProperty
+   private Integer merchantMessage;
+   @JsonProperty
+   private String merchantImage;
+   @JsonProperty
+   private String merchantEmail;
+   @JsonProperty
+   private String typeShipment;
 
    public UserDTO() {
    }
@@ -53,6 +65,12 @@ public class UserDTO {
       this.first = (user.getFirst() != null) ? user.getFirst() : null;
       this.password = (user.getPassword() != null) ? user.getPassword() : null;
       this.image = (user.getImage() != null) ? user.getImage() : null;
-      this.operationStatus = operationStatus;
+      this.merchantSlug = (user.getMerchantSlug() != null) ? user.getMerchantSlug() : null;
+      this.merchantPhone = (user.getMerchantPhone() != null) ? user.getMerchantPhone() : null;
+      this.merchantMessage = (user.getMerchantMessage() != null) ? user.getMerchantMessage() : null;
+      this.merchantImage = (user.getMerchantImage() != null) ? user.getMerchantImage() : null;
+      this.merchantEmail = (user.getMerchantEmail() != null) ? user.getMerchantEmail() : null;
+      this.typeShipment = (user.getTypeShipment() != null) ? user.getTypeShipment() : null;
+      this.status = operationStatus;
    }
 }
