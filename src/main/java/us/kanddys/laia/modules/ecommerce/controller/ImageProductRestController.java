@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,6 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.ImageProductDTO;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 
 @RestController
-@RequestMapping("/image-product")
 @Tag(name = "Image Product Rest Controller", description = "Operaciones REST relacionadas a las imagenes de los productos.")
 public class ImageProductRestController {
 
@@ -36,9 +36,10 @@ public class ImageProductRestController {
       return imageProductService.uploadImageProduct(image, Long.valueOf(productId));
    }
 
-   @RequestMapping(method = { RequestMethod.POST }, value = "/upload-product-images", produces = {
+   @RequestMapping(method = { RequestMethod.POST }, value = "/product-medias", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public Integer uploadImagesProducts(@RequestPart List<MultipartFile> images, @RequestPart String productId) {
-      return imageProductService.uploadImagesProducts(images, Long.valueOf(productId));
+   public Long uploadImagesProducts(@RequestPart List<MultipartFile> medias,
+         @RequestPart Optional<String> productId) {
+      return imageProductService.uploadImagesProducts(medias, productId);
    }
 }

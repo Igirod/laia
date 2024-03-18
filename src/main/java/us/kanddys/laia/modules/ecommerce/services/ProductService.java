@@ -144,4 +144,7 @@ public interface ProductService {
     * @throws ProductNotFoundException
     */
    public ArticleDTO getArticleById(Long id) throws ProductNotFoundException;
+
+   public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,
+         Integer stock);
 }

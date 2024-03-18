@@ -72,4 +72,5 @@ type Mutation {
    dCategory(categoryId: Int!) : Int
    cCategoryProduct(categoryId: Int!, productId: Int!) : Int
    dCategoryProduct(categoryId: Int!, productId: Int!) : Int
+   cProduct(productId: Int, userId: Int, title: String, price: Float, stock: Int, tStock: String) : Int
 }

@@ -35,7 +35,6 @@ import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
-import us.kanddys.laia.modules.ecommerce.services.SellerQuestionService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
 /**
@@ -79,9 +78,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private KeyWordProductService keyWordProductService;
-
-   @Autowired
-   private SellerQuestionService sellerQuestionService;
 
    @Autowired
    private CategoryService categoryService;
@@ -288,14 +284,6 @@ public class ProductServiceImpl implements ProductService {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
          }
       }
-      if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent())
-         sellerQuestionService.createQuestion(sellerQuestionValue.get(),
-               (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get()))
-                     : null),
-               sellerQuestionValue.get(),
-               (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get()))
-                     : null),
-               Long.valueOf(productId.get()));
       if (categoryTitle.isPresent()) {
          var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
          if (categoryId == null) {
@@ -327,5 +315,28 @@ public class ProductServiceImpl implements ProductService {
       // articleDTO.setQuestions();
       // articleDTO.setCategories();
       return articleDTO;
+   }
+
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
+   @Override
+   public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,
+         Integer stock) {
+      if (productId.isPresent() && userId.isPresent()) {
+         productJpaRepository.updateMerchantId(productId.get(), userId.get());
+         return productId.get();
+      }
+      if (productId.isEmpty()) {
+         Long existUserId = null;
+         if (userId.isPresent()) {
+            existUserId = userId.get();
+         }
+         try {
+            return productJpaRepository.save(new Product(null, title, price, stock, null, existUserId, 1,
+                  DateUtils.getCurrentDate(), null, null, new ArrayList<>())).getId();
+         } catch (ParseException e) {
+            throw new RuntimeException("Error al convertir la fecha");
+         }
+      }
+      return -1L;
    }
 }

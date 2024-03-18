@@ -32,4 +32,8 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
    @Modifying
    @Query(value = "UPDATE products SET front_page = ?2 WHERE id = ?1", nativeQuery = true)
    public void updateFrontPage(Long productId, String image);
+
+   @Modifying
+   @Query(value = "UPDATE products SET merchant_id = ?2 WHERE id = ?1", nativeQuery = true)
+   public void updateMerchantId(Long productId, Long merchantId);
 }

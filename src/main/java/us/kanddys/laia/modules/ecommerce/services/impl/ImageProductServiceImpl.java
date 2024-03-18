@@ -1,6 +1,8 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +12,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.ImageProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.ImageProduct;
+import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.repository.ImageProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
@@ -50,12 +53,23 @@ public class ImageProductServiceImpl implements ImageProductService {
    }
 
    @Override
-   public Integer uploadImagesProducts(List<MultipartFile> images, Long productId) {
-      if (productJpaRepository.findProductIdIfExists(productId).isEmpty())
-         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
-      images.stream().map(image -> imageProductJpaRepository
-            .save(new ImageProduct(null, productId, firebaseStorageService.uploadFile(image, "imageProducts"), null)))
-            .toList();
-      return 1;
+   public Long uploadImagesProducts(List<MultipartFile> medias, Optional<String> productId) {
+      if (productId.isPresent()) {
+         if (productJpaRepository.existsById(Long.valueOf(productId.get()))) {
+            medias.stream().map(image -> imageProductJpaRepository
+                  .save(new ImageProduct(null, Long.valueOf(productId.get()),
+                        firebaseStorageService.uploadFile(image, "imageProducts"), "IMAGE")))
+                  .toList();
+            return Long.valueOf(productId.get());
+         }
+      } else {
+         Long newProductId = productJpaRepository.save(new Product()).getId();
+         medias.stream().map(image -> imageProductJpaRepository
+               .save(new ImageProduct(null, newProductId, firebaseStorageService.uploadFile(image, "imageProducts"),
+                     "IMAGE")))
+               .toList();
+         return newProductId;
+      }
+      return -1L;
    }
 }

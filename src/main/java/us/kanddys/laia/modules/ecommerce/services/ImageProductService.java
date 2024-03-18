@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +12,7 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.ImageProductDTO;
  * ImageProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface ImageProductService {
 
@@ -40,9 +41,9 @@ public interface ImageProductService {
    /**
     * Este método tiene la obligación de cargar varias imagenes de un producto.
     * 
-    * @param images
+    * @param medias
     * @param productId
     * @return Integer
     */
-   public Integer uploadImagesProducts(List<MultipartFile> images, Long productId);
+   public Long uploadImagesProducts(List<MultipartFile> medias, Optional<String> productId);
 }

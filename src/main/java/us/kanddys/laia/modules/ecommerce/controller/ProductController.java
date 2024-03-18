@@ -48,4 +48,10 @@ public class ProductController {
    public List<ProductDTO> getProductsByTypeFilterPaginated(@Argument TypeFilter typeFilter, @Argument Integer page) {
       return productService.getProductsByTypeFilterPaginated(page, typeFilter);
    }
+
+   @MutationMapping("cProduct")
+   public Long createProduct(@Argument Optional<Long> userId, @Argument Optional<Long> productId,
+         @Argument String title, @Argument String tStock, @Argument Double price, @Argument Integer stock) {
+      return productService.createProduct(userId, productId, title, tStock, price, stock);
+   }
 }
