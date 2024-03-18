@@ -10,17 +10,16 @@
 #import "./ecommerce/invenstment.graphqls"
 #import "./ecommerce/article.graphqls"
 #import "./ecommerce/orderproduct.graphqls"
+#import "./ecommerce/login.graphqls"
 
 type Query {
-   merchantS(slug: String!): MerchantDTO
    products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
    productDId(productId: Int!): [ProductDetailDTO]
-   merchantId(merchantId: Int!): MerchantDTO
    payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
-   cUserE(userId: Int!, email: String!): Int
-   lUser(userId: Int!, email: String!, password: String!): UserDTO
+   sqqCheck(email: String!): RCheckEmailDTO
+   sqqLogin(userId: Int!, password: String!): RLoginUserDTO
    gOProducts(orderId: Int!, page: Int!, limit: Int): [OrderProductDTO]
    gAddressUId(userId: Int!, page: Int!): [AddressDTO]
    combinedShop(slug: String!, userId: Int): CombinedShopDTO
@@ -30,6 +29,7 @@ type Query {
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
    gInvoice(invoiceId: Int!): InvoiceDTO
    gProductsByTypeFilter(typeFilter: String!, page: Int!) : [ProductDTO]
+   sqqGoogle(email: String!, name: String, lastName: String, phone: String, image: String) : UserDTO
 }
 
 type Mutation {

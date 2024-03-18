@@ -43,12 +43,18 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
    @Query(value = "SELECT * FROM users WHERE id = :userId", nativeQuery = true)
    public User findUserById(Long userId);
 
-   @Query(value = "SELECT id, email FROM users WHERE email = :email", nativeQuery = true)
-   public Map<String, Object> findUserIdByEmail(String email);
+   @Query(value = "SELECT id, name, last_name FROM users WHERE email = :email", nativeQuery = true)
+   public Map<String, Object> findUserIdAndNameAndLastNameByEmail(String email);
 
    @Query(value = "SELECT email FROM users WHERE id = :userId", nativeQuery = true)
    public String findEmailByUserId(Long userId);
 
    @Query(value = "SELECT name, last_name, email FROM users WHERE id = :userId", nativeQuery = true)
    public Map<String, Object> findUserNameAndLastNameAndEmailById(Long userId);
+
+   @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
+   public User findUserByEmail(String email);
+
+   @Query(value = "SELECT phone, image, password FROM users WHERE id = :userId", nativeQuery = true)
+   public Map<String, Object> findPhoneAndImageAndPasswordByUserId(Long userId);
 }
