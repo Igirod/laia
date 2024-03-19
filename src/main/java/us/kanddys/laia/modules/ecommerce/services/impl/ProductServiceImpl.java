@@ -15,15 +15,15 @@ import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
+import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
-import us.kanddys.laia.modules.ecommerce.model.Merchant;
 import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
-import us.kanddys.laia.modules.ecommerce.repository.MerchantJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.CategoryProductService;
 import us.kanddys.laia.modules.ecommerce.services.CategoryService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
@@ -35,6 +35,7 @@ import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
+import us.kanddys.laia.modules.ecommerce.services.SellerQuestionService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
 
 /**
@@ -54,9 +55,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private FirebaseStorageService firebaseStorageService;
-
-   @Autowired
-   private MerchantJpaRepository merchantJpaRepository;
 
    @Autowired
    private ManufacturingProductService manufacturingProductService;
@@ -87,6 +85,12 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private ImageProductService imageProductService;
+
+   @Autowired
+   private UserJpaRepository userJpaRepository;
+
+   @Autowired
+   private SellerQuestionService sellerQuestionService;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -168,39 +172,21 @@ public class ProductServiceImpl implements ProductService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
+   public Long createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice) {
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<List<String>> sellerQuestionOptions) {
       var userid = Long.valueOf(userId.get());
-      var merchantId = merchantJpaRepository.existUserId(Long.valueOf(userId.get()));
-      if (merchantId == null) {
-         // * Primero se crea el usuario y luego el merchant para asociarle el producto.
-         try {
-            merchantId = merchantJpaRepository
-                  .save(new Merchant(userid))
-                  .getId();
-            var newProductDTO = createProductAndDTO(
-                  new Product(null, (title.isPresent() ? title.get() : null),
-                        (price.isPresent() ? Double.valueOf(price.get()) : null),
-                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null, merchantId,
-                        (status.isPresent() ? Integer.valueOf(status.get()) : null), DateUtils.getCurrentDate(),
-                        (typeOfSale.isPresent() ? typeOfSale.get() : null),
-                        (typeOfPrice.isPresent() ? typeOfPrice.get() : null),
-                        new ArrayList<>()),
-                  (frontPage.isPresent() ? frontPage.get() : null));
-            createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
-                  invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
-                  segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue, sellerQuestionType,
-                  sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
-         } catch (ParseException e) {
-            throw new RuntimeException("Error al convertir la fecha");
-         }
-      } else {
+      var merchantId = userJpaRepository.existByUserId(userid);
+      Long newProductId = null;
+      if (merchantId == null)
+         throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
+      else {
          // * Se crea el producto asociado a un merchant.
          try {
             var newProductDTO = createProductAndDTO(
@@ -215,12 +201,14 @@ public class ProductServiceImpl implements ProductService {
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
                   segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
-                  sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle);
+                  sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
+                  sellerQuestionOptions);
+            newProductId = newProductDTO.getId();
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
       }
-      return 1;
+      return newProductId;
    }
 
    /**
@@ -251,7 +239,8 @@ public class ProductServiceImpl implements ProductService {
          Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<String> keywordValue,
          Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle) {
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle,
+         Optional<List<String>> sellerQuestionOptions) {
       if (manufacturingTime.isPresent() && manufacturingType.isPresent()) {
          manufacturingProductService.createManufacturingProduct(Long.valueOf(productId.get()),
                manufacturingType, Optional.of(Integer.valueOf(manufacturingTime.get())));
@@ -284,6 +273,15 @@ public class ProductServiceImpl implements ProductService {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
          }
       }
+      if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent()) {
+         sellerQuestionService.createQuestion(sellerQuestionValue.get(),
+               (sellerQuestionRequired.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionRequired.get())) : null),
+               sellerQuestionType.get(),
+               (sellerQuestionLimit.isPresent() ? Optional.of(Integer.valueOf(sellerQuestionLimit.get())) : null),
+               Long.valueOf(productId.get()),
+               sellerQuestionOptions);
+      }
+
       if (categoryTitle.isPresent()) {
          var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
          if (categoryId == null) {

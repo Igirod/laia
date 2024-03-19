@@ -2,3 +2,8 @@ type KeyWordDTO {
    id: Int!
    word: String
 }
+
+type KeyWordInputDTO {
+   id: Int
+   word: String
+}

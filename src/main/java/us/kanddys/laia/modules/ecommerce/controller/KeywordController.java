@@ -50,4 +50,15 @@ public class KeywordController {
    public List<KeyWordDTO> getKeywords(@Argument Long productId) {
       return keywordService.getKeywordsByProductId(productId);
    }
+
+   // @QueryMapping("wAdminSellKeyWords")
+   // public List<KeyWordDTO> getKeywords() {
+   // return keywordService.getKeywords();
+   // }
+
+   // @MutationMapping("uAdminSellKeyWords")
+   // public List<KeyWordDTO> updateKeywords(@Argument Long productId, @Argument
+   // List<Long> keyWordIds) {
+   // return keywordService.updateKeywords(productId, keyWordIds);
+   // }
 }

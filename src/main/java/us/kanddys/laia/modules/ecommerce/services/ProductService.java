@@ -16,7 +16,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
  * clase ProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.3
+ * @version 1.0.4
  */
 public interface ProductService {
 
@@ -101,7 +101,7 @@ public interface ProductService {
     * 
     *
     * @author Igirod0
-    * @version 1.0.1
+    * @version 1.0.2
     * @param frontPage
     * @param userId
     * @param productId
@@ -125,16 +125,19 @@ public interface ProductService {
     * @param sellerQuestionLimit
     * @param sellerQuestionRequired
     * @param categoryTitle
-    * @return Integer
+    * @param typeOfPrice
+    * @param sellerQuestionOptions
+    * @return Long
     */
-   public Integer createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
+   public Long createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice);
+         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<List<String>> sellerQuestionOptions);
 
    /**
     * Este método tiene la obligación de obtener un producto por su id.

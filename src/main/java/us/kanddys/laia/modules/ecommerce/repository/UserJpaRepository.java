@@ -57,4 +57,7 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
 
    @Query(value = "SELECT phone, image, password FROM users WHERE id = :userId", nativeQuery = true)
    public Map<String, Object> findPhoneAndImageAndPasswordByUserId(Long userId);
+
+   @Query(value = "SELECT id FROM users WHERE id = :id", nativeQuery = true)
+   public Long existByUserId(Long id);
 }
