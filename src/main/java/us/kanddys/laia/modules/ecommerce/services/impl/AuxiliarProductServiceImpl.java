@@ -13,7 +13,7 @@ import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProductMedia;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
-import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
@@ -32,7 +32,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
    private AuxiliarProductJpaRepository auxiliarProductJpaRepository;
 
    @Autowired
-   private AuxiliarProductMediaRepository auxiliarProductMediaRepository;
+   private AuxiliarProductMediaJpaRepository auxiliarProductMediaRepository;
 
    @Autowired
    private AuxiliarMultipleQuestionJpaRepository auxiliarMultipleQuestionRepository;

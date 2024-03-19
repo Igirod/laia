@@ -24,6 +24,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
@@ -100,6 +101,9 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private AuxiliarMultipleQuestionJpaRepository auxiliarMultipleQuestionRepository;
+
+   @Autowired
+   private AuxiliarProductMediaJpaRepository auxiliarProductMediaRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -351,8 +355,6 @@ public class ProductServiceImpl implements ProductService {
    @Override
    public Integer updateAdminSellAssociation(Long productId, Long userId) {
       Optional<AuxiliarProduct> auxiliarProduct = auxiliarProductJpaRepository.findById(productId);
-      var listOptions = auxiliarMultipleQuestionRepository.findOptionsByProductId(productId);
-      System.out.println("Hola");
       if (auxiliarProduct.isPresent()) {
          Product product = null;
          try {
@@ -391,7 +393,8 @@ public class ProductServiceImpl implements ProductService {
                (auxiliarProduct.get().getSegmentDescription() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
                      : null),
-               null, (auxiliarProduct.get() != null ? Optional.of(auxiliarProduct.get().getHashtag()) : null),
+               Optional.empty(),
+               (auxiliarProduct.get() != null ? Optional.of(auxiliarProduct.get().getHashtag()) : null),
                (auxiliarProduct.get().getKeyword() != null
                      ? Optional.of(auxiliarProduct.get().getKeyword().toString())
                      : null),
@@ -420,8 +423,12 @@ public class ProductServiceImpl implements ProductService {
                productId, (auxiliarProduct.get().getSegmentDescription() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
                      : null));
+      } else {
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       }
-      // auxiliarProductJpaRepository.deleteById(productId);
+      auxiliarMultipleQuestionRepository.deleteOptionsByProductId(productId);
+      auxiliarProductMediaRepository.deleteByAuxiliarProductId(productId);
+      auxiliarProductJpaRepository.deleteById(productId);
       return 1;
    }
 }
