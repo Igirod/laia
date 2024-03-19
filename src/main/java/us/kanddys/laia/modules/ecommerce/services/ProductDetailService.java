@@ -43,6 +43,21 @@ public interface ProductDetailService {
          Optional<String> description);
 
    /**
+    * Este método crea un nuevo detalle de producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param description
+    * @param frontPage
+    * @param productId
+    * @param title
+    * @return ProductDetailDTO
+    */
+   public ProductDetailDTO createProductDetailFrontPageString(Optional<String> title, Optional<String> frontPage,
+         Long productId,
+         Optional<String> description);
+
+   /**
     * Este método se encarga de obtener el detalle acortado de un producto.
     *
     * @author Igirod0

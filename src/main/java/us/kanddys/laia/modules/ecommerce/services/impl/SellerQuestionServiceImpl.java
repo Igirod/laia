@@ -10,7 +10,9 @@ import us.kanddys.laia.modules.ecommerce.controller.dto.SellerQuestionDTO;
 import us.kanddys.laia.modules.ecommerce.exception.SellerQuestionNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.SellerQuestion;
+import us.kanddys.laia.modules.ecommerce.model.SellerQuestionMultipleOption;
 import us.kanddys.laia.modules.ecommerce.repository.SellerQuestionJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.SellerQuestionMultipleOptionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.SellerQuestionService;
 
 /**
@@ -26,22 +28,26 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
    @Autowired
    private SellerQuestionJpaRepository sellerQuestionJpaRepository;
 
+   @Autowired
+   private SellerQuestionMultipleOptionJpaRepository sellerQuestionMultipleOptionJpaRepository;
+
    @Override
    public Long createQuestion(String question, Optional<Integer> required, String type,
          Optional<Integer> limit, Long productId, Optional<List<String>> options) {
+      var sellerQuestionId = sellerQuestionJpaRepository
+            .save(new SellerQuestion(null, question, required.orElse(null), type, limit.orElse(null),
+                  productId))
+            .getId();
       if (type.equals("MULTIPLE")) {
          if (limit.isEmpty())
             throw new IllegalArgumentException(ExceptionMessage.LIMIT_REQUIRED);
          if (options.isEmpty())
             throw new IllegalArgumentException(ExceptionMessage.OPTIONS_REQUIRED);
-         else {
-            
-         }
+         sellerQuestionMultipleOptionJpaRepository.saveAll(options.get().stream()
+               .map(option -> new SellerQuestionMultipleOption(null, sellerQuestionId, option))
+               .toList());
       }
-      return sellerQuestionJpaRepository
-            .save(new SellerQuestion(null, question, required.orElse(null), type, limit.orElse(null),
-                  productId))
-            .getId();
+      return sellerQuestionId;
    }
 
    @Override

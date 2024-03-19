@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarMultipleOptionQuestion;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProductMedia;
-import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaRepository;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
@@ -35,7 +35,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
    private AuxiliarProductMediaRepository auxiliarProductMediaRepository;
 
    @Autowired
-   private AuxiliarMultipleQuestionRepository auxiliarMultipleQuestionRepository;
+   private AuxiliarMultipleQuestionJpaRepository auxiliarMultipleQuestionRepository;
 
    @Autowired
    private FirebaseStorageService firebaseStorageService;

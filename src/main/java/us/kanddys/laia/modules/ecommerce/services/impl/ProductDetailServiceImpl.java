@@ -76,4 +76,16 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       return new ProductDetailShortDTO(productDetailShortJpaRepository.findProductDetailsByProductId(productId)
             .orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND)));
    }
+
+   @Override
+   public ProductDetailDTO createProductDetailFrontPageString(Optional<String> title, Optional<String> frontPage,
+         Long productId, Optional<String> description) {
+      try {
+         return new ProductDetailDTO(
+               productDetailJpaRepository.save(new ProductDetail(null, productId, title.orElse(null),
+                     description.orElse(null), frontPage.orElse(null))));
+      } catch (IOException e) {
+         throw new IOJavaException(e.getMessage());
+      }
+   }
 }

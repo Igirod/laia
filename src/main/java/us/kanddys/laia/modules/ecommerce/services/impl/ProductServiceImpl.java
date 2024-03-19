@@ -18,9 +18,12 @@ import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
+import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
 import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
@@ -91,6 +94,12 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private SellerQuestionService sellerQuestionService;
+
+   @Autowired
+   private AuxiliarProductJpaRepository auxiliarProductJpaRepository;
+
+   @Autowired
+   private AuxiliarMultipleQuestionJpaRepository auxiliarMultipleQuestionRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -338,9 +347,81 @@ public class ProductServiceImpl implements ProductService {
       return -1L;
    }
 
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Integer updateAdminSellAssociation(Long productId, Long userId) {
-      productJpaRepository.updateMerchantId(productId, userId);
+      Optional<AuxiliarProduct> auxiliarProduct = auxiliarProductJpaRepository.findById(productId);
+      var listOptions = auxiliarMultipleQuestionRepository.findOptionsByProductId(productId);
+      System.out.println("Hola");
+      if (auxiliarProduct.isPresent()) {
+         Product product = null;
+         try {
+            product = new Product(null,
+                  (auxiliarProduct.get().getTitle() != null ? auxiliarProduct.get().getTitle() : null),
+                  (auxiliarProduct.get().getPrice() != null ? auxiliarProduct.get().getPrice() : null),
+                  (auxiliarProduct.get().getStock() != null ? auxiliarProduct.get().getStock() : null),
+                  (auxiliarProduct.get().getFrontPage() != null ? auxiliarProduct.get().getFrontPage() : null), userId,
+                  1, DateUtils.getCurrentDate(),
+                  (auxiliarProduct.get().getTypeOfStock() != null ? auxiliarProduct.get().getTypeOfStock() : null),
+                  (auxiliarProduct.get().getTypeOfPrice() != null ? auxiliarProduct.get().getTypeOfPrice() : null),
+                  new ArrayList<>());
+         } catch (ParseException e) {
+            throw new RuntimeException("Error al convertir la fecha");
+         }
+         product = productJpaRepository.save(product);
+         createProductExtraAtributes(Optional.of(product.getId().toString()),
+               (auxiliarProduct.get().getManufacturingTime() != null
+                     ? Optional.of(auxiliarProduct.get().getManufacturingTime().toString())
+                     : null),
+               (auxiliarProduct.get().getInvenstmentAmount() != null
+                     ? Optional.of(auxiliarProduct.get().getInvenstmentAmount().toString())
+                     : null),
+               (auxiliarProduct.get().getManufacturingTime() != null
+                     ? Optional.of(auxiliarProduct.get().getInvenstmentNote().toString())
+                     : null),
+               (auxiliarProduct.get().getInvenstmentTitle() != null
+                     ? Optional.of(auxiliarProduct.get().getInvenstmentTitle().toString())
+                     : null),
+               (auxiliarProduct.get().getManufacturingType() != null
+                     ? Optional.of(auxiliarProduct.get().getManufacturingType().toString())
+                     : null),
+               (auxiliarProduct.get().getSegmentTitle() != null
+                     ? Optional.of(auxiliarProduct.get().getSegmentTitle().toString())
+                     : null),
+               (auxiliarProduct.get().getSegmentDescription() != null
+                     ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
+                     : null),
+               null, (auxiliarProduct.get() != null ? Optional.of(auxiliarProduct.get().getHashtag()) : null),
+               (auxiliarProduct.get().getKeyword() != null
+                     ? Optional.of(auxiliarProduct.get().getKeyword().toString())
+                     : null),
+               (auxiliarProduct.get().getQuestionTitle() != null
+                     ? Optional.of(auxiliarProduct.get().getQuestionTitle().toString())
+                     : null),
+               (auxiliarProduct.get().getQuestionType() != null
+                     ? Optional.of(auxiliarProduct.get().getQuestionType().toString())
+                     : null),
+               (auxiliarProduct.get().getQuestionLimit() != null
+                     ? Optional.of(auxiliarProduct.get().getQuestionLimit().toString())
+                     : null),
+               (auxiliarProduct.get().getQuestionRequired() != null
+                     ? Optional.of(auxiliarProduct.get().getQuestionRequired().toString())
+                     : null),
+               (auxiliarProduct.get().getCategoryTitle() != null
+                     ? Optional.of(auxiliarProduct.get().getCategoryTitle().toString())
+                     : null),
+               Optional.of(auxiliarMultipleQuestionRepository.findOptionsByProductId(productId)));
+         productDetailService.createProductDetailFrontPageString((auxiliarProduct.get().getSegmentTitle() != null
+               ? Optional.of(auxiliarProduct.get().getSegmentTitle().toString())
+               : null),
+               (auxiliarProduct.get().getSegmentMedia() != null
+                     ? Optional.of(auxiliarProduct.get().getSegmentMedia().toString())
+                     : null),
+               productId, (auxiliarProduct.get().getSegmentDescription() != null
+                     ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
+                     : null));
+      }
+      // auxiliarProductJpaRepository.deleteById(productId);
       return 1;
    }
 }
