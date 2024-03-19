@@ -76,4 +76,10 @@ public class User {
       this.image = image;
       this.first = 0;
    }
+
+   public User(Boolean login, String mail) {
+      super();
+      this.mail = (mail == null ? null : mail);
+      this.password = "cocodrilo";
+   }
 }

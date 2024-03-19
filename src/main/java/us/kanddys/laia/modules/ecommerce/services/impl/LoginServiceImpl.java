@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
    public RCheckEmailDTO sqqCheck(@Argument String email) {
       var userAtributes = userJpaRepository.findUserIdAndNameAndLastNameByEmail(email);
       if (userAtributes.size() == 0) {
-         return new RCheckEmailDTO(0, null, null, null);
+         return new RCheckEmailDTO(0, userJpaRepository.save(new User(true, email)).getId(), null, null);
       } else
          return new RCheckEmailDTO(1,
                (userAtributes.get("id") == null ? null : Long.valueOf(userAtributes.get("id").toString())),
