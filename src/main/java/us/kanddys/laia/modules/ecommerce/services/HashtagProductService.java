@@ -28,4 +28,14 @@ public interface HashtagProductService {
     * @return Integer
     */
    public Integer deleteHashtagProduct(Long idHashtag, Long idProduct);
+
+   /**
+    * Este método borra todos los hashtag asociados a un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param idProduct
+    * @return Integer
+    */
+   public Integer deleteHashtagProductByProductId(Long idProduct);
 }

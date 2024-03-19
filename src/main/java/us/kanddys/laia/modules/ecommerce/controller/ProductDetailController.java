@@ -17,7 +17,7 @@ public class ProductDetailController {
    @Autowired
    private ProductDetailService productDetailService;
 
-   @QueryMapping("productDId")
+   @QueryMapping("gAdminSellSegments")
    public List<ProductDetailDTO> getProductDetails(@Argument(name = "productId") Long productId) {
       return productDetailService.getProductDetailsByProductId(productId);
    }

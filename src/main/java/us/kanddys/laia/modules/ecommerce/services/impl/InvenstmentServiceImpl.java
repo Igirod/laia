@@ -54,8 +54,8 @@ public class InvenstmentServiceImpl implements InvenstmentService {
    }
 
    @Override
-   public List<InvenstmentDTO> getInvenstmentByProductId(Long id) {
-      return invenstmentJpaRepository.findByProductId(id).stream().map(InvenstmentDTO::new).toList();
+   public List<InvenstmentDTO> getAdminSellInvenstments(Long productId) {
+      return invenstmentJpaRepository.findByProductId(productId).stream().map(InvenstmentDTO::new).toList();
    }
 
 }

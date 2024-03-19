@@ -303,7 +303,7 @@ public class ProductServiceImpl implements ProductService {
       ArticleDTO articleDTO = new ArticleDTO();
       articleDTO.setProductId(id);
       articleDTO.setMedias(imageProductService.getImagesProductByProductId(id));
-      articleDTO.setInvenstments(invenstmentService.getInvenstmentByProductId(id));
+      articleDTO.setInvenstments(invenstmentService.getAdminSellInvenstments(id));
       articleDTO.setManufacturingProduct(manufacturingProductService.getManufacturingByProductId(id));
       articleDTO.setTitle(productDTO.getTitle());
       articleDTO.setPrice(productDTO.getPrice());
@@ -338,5 +338,11 @@ public class ProductServiceImpl implements ProductService {
          }
       }
       return -1L;
+   }
+
+   @Override
+   public Integer updateAdminSellAssociation(Long productId, Long userId) {
+      productJpaRepository.updateMerchantId(productId, userId);
+      return 1;
    }
 }

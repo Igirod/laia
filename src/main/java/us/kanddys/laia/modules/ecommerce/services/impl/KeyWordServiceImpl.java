@@ -11,6 +11,7 @@ import us.kanddys.laia.modules.ecommerce.exception.KeyWordNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 
 /**
@@ -25,6 +26,9 @@ public class KeyWordServiceImpl implements KeyWordService {
 
    @Autowired
    private KeyWordJpaRepository keyWordJpaRepository;
+
+   @Autowired
+   private KeyWordProductCriteriaRepository keyWordProductCriteriaRepository;
 
    @Override
    public Long createKeyWord(String word) {
@@ -61,8 +65,9 @@ public class KeyWordServiceImpl implements KeyWordService {
 
    @Override
    public List<KeyWordDTO> getKeywordsByProductId(Long productId) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'getKeywordsByProductId'");
+      return keyWordJpaRepository
+            .findAllById(keyWordProductCriteriaRepository.getKeywordsProductsIdsByProductId(productId)).stream()
+            .map(KeyWordDTO::new).toList();
    }
 
 }

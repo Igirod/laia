@@ -7,6 +7,7 @@ import us.kanddys.laia.modules.ecommerce.exception.ExistingHashtagProductExcepti
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.HashtagProduct;
 import us.kanddys.laia.modules.ecommerce.model.HashtagProductId;
+import us.kanddys.laia.modules.ecommerce.repository.HashtagProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 
@@ -22,6 +23,9 @@ public class HashtagProductServiceImpl implements HashtagProductService {
    @Autowired
    private HashtagProductJpaRepository hashtagProductJpaRepository;
 
+   @Autowired
+   private HashtagProductCriteriaRepository hashtagProductCriteriaRepository;
+
    @Override
    public Integer createHashtagProduct(Long idHashtag, Long idProduct) {
       if (hashtagProductJpaRepository.existsById(new HashtagProductId(idHashtag, idProduct)))
@@ -33,6 +37,12 @@ public class HashtagProductServiceImpl implements HashtagProductService {
    @Override
    public Integer deleteHashtagProduct(Long idHashtag, Long idProduct) {
       hashtagProductJpaRepository.deleteById(new HashtagProductId(idHashtag, idProduct));
+      return 1;
+   }
+
+   @Override
+   public Integer deleteHashtagProductByProductId(Long idProduct) {
+      hashtagProductCriteriaRepository.deleteHashtagProductsByProductId(idProduct);
       return 1;
    }
 }

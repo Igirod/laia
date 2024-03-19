@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.Hashtag;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagProductCriteriaRepository;
+import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 
 /**
@@ -27,6 +30,9 @@ public class HashtagServiceImpl implements HashtagService {
 
    @Autowired
    private HashtagProductCriteriaRepository hashtagProductCriteriaRepository;
+
+   @Autowired
+   private HashtagProductService hashtagProductService;
 
    @Override
    public Long getHashtagIdByValue(String value) {
@@ -69,5 +75,30 @@ public class HashtagServiceImpl implements HashtagService {
          return new HashtagDTO();
       else
          return new HashtagDTO(hashtag.get());
+   }
+
+   @Override
+   public Integer wAdminSellHashtag(String hashtag) {
+      var existHashtag = hashtagJpaRepository.findByValue(hashtag);
+      if (existHashtag == null)
+         return 0;
+      else
+         return 1;
+   }
+
+   @Override
+   public Integer uAdminSellHashtag(Long productId, Optional<String> hashtag) {
+      if (hashtag.isPresent()) {
+         var existHashtag = hashtagJpaRepository.findByValue(hashtag.get());
+         if (existHashtag == null)
+            return 0;
+         else {
+            hashtagProductService.createHashtagProduct(existHashtag, productId);
+            return 1;
+         }
+      } else {
+         hashtagProductService.deleteHashtagProductByProductId(productId);
+         return -1;
+      }
    }
 }

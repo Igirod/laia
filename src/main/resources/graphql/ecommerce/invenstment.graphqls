@@ -1,4 +1,4 @@
-type InvestmentDTO {
+type InvenstmentDTO {
    id: Int!
    productId: Int
    amount: Float

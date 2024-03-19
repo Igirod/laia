@@ -11,10 +11,11 @@
 #import "./ecommerce/article.graphqls"
 #import "./ecommerce/orderproduct.graphqls"
 #import "./ecommerce/login.graphqls"
+#import "./ecommerce/keyword.graphqls"
 
 type Query {
    products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
-   productDId(productId: Int!): [ProductDetailDTO]
+   gAdminSellSegments(productId: Int!): [ProductDetailDTO]
    payments(page: Int!, merchantId: Int, status: Int): [PaymentDTO]
    imagesPId(productId: Int!): [ImageProductDTO]
    productDSId(productId: Int!): ProductDetailShortDTO
@@ -30,6 +31,10 @@ type Query {
    gInvoice(invoiceId: Int!): InvoiceDTO
    gProductsByTypeFilter(typeFilter: String!, page: Int!) : [ProductDTO]
    sqqGoogle(email: String!, name: String, lastName: String, phone: String, image: String) : UserDTO
+   gAdminSellKeyWords(productId: Int!) : [KeyWordDTO]
+   gAdminSellInvenstments(productId: Int!) : [InvenstmentDTO]
+   wAdminSellHashtag(hashtag: String) : Int
+   wAdminSellKeyWords(productId: Int!) : [KeyWordDTO]
 }
 
 type Mutation {
@@ -73,4 +78,6 @@ type Mutation {
    cCategoryProduct(categoryId: Int!, productId: Int!) : Int
    dCategoryProduct(categoryId: Int!, productId: Int!) : Int
    cProduct(productId: Int, userId: Int, title: String, price: Float, stock: Int, tStock: String) : Int
+   uAdminSellAssociation(productId: Int!, userId: Int!) : Int
+   uAdminSellHashtag(productId: Int!, hashtag: String) : Int
 }

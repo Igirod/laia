@@ -54,4 +54,9 @@ public class ProductController {
          @Argument String title, @Argument String tStock, @Argument Double price, @Argument Integer stock) {
       return productService.createProduct(userId, productId, title, tStock, price, stock);
    }
+
+   @MutationMapping("uAdminSellAssociation")
+   public Integer updateAdminSellAssociation(@Argument Long productId, @Argument Long userId) {
+      return productService.updateAdminSellAssociation(productId, userId);
+   }
 }

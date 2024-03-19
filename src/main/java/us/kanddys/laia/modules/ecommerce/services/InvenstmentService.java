@@ -51,5 +51,13 @@ public interface InvenstmentService {
    public Integer updateInvenstment(Long invenstmentId, Optional<Double> amount, Optional<String> note,
          Optional<String> title);
 
-   public List<InvenstmentDTO> getInvenstmentByProductId(Long id);
+   /**
+    * Este método obtiene las inversiones asociadas a un producto.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return List<InvenstmentDTO>
+    */
+   public List<InvenstmentDTO> getAdminSellInvenstments(Long productId);
 }

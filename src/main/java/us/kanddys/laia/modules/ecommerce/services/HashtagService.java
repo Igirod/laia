@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
+import java.util.Optional;
+
 import us.kanddys.laia.modules.ecommerce.controller.dto.HashtagDTO;
 
 /**
@@ -55,4 +57,25 @@ public interface HashtagService {
     * @return List
     */
    public HashtagDTO getHashtagsByProductId(Long productId);
+
+   /**
+    * Método que verifica la existencia del hashtag.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param hashtag
+    * @return Integer
+    */
+   public Integer wAdminSellHashtag(String hashtag);
+
+   /**
+    * Este método tiene la obligación de actualizar el hashtag de un producto.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param hashtag
+    * @return Integer
+    */
+   public Integer uAdminSellHashtag(Long productId, Optional<String> hashtag);
 }

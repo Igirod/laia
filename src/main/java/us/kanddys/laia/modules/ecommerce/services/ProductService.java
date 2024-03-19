@@ -147,4 +147,15 @@ public interface ProductService {
 
    public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,
          Integer stock);
+
+   /**
+    * Método que tiene la obligación de asociar un producto a un comerciante.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param userId
+    * @return Integer
+    */
+   public Integer updateAdminSellAssociation(Long productId, Long userId);
 }
