@@ -36,6 +36,7 @@ type Query {
    wAdminSellHashtag(hashtag: String) : Int
    wAdminSellKeyWords(userId: Int!, keyWordValue: String) : [KeyWordDTO]
    gAdminSellQuestions(productId: Int!) : [SellerQuestionDTO]
+   gAdminSellProduct(productId: Int!) : ArticleDTO
 }
 
 type Mutation {

@@ -24,11 +24,12 @@ public class HashtagProductCriteriaRepository {
    public Long getHashtagIdsByProductId(Long productId) {
       List<Predicate> predicates = new ArrayList<>();
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<Long> cQueryHahstagProduct = cBuilder.createQuery(Long.class);
-      Root<Long> rHashtagProduct = cQueryHahstagProduct.from(Long.class);
+      CriteriaQuery<Long> cQueryHashtagProduct = cBuilder.createQuery(Long.class);
+      Root<HashtagProduct> rHashtagProduct = cQueryHashtagProduct.from(HashtagProduct.class);
       predicates.add(cBuilder.equal(rHashtagProduct.get("id").get("productId"), productId));
-      cQueryHahstagProduct.where(predicates.toArray(new Predicate[0]));
-      return entityManager.createQuery(cQueryHahstagProduct).getSingleResult();
+      cQueryHashtagProduct.select(rHashtagProduct.get("id").get("hashId"));
+      cQueryHashtagProduct.where(predicates.toArray(new Predicate[0]));
+      return entityManager.createQuery(cQueryHashtagProduct).getSingleResult();
    }
 
    @Transactional

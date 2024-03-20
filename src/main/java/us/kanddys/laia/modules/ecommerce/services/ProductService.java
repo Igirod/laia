@@ -139,15 +139,6 @@ public interface ProductService {
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions);
 
-   /**
-    * Este método tiene la obligación de obtener un producto por su id.
-    *
-    * @param id
-    * @return ArticleDTO
-    * @throws ProductNotFoundException
-    */
-   public ArticleDTO getArticleById(Long id) throws ProductNotFoundException;
-
    public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,
          Integer stock);
 
@@ -161,4 +152,14 @@ public interface ProductService {
     * @return Integer
     */
    public Integer updateAdminSellAssociation(Long productId, Long userId);
+
+   /**
+    * Método que tiene la obligación de obtener un producto por su id.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return ArticleDTO
+    */
+   public ArticleDTO getAdminSellProduct(Long productId);
 }

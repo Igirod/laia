@@ -41,8 +41,6 @@ public class ArticleDTO {
    private List<KeyWordDTO> keywords;
    @JsonProperty
    private List<SellerQuestionDTO> questions;
-   @JsonProperty
-   private List<CategoryDTO> categories;
 
    public ArticleDTO() {
    }

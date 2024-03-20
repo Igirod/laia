@@ -306,28 +306,6 @@ public class ProductServiceImpl implements ProductService {
       }
    }
 
-   @Override
-   public ArticleDTO getArticleById(Long id) throws ProductNotFoundException {
-      ProductDTO productDTO = getProductById(id);
-      if (productDTO == null)
-         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
-      ArticleDTO articleDTO = new ArticleDTO();
-      articleDTO.setProductId(id);
-      articleDTO.setMedias(imageProductService.getImagesProductByProductId(id));
-      articleDTO.setInvenstments(invenstmentService.getAdminSellInvenstments(id));
-      articleDTO.setManufacturingProduct(manufacturingProductService.getManufacturingByProductId(id));
-      articleDTO.setTitle(productDTO.getTitle());
-      articleDTO.setPrice(productDTO.getPrice());
-      articleDTO.setTypeOfPrice(productDTO.getTypeOfPrice());
-      articleDTO.setStock(productDTO.getStock());
-      articleDTO.setSegments(productDetailService.getProductDetailsByProductId(id));
-      articleDTO.setHashtag(hashtagService.getHashtagsByProductId(id));
-      // articleDTO.setKeywords();
-      // articleDTO.setQuestions();
-      // articleDTO.setCategories();
-      return articleDTO;
-   }
-
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,
@@ -430,5 +408,26 @@ public class ProductServiceImpl implements ProductService {
       auxiliarProductMediaRepository.deleteByAuxiliarProductId(productId);
       auxiliarProductJpaRepository.deleteById(productId);
       return 1;
+   }
+
+   @Override
+   public ArticleDTO getAdminSellProduct(Long id) {
+      ProductDTO productDTO = getProductById(id);
+      if (productDTO == null)
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      ArticleDTO articleDTO = new ArticleDTO();
+      articleDTO.setProductId(id);
+      articleDTO.setMedias(imageProductService.getImagesProductByProductId(id));
+      articleDTO.setInvenstments(invenstmentService.getAdminSellInvenstments(id));
+      articleDTO.setManufacturingProduct(manufacturingProductService.getManufacturingByProductId(id));
+      articleDTO.setTitle(productDTO.getTitle());
+      articleDTO.setPrice(productDTO.getPrice());
+      articleDTO.setTypeOfPrice(productDTO.getTypeOfPrice());
+      articleDTO.setStock(productDTO.getStock());
+      articleDTO.setSegments(productDetailService.getProductDetailsByProductId(id));
+      articleDTO.setHashtag(hashtagService.getHashtagsByProductId(id));
+      articleDTO.setKeywords(keyWordService.getKeywordsByProductId(id));
+      articleDTO.setQuestions(sellerQuestionService.getAdminSellQuestions(id));
+      return articleDTO;
    }
 }

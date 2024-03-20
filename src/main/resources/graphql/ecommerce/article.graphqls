@@ -1,0 +1,21 @@
+#import "./ecommerce/imageproduct.graphqls"
+#import "./ecommerce/invenstment.graphqls"
+#import "./ecommerce/productdetail.graphqls"
+#import "./ecommerce/keyword.graphqls"
+#import "./ecommerce/sellerquestion.graphqls"
+#import "./ecommerce/hashtag.graphqls"
+
+type ArticleDTO {
+   productId: Int!
+   medias: [ImageProductDTO]
+   title: String
+   price: Float
+   typeOfPrice: String
+   stock: Int
+   invenstments: [InvenstmentDTO]
+   hashtag: HashtagDTO
+   segments: [ProductDetailDTO]
+   manufacturingProduct: ManufacturingProductDTO
+   keywords: [KeyWordDTO]
+   questions: [SellerQuestionDTO]
+}

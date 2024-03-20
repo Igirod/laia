@@ -39,11 +39,6 @@ public class ProductController {
       return productService.deleteProduct(productId);
    }
 
-   @QueryMapping("gProduct")
-   public ArticleDTO getProduct(@Argument Long productId) {
-      return productService.getArticleById(productId);
-   }
-
    @QueryMapping("gProductsByTypeFilter")
    public List<ProductDTO> getProductsByTypeFilterPaginated(@Argument TypeFilter typeFilter, @Argument Integer page) {
       return productService.getProductsByTypeFilterPaginated(page, typeFilter);
@@ -58,5 +53,10 @@ public class ProductController {
    @MutationMapping("uAdminSellAssociation")
    public Integer updateAdminSellAssociation(@Argument Long productId, @Argument Long userId) {
       return productService.updateAdminSellAssociation(productId, userId);
+   }
+
+   @QueryMapping("gAdminSellProduct")
+   public ArticleDTO getAdminSellProduct(@Argument Long productId) {
+      return productService.getAdminSellProduct(productId);
    }
 }
