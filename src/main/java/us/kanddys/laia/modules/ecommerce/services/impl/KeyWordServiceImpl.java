@@ -1,19 +1,25 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordInputDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ExistingKeyWordException;
 import us.kanddys.laia.modules.ecommerce.exception.KeyWordNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
+import us.kanddys.laia.modules.ecommerce.model.KeyWordProduct;
+import us.kanddys.laia.modules.ecommerce.model.KeyWordProductId;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductCriteriaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 
 /**
@@ -31,6 +37,9 @@ public class KeyWordServiceImpl implements KeyWordService {
 
    @Autowired
    private KeyWordProductCriteriaRepository keyWordProductCriteriaRepository;
+
+   @Autowired
+   private KeyWordProductJpaRepository keyWordProductJpaRepository;
 
    @Autowired
    private KeyWordCriteriaRepository keyWordCriteriaRepository;
@@ -81,4 +90,48 @@ public class KeyWordServiceImpl implements KeyWordService {
             .toList();
    }
 
+   @Override
+   public List<KeyWordDTO> updateKeywordsByProductId(Long productId, Long userId, List<KeyWordInputDTO> keyWords) {
+      var productKeyWordsWithId = keyWords.stream()
+            .filter(keyWord -> keyWord.getId() != null)
+            .collect(Collectors.toList());
+      var productKeyWordsWithoutId = keyWords.stream()
+            .filter(keyWord -> keyWord.getId() == null)
+            .collect(Collectors.toList());
+      var deletedKeyWordsId = new ArrayList<Long>();
+      keyWordJpaRepository
+            .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId))
+            .forEach(keyWord -> {
+               if (productKeyWordsWithId.stream()
+                     .noneMatch(existKeyWord -> existKeyWord.getId().equals(keyWord.getId())))
+                  // ! En caso de que las palabras existentes no se encuentren en el
+                  // ! en el listado pasado por parametro, estas se eliminan.
+                  deletedKeyWordsId.add(keyWord.getId());
+            });
+      for (var keyWord : deletedKeyWordsId) {
+         for (var countKeyword : keyWordProductJpaRepository
+               .countKeyWordProductByWordIds(deletedKeyWordsId)) {
+            if (countKeyword == 1) {
+               keyWordJpaRepository.deleteById(keyWord);
+            }
+            if (countKeyword > 1) {
+               keyWordProductJpaRepository.deleteById(new KeyWordProductId(keyWord, productId));
+            }
+         }
+      }
+      if (!productKeyWordsWithoutId.isEmpty()) {
+         // * Se insertan las palabras claves que no tienen id.
+         var newProductKeywords = keyWordJpaRepository.saveAll(productKeyWordsWithoutId.stream()
+               .map(keyWord -> new KeyWord(null, keyWord.getWord(), userId))
+               .collect(Collectors.toList()));
+         // * Se asocian las nuevas palabras claves al producto.
+         keyWordProductJpaRepository
+               .saveAll(newProductKeywords.stream()
+                     .map(keyWord -> new KeyWordProduct(new KeyWordProductId(keyWord.getId(), productId)))
+                     .collect(Collectors.toList()));
+      }
+      return keyWordJpaRepository
+            .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId)).stream()
+            .map(KeyWordDTO::new).toList();
+   }
 }

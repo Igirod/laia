@@ -29,4 +29,6 @@ public class KeyWordProductCriteriaRepository {
             .where(predicates.toArray(new Predicate[0]));
       return entityManager.createQuery(cQueryKeyWordProduct).getResultList();
    }
+
+   
 }

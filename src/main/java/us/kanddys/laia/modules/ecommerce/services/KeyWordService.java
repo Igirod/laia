@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordInputDTO;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
@@ -71,4 +72,17 @@ public interface KeyWordService {
     * @return List<KeyWordDTO>
     */
    public List<KeyWordDTO> getKeywordsByValueAndUserid(Long userId, Optional<String> keyWordValue);
+
+   /**
+    * Método que tiene la obligación de actualizar las palabras claves asociadas a
+    * un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param userId
+    * @param keyWords
+    * @return List<KeyWordDTO>
+    */
+   public List<KeyWordDTO> updateKeywordsByProductId(Long productId, Long userId, List<KeyWordInputDTO> keyWords);
 }
