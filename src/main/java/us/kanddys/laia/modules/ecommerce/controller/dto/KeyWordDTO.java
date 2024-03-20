@@ -20,6 +20,8 @@ public class KeyWordDTO {
    private Long id;
    @JsonProperty
    private String word;
+   @JsonProperty
+   private Long userId;
 
    public KeyWordDTO() {
    }
@@ -28,5 +30,6 @@ public class KeyWordDTO {
       super();
       this.id = (keyWord.getId() == null ? null : keyWord.getId());
       this.word = (keyWord.getWord() == null ? null : keyWord.getWord());
+      this.userId = (keyWord.getUserId() == null ? null : keyWord.getUserId());
    }
 }

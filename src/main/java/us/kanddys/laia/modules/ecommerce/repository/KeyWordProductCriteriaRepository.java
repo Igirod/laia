@@ -19,7 +19,7 @@ public class KeyWordProductCriteriaRepository {
    @Autowired
    private EntityManager entityManager;
 
-   public List<Long> getKeywordsProductsIdsByProductId(Long productId) {
+   public List<Long> findKeywordsProductsIdsByProductId(Long productId) {
       List<Predicate> predicates = new ArrayList<>();
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Long> cQueryKeyWordProduct = cBuilder.createQuery(Long.class);

@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -22,8 +23,8 @@ public class KeywordController {
    private KeyWordProductService keywordProductService;
 
    @MutationMapping("cKeyWord")
-   public Long createKeyWordProduct(@Argument String word) {
-      return keywordService.createKeyWord(word);
+   public Long createKeyWordProduct(@Argument String word, @Argument Long userId) {
+      return keywordService.createKeyWord(word, userId);
    }
 
    @MutationMapping("uKeyWord")
@@ -51,10 +52,11 @@ public class KeywordController {
       return keywordService.getKeywordsByProductId(productId);
    }
 
-   // @QueryMapping("wAdminSellKeyWords")
-   // public List<KeyWordDTO> getKeywords() {
-   // return keywordService.getKeywords();
-   // }
+   @QueryMapping("wAdminSellKeyWords")
+   public List<KeyWordDTO> getKeywords(@Argument Long userId, @Argument Optional<String> keyWordValue) {
+      return keywordService.getKeywordsByValueAndUserid(userId, keyWordValue);
+
+   }
 
    // @MutationMapping("uAdminSellKeyWords")
    // public List<KeyWordDTO> updateKeywords(@Argument Long productId, @Argument

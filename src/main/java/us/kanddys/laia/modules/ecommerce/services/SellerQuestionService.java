@@ -76,4 +76,18 @@ public interface SellerQuestionService {
     * @return SellerQuestionDTO
     */
    public SellerQuestionDTO getQuestionByQuestionAndType(String question, String type);
+
+   public Integer updateAdminSellQuestions(Long id, Optional<String> value, Optional<String> type,
+         Optional<Integer> required, Optional<Integer> limit, Optional<List<String>> options);
+
+   /**
+    * Este método se encarga de obtener las preguntas de un vendedor por su id de
+    * producto asociado.
+    * 
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @return List<SellerQuestionDTO>
+    */
+   public List<SellerQuestionDTO> getAdminSellQuestions(Long productId);
 }

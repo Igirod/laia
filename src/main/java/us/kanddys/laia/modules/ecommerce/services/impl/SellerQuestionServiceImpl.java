@@ -85,4 +85,47 @@ public class SellerQuestionServiceImpl implements SellerQuestionService {
       return new SellerQuestionDTO(sellerQuestionJpaRepository.findQuestionByQuestionAndType(question, type));
    }
 
+   @Override
+   public Integer updateAdminSellQuestions(Long id, Optional<String> value, Optional<String> type,
+         Optional<Integer> required, Optional<Integer> limit, Optional<List<String>> options) {
+      if (value.isEmpty() && type.isEmpty() && required.isEmpty() && limit.isEmpty() && options.isEmpty()) {
+         if (sellerQuestionJpaRepository.existsById(id)) {
+            sellerQuestionJpaRepository.deleteById(id);
+         }
+      } else {
+         var sellerQuestion = sellerQuestionJpaRepository.findById(id);
+         if (sellerQuestion.isEmpty())
+            throw new SellerQuestionNotFoundException(ExceptionMessage.SELLER_QUESTION_NOT_FOUND);
+         var sellerQuestionToUpdate = sellerQuestion.get();
+         value.ifPresent(sellerQuestionToUpdate::setQuestion);
+         type.ifPresent(sellerQuestionToUpdate::setType);
+         required.ifPresent(sellerQuestionToUpdate::setRequired);
+         limit.ifPresent(sellerQuestionToUpdate::setLimit);
+         sellerQuestionJpaRepository.save(sellerQuestionToUpdate);
+         if (type.isPresent() && type.get().equals("MULTIPLE")) {
+            if (limit.isEmpty())
+               throw new IllegalArgumentException(ExceptionMessage.LIMIT_REQUIRED);
+            if (options.isEmpty())
+               throw new IllegalArgumentException(ExceptionMessage.OPTIONS_REQUIRED);
+            sellerQuestionMultipleOptionJpaRepository.deleteBySellerQuestionId(id);
+            sellerQuestionMultipleOptionJpaRepository.saveAll(options.get().stream()
+                  .map(option -> new SellerQuestionMultipleOption(null, id, option)).toList());
+         }
+      }
+      return 1;
+   }
+
+   @Override
+   public List<SellerQuestionDTO> getAdminSellQuestions(Long productId) {
+      var productQuestions = sellerQuestionJpaRepository.findQuestionByProductId(productId).stream()
+            .map(SellerQuestionDTO::new)
+            .toList();
+      productQuestions.forEach(question -> {
+         if (question.getType().equals("MULTIPLE")) {
+            question.setOptions(
+                  sellerQuestionMultipleOptionJpaRepository.findBySellerQuestionId(question.getId()));
+         }
+      });
+      return productQuestions;
+   }
 }

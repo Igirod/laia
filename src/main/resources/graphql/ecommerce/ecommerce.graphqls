@@ -12,6 +12,7 @@
 #import "./ecommerce/orderproduct.graphqls"
 #import "./ecommerce/login.graphqls"
 #import "./ecommerce/keyword.graphqls"
+#import "./ecommerce/sellerquestion.graphqls"
 
 type Query {
    products(page: Int!, merchantId: Int!, status: Int): [ProductDTO]
@@ -30,11 +31,11 @@ type Query {
    gBatches(calendarId: Int!, day: String!, date: String!, exceptionalDate: Int): [BatchDTO]
    gInvoice(invoiceId: Int!): InvoiceDTO
    gProductsByTypeFilter(typeFilter: String!, page: Int!) : [ProductDTO]
-   sqqGoogle(email: String!, name: String, lastName: String, phone: String, image: String) : UserDTO
    gAdminSellKeyWords(productId: Int!) : [KeyWordDTO]
    gAdminSellInvenstments(productId: Int!) : [InvenstmentDTO]
    wAdminSellHashtag(hashtag: String) : Int
-   wAdminSellKeyWords(productId: Int!) : [KeyWordDTO]
+   wAdminSellKeyWords(userId: Int!, keyWordValue: String) : [KeyWordDTO]
+   gAdminSellQuestions(productId: Int!) : [SellerQuestionDTO]
 }
 
 type Mutation {
@@ -64,7 +65,7 @@ type Mutation {
    dHashtag(hashtagId: Int!) : Int
    cHashtagProduct(productId: Int!, hashtagId: Int!) : Int
    dHashtagProduct(productId: Int!, hashtagId: Int!) : Int
-   cKeyWord(word: String!) : Int
+   cKeyWord(word: String!, userId: Int!) : Int
    uKeyWord(keyWordId: Int!, word: String!) : Int
    dKeyWord(keyWordId: Int!) : Int
    cKeyWordProduct(productId: Int!, keyWordId: Int!) : Int
@@ -80,4 +81,5 @@ type Mutation {
    cProduct(productId: Int, userId: Int, title: String, price: Float, stock: Int, tStock: String) : Int
    uAdminSellAssociation(productId: Int!, userId: Int!) : Int
    uAdminSellHashtag(productId: Int!, hashtag: String) : Int
+   uAdminSellQuestion(sellerQuestionId: Int!, value: String, type: String, required: Int, limit: Int, options: [String]) : Int
 }

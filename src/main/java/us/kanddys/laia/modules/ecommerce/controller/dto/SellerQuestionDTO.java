@@ -1,5 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +29,10 @@ public class SellerQuestionDTO {
    private Integer required;
    @JsonProperty
    private Integer limit;
+   @JsonProperty
+   private Long productId;
+   @JsonProperty
+   private List<String> options;
 
    public SellerQuestionDTO() {
    }
@@ -38,5 +44,6 @@ public class SellerQuestionDTO {
       this.question = (sellerQuestion.getQuestion() != null ? sellerQuestion.getQuestion() : null);
       this.required = (sellerQuestion.getRequired() != null ? sellerQuestion.getRequired() : null);
       this.type = (sellerQuestion.getType() != null ? sellerQuestion.getType() : null);
+      this.productId = (sellerQuestion.getProductId() != null ? sellerQuestion.getProductId() : null);
    }
 }

@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
 
@@ -19,9 +20,10 @@ public interface KeyWordService {
     * @author Igirod0
     * @version 1.0.0
     * @param word
+    * @param userId
     * @return Long
     */
-   public Long createKeyWord(String word);
+   public Long createKeyWord(String word, Long userId);
 
    /**
     * Este método tiene la obligación de modificar una keyword.
@@ -57,4 +59,16 @@ public interface KeyWordService {
     * @return List
     */
    public List<KeyWordDTO> getKeywordsByProductId(Long productId);
+
+   /**
+    * Método que tiene la obligación de obtener un listado de 5 keyWords.
+    * por su valor y el id del usuario asociado.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param keyWordValue
+    * @param userId
+    * @return List<KeyWordDTO>
+    */
+   public List<KeyWordDTO> getKeywordsByValueAndUserid(Long userId, Optional<String> keyWordValue);
 }

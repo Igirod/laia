@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import us.kanddys.laia.modules.ecommerce.exception.ExistingKeyWordException;
 import us.kanddys.laia.modules.ecommerce.exception.KeyWordNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
+import us.kanddys.laia.modules.ecommerce.repository.KeyWordCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
@@ -30,11 +32,14 @@ public class KeyWordServiceImpl implements KeyWordService {
    @Autowired
    private KeyWordProductCriteriaRepository keyWordProductCriteriaRepository;
 
+   @Autowired
+   private KeyWordCriteriaRepository keyWordCriteriaRepository;
+
    @Override
-   public Long createKeyWord(String word) {
+   public Long createKeyWord(String word, Long userId) {
       if (keyWordJpaRepository.findKeyWordIdByWord(word) != null)
          throw new ExistingKeyWordException(ExceptionMessage.EXISTING_KEY_WORD);
-      return keyWordJpaRepository.save(new KeyWord(null, word)).getId();
+      return keyWordJpaRepository.save(new KeyWord(null, word, userId)).getId();
    }
 
    @Override
@@ -66,8 +71,14 @@ public class KeyWordServiceImpl implements KeyWordService {
    @Override
    public List<KeyWordDTO> getKeywordsByProductId(Long productId) {
       return keyWordJpaRepository
-            .findAllById(keyWordProductCriteriaRepository.getKeywordsProductsIdsByProductId(productId)).stream()
+            .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId)).stream()
             .map(KeyWordDTO::new).toList();
+   }
+
+   @Override
+   public List<KeyWordDTO> getKeywordsByValueAndUserid(Long userdId, Optional<String> keyWordValue) {
+      return keyWordCriteriaRepository.findKeywordsByUserIdAndValue(userdId, keyWordValue).stream().map(KeyWordDTO::new)
+            .toList();
    }
 
 }

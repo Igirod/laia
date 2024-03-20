@@ -215,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
                   segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
                   sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
-                  sellerQuestionOptions);
+                  sellerQuestionOptions, userid);
             newProductId = newProductDTO.getId();
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
@@ -253,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
          Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle,
-         Optional<List<String>> sellerQuestionOptions) {
+         Optional<List<String>> sellerQuestionOptions, Long userId) {
       if (manufacturingTime.isPresent() && manufacturingType.isPresent()) {
          manufacturingProductService.createManufacturingProduct(Long.valueOf(productId.get()),
                manufacturingType, Optional.of(Integer.valueOf(manufacturingTime.get())));
@@ -281,7 +281,7 @@ public class ProductServiceImpl implements ProductService {
          // * Si no existe la keyword se crea.
          if (keywordId == null) {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()),
-                  keyWordService.createKeyWord(keywordValue.get()));
+                  keyWordService.createKeyWord(keywordValue.get(), userId));
          } else {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
          }
@@ -413,7 +413,7 @@ public class ProductServiceImpl implements ProductService {
                (auxiliarProduct.get().getCategoryTitle() != null
                      ? Optional.of(auxiliarProduct.get().getCategoryTitle().toString())
                      : null),
-               Optional.of(auxiliarMultipleQuestionRepository.findOptionsByProductId(productId)));
+               Optional.of(auxiliarMultipleQuestionRepository.findOptionsByProductId(productId)), userId);
          productDetailService.createProductDetailFrontPageString((auxiliarProduct.get().getSegmentTitle() != null
                ? Optional.of(auxiliarProduct.get().getSegmentTitle().toString())
                : null),

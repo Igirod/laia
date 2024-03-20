@@ -27,6 +27,8 @@ public class KeyWord {
    private Long id;
    @Column(name = "word")
    private String word;
+   @Column(name = "user_id")
+   private Long userId;
 
    public KeyWord() {
    }
