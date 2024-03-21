@@ -83,5 +83,5 @@ type Mutation {
    uAdminSellAssociation(productId: Int!, userId: Int!) : Int
    uAdminSellHashtag(productId: Int!, hashtag: String) : Int
    uAdminSellQuestion(sellerQuestionId: Int!, value: String, type: String, required: Int, limit: Int, options: [String]) : Int
-   uAdminSellKeyWords(productId: Int!, userId: Int!, keyWords: [KeyWordInputDTO]): [KeyWordDTO]
+   uAdminSellKeyWords(productId: Int!, userId: Int!, keyWords: [String]): [String]
 }

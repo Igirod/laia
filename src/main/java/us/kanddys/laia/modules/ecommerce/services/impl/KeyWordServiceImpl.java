@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordInputDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ExistingKeyWordException;
 import us.kanddys.laia.modules.ecommerce.exception.KeyWordNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
@@ -90,47 +89,46 @@ public class KeyWordServiceImpl implements KeyWordService {
    }
 
    @Override
-   public List<KeyWordDTO> updateKeywordsByProductId(Long productId, Long userId, List<KeyWordInputDTO> keyWords) {
-      var productKeyWordsWithId = keyWords.stream()
-            .filter(keyWord -> keyWord.getId() != null)
-            .collect(Collectors.toList());
-      var productKeyWordsWithoutId = keyWords.stream()
-            .filter(keyWord -> keyWord.getId() == null)
-            .collect(Collectors.toList());
+   public List<String> updateKeywordsByProductId(Long productId, Long userId, List<String> keyWords) {
+      var existProductKeyWords = keyWordJpaRepository.findKeyWordIdByWords(keyWords);
       var deletedKeyWordsId = new ArrayList<Long>();
       keyWordJpaRepository
             .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId))
             .forEach(keyWord -> {
-               if (productKeyWordsWithId.stream()
+               if (existProductKeyWords.stream()
                      .noneMatch(existKeyWord -> existKeyWord.getId().equals(keyWord.getId())))
                   // ! En caso de que las palabras existentes no se encuentren en el
                   // ! en el listado pasado por parametro, estas se eliminan.
                   deletedKeyWordsId.add(keyWord.getId());
             });
-      for (var keyWord : deletedKeyWordsId) {
-         for (var countKeyword : keyWordProductJpaRepository
-               .countKeyWordProductByWordIds(deletedKeyWordsId)) {
-            if (countKeyword == 1) {
-               keyWordJpaRepository.deleteById(keyWord);
-            }
-            if (countKeyword > 1) {
-               keyWordProductJpaRepository.deleteById(new KeyWordProductId(keyWord, productId));
-            }
-         }
-      }
-      if (!productKeyWordsWithoutId.isEmpty()) {
-         // * Se insertan las palabras claves que no tienen id.
-         var newProductKeywords = keyWordJpaRepository.saveAll(productKeyWordsWithoutId.stream()
-               .map(keyWord -> new KeyWord(null, keyWord.getWord(), userId))
-               .collect(Collectors.toList()));
-         // * Se asocian las nuevas palabras claves al producto.
+      deletedKeyWordsId.forEach(keyWordId -> {
+         keyWordProductJpaRepository.countKeyWordProductByWordIds(deletedKeyWordsId)
+               .forEach(countKeyword -> {
+                  if (countKeyword == 1) {
+                     keyWordProductJpaRepository.deleteById(new KeyWordProductId(keyWordId, productId));
+                     keyWordJpaRepository.deleteById(keyWordId);
+                  }
+                  if (countKeyword > 1) {
+                     keyWordProductJpaRepository.deleteById(new KeyWordProductId(keyWordId, productId));
+                  }
+               });
+      });
+      var newProductKeyWords = keyWords.stream()
+            .filter(keyWord -> existProductKeyWords.stream().noneMatch(word -> word.getWord().equals(keyWord)))
+            .collect(Collectors.toList());
+      if (!newProductKeyWords.isEmpty()) {
+         // * Se insertan las palabras claves que no tienen id. y se asocian las nuevas
+         // * palabras claves al producto.
          keyWordProductJpaRepository
-               .saveAll(newProductKeywords.stream()
-                     .map(keyWord -> new KeyWordProduct(new KeyWordProductId(keyWord.getId(), productId)))
+               .saveAll(keyWordJpaRepository.saveAll(newProductKeyWords.stream()
+                     .map(keyWord -> new KeyWord(null, keyWord, userId))
+                     .collect(Collectors.toList())).stream()
+                     .map(keyWord -> new KeyWordProduct(new KeyWordProductId(keyWord.getId(),
+                           productId)))
                      .collect(Collectors.toList()));
       }
       return keyWordJpaRepository
-            .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId)).stream()
-            .map(KeyWordDTO::new).toList();
+            .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId))
+            .stream().map(KeyWord::getWord).toList();
    }
 }

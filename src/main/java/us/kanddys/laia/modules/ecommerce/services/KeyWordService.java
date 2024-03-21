@@ -2,16 +2,14 @@ package us.kanddys.laia.modules.ecommerce.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordInputDTO;
 
 /**
  * Esta interface contiene las obligaciones que debe implementar la clase
  * KeyWordServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public interface KeyWordService {
 
@@ -78,11 +76,11 @@ public interface KeyWordService {
     * un producto.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param productId
     * @param userId
     * @param keyWords
-    * @return List<KeyWordDTO>
+    * @return List<String>
     */
-   public List<KeyWordDTO> updateKeywordsByProductId(Long productId, Long userId, List<KeyWordInputDTO> keyWords);
+   public List<String> updateKeywordsByProductId(Long productId, Long userId, List<String> keyWords);
 }
