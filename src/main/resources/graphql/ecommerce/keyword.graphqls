@@ -2,8 +2,3 @@ type KeyWordDTO {
    id: Int!
    word: String
 }
-
-input KeyWordInputDTO {
-   id: Int
-   word: String
-}
