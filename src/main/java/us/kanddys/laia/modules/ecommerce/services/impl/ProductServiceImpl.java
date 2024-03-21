@@ -19,12 +19,15 @@ import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
+import us.kanddys.laia.modules.ecommerce.model.KeyWord;
 import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
@@ -104,6 +107,12 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private AuxiliarProductMediaJpaRepository auxiliarProductMediaRepository;
+
+   @Autowired
+   private KeyWordJpaRepository keyWordJpaRepository;
+
+   @Autowired
+   private KeyWordProductJpaRepository keyWordProductJpaRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -190,7 +199,7 @@ public class ProductServiceImpl implements ProductService {
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
-         Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
+         Optional<String> hashtagValue, Optional<List<String>> keywords, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions) {
@@ -213,7 +222,7 @@ public class ProductServiceImpl implements ProductService {
                   (frontPage.isPresent() ? frontPage.get() : null));
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
-                  segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
+                  segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
                   sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
                   sellerQuestionOptions, userid);
             newProductId = newProductDTO.getId();
@@ -249,7 +258,7 @@ public class ProductServiceImpl implements ProductService {
    private void createProductExtraAtributes(Optional<String> productId, Optional<String> manufacturingTime,
          Optional<String> invenstmentAmount, Optional<String> invenstmentNote, Optional<String> invenstmentTitle,
          Optional<String> manufacturingType, Optional<String> segmentTitle, Optional<String> segmentDescription,
-         Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<String> keywordValue,
+         Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<List<String>> keywords,
          Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle,
@@ -276,12 +285,14 @@ public class ProductServiceImpl implements ProductService {
             hashtagProductService.createHashtagProduct(hashtagId, Long.valueOf(productId.get()));
          }
       }
-      if (keywordValue.isPresent()) {
-         var keywordId = keyWordService.getKeywordId(keywordValue.get());
+      if (keywords.isPresent()) {
+         // TODO: RECORRER LISTA Y AGREGAR.
+         var existKeyWords = keyWordJpaRepository.findKeyWordIdByWords(keywords.get());
+         var newKeyWords = keywords.get().stream().filter(t -> !existKeyWords.stream().map(KeyWord::getWord)
+               .collect(Collectors.toList()).contains(t)).collect(Collectors.toList());
          // * Si no existe la keyword se crea.
-         if (keywordId == null) {
-            keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()),
-                  keyWordService.createKeyWord(keywordValue.get(), userId));
+         if (!newKeyWords.isEmpty()) {
+            ley
          } else {
             keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
          }
