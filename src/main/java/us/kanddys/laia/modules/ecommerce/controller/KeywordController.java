@@ -54,7 +54,7 @@ public class KeywordController {
    }
 
    @QueryMapping("wAdminSellKeyWords")
-   public List<KeyWordDTO> getKeywords(@Argument Long userId, @Argument Optional<String> keyWordValue) {
+   public List<String> getKeywords(@Argument Long userId, @Argument Optional<String> keyWordValue) {
       return keywordService.getKeywordsByValueAndUserid(userId, keyWordValue);
 
    }

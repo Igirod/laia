@@ -34,7 +34,7 @@ type Query {
    gAdminSellKeyWords(productId: Int!) : [KeyWordDTO]
    gAdminSellInvenstments(productId: Int!) : [InvenstmentDTO]
    wAdminSellHashtag(hashtag: String) : Int
-   wAdminSellKeyWords(userId: Int!, keyWordValue: String) : [KeyWordDTO]
+   wAdminSellKeyWords(userId: Int!, keyWordValue: String) : [String]
    gAdminSellQuestions(productId: Int!) : [SellerQuestionDTO]
    gAdminSellProduct(productId: Int!) : ArticleDTO
 }

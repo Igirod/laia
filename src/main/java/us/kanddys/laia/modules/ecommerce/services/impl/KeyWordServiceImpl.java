@@ -85,9 +85,8 @@ public class KeyWordServiceImpl implements KeyWordService {
    }
 
    @Override
-   public List<KeyWordDTO> getKeywordsByValueAndUserid(Long userdId, Optional<String> keyWordValue) {
-      return keyWordCriteriaRepository.findKeywordsByUserIdAndValue(userdId, keyWordValue).stream().map(KeyWordDTO::new)
-            .toList();
+   public List<String> getKeywordsByValueAndUserid(Long userdId, Optional<String> keyWordValue) {
+      return keyWordCriteriaRepository.findKeywordsByUserIdAndValue(userdId, keyWordValue);
    }
 
    @Override

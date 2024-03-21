@@ -20,16 +20,16 @@ public class KeyWordCriteriaRepository {
    @Autowired
    private EntityManager entityManager;
 
-   public List<KeyWord> findKeywordsByUserIdAndValue(Long userId, Optional<String> value) {
+   public List<String> findKeywordsByUserIdAndValue(Long userId, Optional<String> value) {
       List<Predicate> predicates = new ArrayList<>();
       CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<KeyWord> cQueryKeyWord = cBuilder.createQuery(KeyWord.class);
-      Root<KeyWord> rKeyword = cQueryKeyWord.from(KeyWord.class);
-      cQueryKeyWord.select(rKeyword);
+      CriteriaQuery<String> cQueryValue = cBuilder.createQuery(String.class);
+      Root<KeyWord> rKeyword = cQueryValue.from(KeyWord.class);
+      cQueryValue.select(rKeyword.get("word"));
       predicates.add(cBuilder.equal(rKeyword.get("userId"), userId));
       if (value.isPresent())
          predicates.add(cBuilder.like(rKeyword.get("word"), "%" + value.get() + "%"));
-      cQueryKeyWord.where(predicates.toArray(new Predicate[0]));
-      return entityManager.createQuery(cQueryKeyWord).setMaxResults(5).getResultList();
+      cQueryValue.where(predicates.toArray(new Predicate[0]));
+      return entityManager.createQuery(cQueryValue).setMaxResults(5).getResultList();
    }
 }

@@ -69,9 +69,9 @@ public interface KeyWordService {
     * @version 1.0.0
     * @param keyWordValue
     * @param userId
-    * @return List<KeyWordDTO>
+    * @return List<String>
     */
-   public List<KeyWordDTO> getKeywordsByValueAndUserid(Long userId, Optional<String> keyWordValue);
+   public List<String> getKeywordsByValueAndUserid(Long userId, Optional<String> keyWordValue);
 
    /**
     * Método que tiene la obligación de actualizar las palabras claves asociadas a
