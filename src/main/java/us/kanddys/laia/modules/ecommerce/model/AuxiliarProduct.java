@@ -32,8 +32,6 @@ public class AuxiliarProduct {
    private String typeOfStock;
    @Column(name = "hashtag")
    private String hashtag;
-   @Column(name = "keyword")
-   private String keyword;
    @Column(name = "manufacturing_type")
    private String manufacturingType;
    @Column(name = "manufacturing_time")

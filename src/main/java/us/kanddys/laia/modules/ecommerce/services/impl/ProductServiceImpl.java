@@ -20,11 +20,14 @@ import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
+import us.kanddys.laia.modules.ecommerce.model.KeyWordProduct;
+import us.kanddys.laia.modules.ecommerce.model.KeyWordProductId;
 import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
@@ -37,7 +40,6 @@ import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 import us.kanddys.laia.modules.ecommerce.services.InvenstmentService;
-import us.kanddys.laia.modules.ecommerce.services.KeyWordProductService;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
@@ -82,9 +84,6 @@ public class ProductServiceImpl implements ProductService {
    private KeyWordService keyWordService;
 
    @Autowired
-   private KeyWordProductService keyWordProductService;
-
-   @Autowired
    private CategoryService categoryService;
 
    @Autowired
@@ -107,6 +106,9 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private AuxiliarProductMediaJpaRepository auxiliarProductMediaRepository;
+
+   @Autowired
+   private AuxiliarProductKeyWordJpaRepository auxiliarProductKeyWordJpaRepository;
 
    @Autowired
    private KeyWordJpaRepository keyWordJpaRepository;
@@ -233,28 +235,6 @@ public class ProductServiceImpl implements ProductService {
       return newProductId;
    }
 
-   /**
-    * Este método privado tiene la obligación de agregar los atributos extras de un
-    * producto.
-    *
-    * @auhtor Igirod0
-    * @version 1.0.0
-    * @param productId
-    * @param manufacturingTime
-    * @param invenstmentAmount
-    * @param invenstmentNote
-    * @param invenstmentTitle
-    * @param manufacturingType
-    * @param segmentTitle
-    * @param segmentDescription
-    * @param segmentMedia
-    * @param hashtagValue
-    * @param keywordValue
-    * @param sellerQuestionValue
-    * @param sellerQuestionType
-    * @param sellerQuestionLimit
-    * @param sellerQuestionRequired
-    */
    private void createProductExtraAtributes(Optional<String> productId, Optional<String> manufacturingTime,
          Optional<String> invenstmentAmount, Optional<String> invenstmentNote, Optional<String> invenstmentTitle,
          Optional<String> manufacturingType, Optional<String> segmentTitle, Optional<String> segmentDescription,
@@ -286,15 +266,28 @@ public class ProductServiceImpl implements ProductService {
          }
       }
       if (keywords.isPresent()) {
-         // TODO: RECORRER LISTA Y AGREGAR.
          var existKeyWords = keyWordJpaRepository.findKeyWordIdByWords(keywords.get());
-         var newKeyWords = keywords.get().stream().filter(t -> !existKeyWords.stream().map(KeyWord::getWord)
-               .collect(Collectors.toList()).contains(t)).collect(Collectors.toList());
+         var newKeyWordsWord = keywords.get().stream()
+               .filter(
+                     t -> !keyWordJpaRepository.findKeyWordIdByWords(keywords.get()).stream().map(KeyWord::getWord)
+                           .collect(Collectors.toList()).contains(t))
+               .collect(Collectors.toList());
          // * Si no existe la keyword se crea.
-         if (!newKeyWords.isEmpty()) {
-            ley
+         if (!newKeyWordsWord.isEmpty()) {
+            List<Long> existProductKeyWordsId = keyWordJpaRepository.saveAll(newKeyWordsWord.stream()
+                  .map(t -> new KeyWord(t, userId)).collect(Collectors.toList())).stream().map(KeyWord::getId)
+                  .collect(Collectors.toList());
+            existProductKeyWordsId.addAll(existKeyWords.stream().map(KeyWord::getId).collect(Collectors.toList()));
+            // * Se asocian las palabras existentes al nuevo producto.
+            var l = existProductKeyWordsId.stream()
+                  .map(t -> new KeyWordProduct(new KeyWordProductId(t, Long.valueOf(productId.get()))))
+                  .collect(Collectors.toList());
+            keyWordProductJpaRepository.saveAll(l);
          } else {
-            keyWordProductService.createKeyWordProduct(Long.valueOf(productId.get()), keywordId);
+            // * Si existen todas las palabras se asocian al nuevo producto.
+            keyWordProductJpaRepository.saveAll(existKeyWords.stream().map(KeyWord::getId)
+                  .map(t -> new KeyWordProduct(new KeyWordProductId(t, Long.valueOf(productId.get()))))
+                  .collect(Collectors.toList()));
          }
       }
       if (sellerQuestionValue.isPresent() && sellerQuestionType.isPresent()) {
@@ -305,7 +298,6 @@ public class ProductServiceImpl implements ProductService {
                Long.valueOf(productId.get()),
                sellerQuestionOptions);
       }
-
       if (categoryTitle.isPresent()) {
          var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
          if (categoryId == null) {
@@ -360,63 +352,67 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Error al convertir la fecha");
          }
          product = productJpaRepository.save(product);
+         var auxiliarProductKeyWords = auxiliarProductKeyWordJpaRepository.findByAuxiliarProductId(productId);
          createProductExtraAtributes(Optional.of(product.getId().toString()),
                (auxiliarProduct.get().getManufacturingTime() != null
                      ? Optional.of(auxiliarProduct.get().getManufacturingTime().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getInvenstmentAmount() != null
                      ? Optional.of(auxiliarProduct.get().getInvenstmentAmount().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getManufacturingTime() != null
                      ? Optional.of(auxiliarProduct.get().getInvenstmentNote().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getInvenstmentTitle() != null
                      ? Optional.of(auxiliarProduct.get().getInvenstmentTitle().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getManufacturingType() != null
                      ? Optional.of(auxiliarProduct.get().getManufacturingType().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getSegmentTitle() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentTitle().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getSegmentDescription() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
-                     : null),
+                     : Optional.empty()),
                Optional.empty(),
-               (auxiliarProduct.get() != null ? Optional.of(auxiliarProduct.get().getHashtag()) : null),
-               (auxiliarProduct.get().getKeyword() != null
-                     ? Optional.of(auxiliarProduct.get().getKeyword().toString())
-                     : null),
+               (auxiliarProduct.get().getHashtag() != null ? Optional.of(auxiliarProduct.get().getHashtag())
+                     : Optional.empty()),
+               (!auxiliarProductKeyWords.isEmpty()
+                     ? Optional.of(auxiliarProductKeyWords)
+                     : Optional.empty()),
                (auxiliarProduct.get().getQuestionTitle() != null
                      ? Optional.of(auxiliarProduct.get().getQuestionTitle().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getQuestionType() != null
                      ? Optional.of(auxiliarProduct.get().getQuestionType().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getQuestionLimit() != null
                      ? Optional.of(auxiliarProduct.get().getQuestionLimit().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getQuestionRequired() != null
                      ? Optional.of(auxiliarProduct.get().getQuestionRequired().toString())
-                     : null),
+                     : Optional.empty()),
                (auxiliarProduct.get().getCategoryTitle() != null
                      ? Optional.of(auxiliarProduct.get().getCategoryTitle().toString())
-                     : null),
+                     : Optional.empty()),
                Optional.of(auxiliarMultipleQuestionRepository.findOptionsByProductId(productId)), userId);
          productDetailService.createProductDetailFrontPageString((auxiliarProduct.get().getSegmentTitle() != null
                ? Optional.of(auxiliarProduct.get().getSegmentTitle().toString())
-               : null),
+               : Optional.empty()),
                (auxiliarProduct.get().getSegmentMedia() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentMedia().toString())
-                     : null),
+                     : Optional.empty()),
                productId, (auxiliarProduct.get().getSegmentDescription() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
-                     : null));
+                     : Optional.empty()));
       } else {
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       }
+      // ! Borrado del producto auxiliar.
       auxiliarMultipleQuestionRepository.deleteOptionsByProductId(productId);
       auxiliarProductMediaRepository.deleteByAuxiliarProductId(productId);
+      auxiliarProductKeyWordJpaRepository.deleteWordsByProductId(productId);
       auxiliarProductJpaRepository.deleteById(productId);
       return 1;
    }

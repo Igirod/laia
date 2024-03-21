@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarMultipleOptionQuestion;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
+import us.kanddys.laia.modules.ecommerce.model.AuxiliarProductKeyWord;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProductMedia;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
@@ -38,6 +41,9 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
    private AuxiliarMultipleQuestionJpaRepository auxiliarMultipleQuestionRepository;
 
    @Autowired
+   private AuxiliarProductKeyWordJpaRepository auxiliarProductKeyWordJpaRepository;
+
+   @Autowired
    private FirebaseStorageService firebaseStorageService;
 
    @Autowired
@@ -50,7 +56,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
-         Optional<String> hashtagValue, Optional<String> keywordValue, Optional<String> sellerQuestionValue,
+         Optional<String> hashtagValue, Optional<List<String>> keywords, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
          Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions) {
@@ -62,7 +68,6 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                (stock.isPresent() ? Integer.parseInt(stock.get()) : null),
                (typeOfSale.isPresent() ? typeOfSale.get() : null),
                (hashtagValue.isPresent() ? hashtagValue.get() : null),
-               (keywordValue.isPresent() ? keywordValue.get() : null),
                (manufacturingType.isPresent() ? manufacturingType.get() : null),
                (manufacturingTime.isPresent() ? Integer.parseInt(manufacturingTime.get()) : null),
                (segmentTitle.isPresent() ? segmentTitle.get() : null),
@@ -87,6 +92,11 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                      auxiliarProductMediaRepository.save(auxiliarProductMedia);
                   });
          });
+         if (keywords.isPresent()) {
+            auxiliarProductKeyWordJpaRepository.saveAll(keywords.get().stream()
+                  .map(keyword -> new AuxiliarProductKeyWord(null, auxProductId, keyword))
+                  .collect(Collectors.toList()));
+         }
          if (sellerQuestionType.isPresent() && sellerQuestionType.get().equals("MULTIPLE")) {
             sellerQuestionOptions.ifPresent(options -> {
                options.forEach(option -> {
@@ -104,7 +114,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                title,
                typeOfSale, price, stock, status,
                userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
-               segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
+               segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
                sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
                sellerQuestionOptions);
       }

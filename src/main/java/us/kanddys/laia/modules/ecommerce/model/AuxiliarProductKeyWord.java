@@ -10,32 +10,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Esta clase contiene las palabras claves que se utilizarán para la busqueda de
- * productos.
- * 
  * @author Igirod0
  * @version 1.0.0
  */
 @AllArgsConstructor
 @Data
-@Table(name = "key_words")
+@Table(name = "aux_products_key_words")
 @Entity
-public class KeyWord {
+public class AuxiliarProductKeyWord {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
+   @Column(name = "aux_product_key_word_id")
    private Long id;
+   @Column(name = "aux_product_id")
+   private Long auxProductId;
    @Column(name = "word")
    private String word;
-   @Column(name = "user_id")
-   private Long userId;
 
-   public KeyWord() {
-   }
-
-   public KeyWord(String word, Long userId) {
-      super();
-      this.word = word;
-      this.userId = userId;
+   public AuxiliarProductKeyWord() {
    }
 }
