@@ -17,4 +17,7 @@ public interface KeyWordJpaRepository extends JpaRepository<KeyWord, Long> {
 
    @Query(value = "SELECT * FROM key_words k WHERE k.word IN :words", nativeQuery = true)
    public List<KeyWord> findKeyWordIdByWords(@Param("words") List<String> words);
+
+   @Query(value = "SELECT word FROM key_words k WHERE k.id IN :keyWordIds", nativeQuery = true)
+   public List<String> findKeyWordByKeywordIds(@Param("keyWordIds") List<Long> keyWordIds);
 }

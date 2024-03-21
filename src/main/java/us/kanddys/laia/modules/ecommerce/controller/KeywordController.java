@@ -8,8 +8,6 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-
-import us.kanddys.laia.modules.ecommerce.controller.dto.KeyWordDTO;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordProductService;
 import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 
@@ -48,8 +46,8 @@ public class KeywordController {
    }
 
    @QueryMapping("gAdminSellKeyWords")
-   public List<KeyWordDTO> getKeywords(@Argument Long productId) {
-      return keywordService.getKeywordsByProductId(productId);
+   public List<String> getKeywords(@Argument Long productId) {
+      return keywordService.getWordsByProductId(productId);
    }
 
    @QueryMapping("wAdminSellKeyWords")

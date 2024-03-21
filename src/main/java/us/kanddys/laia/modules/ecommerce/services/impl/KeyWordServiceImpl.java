@@ -131,4 +131,10 @@ public class KeyWordServiceImpl implements KeyWordService {
             .findAllById(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId))
             .stream().map(KeyWord::getWord).toList();
    }
+
+   @Override
+   public List<String> getWordsByProductId(Long productId) {
+      return keyWordJpaRepository
+            .findKeyWordByKeywordIds(keyWordProductCriteriaRepository.findKeywordsProductsIdsByProductId(productId));
+   }
 }
