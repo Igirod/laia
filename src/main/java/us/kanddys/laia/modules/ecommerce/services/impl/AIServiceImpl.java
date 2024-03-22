@@ -7,9 +7,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import us.kanddys.laia.modules.ecommerce.services.AIService;
 
+@Service
 public class AIServiceImpl implements AIService {
 
    @Value("${openai.api.key}")
