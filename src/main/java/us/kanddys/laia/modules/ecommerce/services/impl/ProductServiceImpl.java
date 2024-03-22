@@ -151,10 +151,11 @@ public class ProductServiceImpl implements ProductService {
    }
 
    @Override
-   public Integer updateFrontPage(Long productId, MultipartFile image) {
+   public String updateFrontPage(Long productId, MultipartFile image) {
+      var url = firebaseStorageService.uploadFile(image, "front-page-product-", "frontPages");
       productJpaRepository.updateFrontPage(productId,
-            firebaseStorageService.uploadFile(image, "front-page-product-", "frontPages"));
-      return 1;
+            url);
+      return url;
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
@@ -188,7 +189,7 @@ public class ProductServiceImpl implements ProductService {
          var productDTO = new ProductDTO(productJpaRepository.save(product));
          // ! Carga solo la portada.
          if (frontPage != null)
-            updateFrontPage(productDTO.getId(), frontPage);
+            productDTO.setFrontPage(updateFrontPage(productDTO.getId(), frontPage));
          return productDTO;
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());

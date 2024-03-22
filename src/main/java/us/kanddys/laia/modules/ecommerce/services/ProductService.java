@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
-import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -67,7 +66,7 @@ public interface ProductService {
     * @return Integer
     */
    @Modifying
-   public Integer updateFrontPage(Long productId, MultipartFile image);
+   public String updateFrontPage(Long productId, MultipartFile image);
 
    /**
     * Este método tiene la obligación de actualizar un producto.

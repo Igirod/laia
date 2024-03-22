@@ -41,7 +41,8 @@ public class ProductRestController {
    @RequestMapping(method = { RequestMethod.POST }, value = "/upload", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
    public Integer uploadFrontPage(@RequestPart MultipartFile image, @RequestPart String productId) {
-      return productService.updateFrontPage(Long.valueOf(productId), image);
+      productService.updateFrontPage(Long.valueOf(productId), image);
+      return 1;
    }
 
    @Operation(description = "Servicio que tiene la obligación de crear un producto.")
