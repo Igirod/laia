@@ -128,15 +128,18 @@ public class ProductRestController {
          @RequestPart Optional<String> invenstmentAmount, @RequestPart Optional<String> invenstmentTitle,
          @RequestPart Optional<String> manufacturingType, @RequestPart Optional<String> segmentTitle,
          @RequestPart Optional<String> segmentDescription, @RequestPart Optional<MultipartFile> segmentMedia,
-         @RequestPart Optional<String> hashtagValue, @RequestPart Optional<List<String>> keywordValue,
+         @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywords,
          @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
          @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
          @RequestPart Optional<String> categoryTitle, @RequestPart Optional<String> typeOfPrice,
          @RequestPart Optional<String> sellerQuestionOptions) {
       return auxiliarProductService.createAuxiliarProduct(medias, title, typeOfSale, price, stock, status,
             userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
-            segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
-            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
+            segmentTitle, segmentDescription, segmentMedia, hashtagValue,
+            (keywords.isPresent()) ? Optional.of(List.of(keywords.get().split("♀")))
+                  : Optional.empty(),
+            sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
+            typeOfPrice,
             (sellerQuestionOptions.isPresent()) ? Optional.of(List.of(sellerQuestionOptions.get().split("♀")))
                   : Optional.empty());
    }
