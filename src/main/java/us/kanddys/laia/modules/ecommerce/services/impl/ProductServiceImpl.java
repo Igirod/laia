@@ -152,7 +152,8 @@ public class ProductServiceImpl implements ProductService {
 
    @Override
    public Integer updateFrontPage(Long productId, MultipartFile image) {
-      productJpaRepository.updateFrontPage(productId, firebaseStorageService.uploadFile(image, "frontPages"));
+      productJpaRepository.updateFrontPage(productId,
+            firebaseStorageService.uploadFile(image, "front-page-product-", "frontPages"));
       return 1;
    }
 
@@ -196,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Long createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
+   public ProductDTO createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
@@ -207,13 +208,13 @@ public class ProductServiceImpl implements ProductService {
          Optional<List<String>> sellerQuestionOptions) {
       var userid = Long.valueOf(userId.get());
       var merchantId = userJpaRepository.existByUserId(userid);
-      Long newProductId = null;
+      ProductDTO newProductDTO = null;
       if (merchantId == null)
          throw new MerchantNotFoundException(ExceptionMessage.MERCHANT_NOT_FOUND);
       else {
          // * Se crea el producto asociado a un merchant.
          try {
-            var newProductDTO = createProductAndDTO(
+            newProductDTO = createProductAndDTO(
                   new Product(null, (title.isPresent() ? title.get() : null),
                         (price.isPresent() ? Double.valueOf(price.get()) : null),
                         (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null,
@@ -227,12 +228,11 @@ public class ProductServiceImpl implements ProductService {
                   segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
                   sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
                   sellerQuestionOptions, userid);
-            newProductId = newProductDTO.getId();
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
       }
-      return newProductId;
+      return newProductDTO;
    }
 
    private void createProductExtraAtributes(Optional<String> productId, Optional<String> manufacturingTime,

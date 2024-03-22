@@ -20,5 +20,5 @@ public interface FirebaseStorageService {
     * @param folderName
     * @return String
     */
-   public String uploadFile(MultipartFile multipartFile, String folderName);
+   public String uploadFile(MultipartFile multipartFile, String imageName, String folderName);
 }

@@ -62,7 +62,8 @@ public class InvoiceServiceImpl implements InvoiceService {
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public InvoicePaymentDTO updateInvoiceVoucher(MultipartFile voucher, Long invoiceId) {
-      var voucherUrl = firebaseStorageService.uploadFile(voucher, "vouchers");
+      var voucherUrl = firebaseStorageService.uploadFile(voucher, "invoice-voucher-" + invoiceId.toString(),
+            "vouchers");
       invoiceJpaRepository.updateVoucherByInvoiceId(voucherUrl, invoiceId);
       // * Se utiliza este tipo de DTO para no crear uno nuevo.
       return new InvoicePaymentDTO(voucherUrl, null, null);

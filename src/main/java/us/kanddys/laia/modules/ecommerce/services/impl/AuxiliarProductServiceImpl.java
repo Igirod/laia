@@ -1,5 +1,6 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleImageDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarMultipleOptionQuestion;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProductKeyWord;
@@ -17,6 +21,7 @@ import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaR
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
@@ -51,7 +56,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Long createAuxiliarProduct(Optional<List<MultipartFile>> medias, Optional<String> title,
+   public NewArticleDTO createAuxiliarProduct(Optional<List<MultipartFile>> medias, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,
@@ -62,7 +67,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          Optional<List<String>> sellerQuestionOptions) {
       if (userId.isEmpty()) {
          var auxProductId = auxiliarProductJpaRepository.save(new AuxiliarProduct(null,
-               (medias.isPresent() ? firebaseStorageService.uploadFile(medias.get().get(0), "frontPages") : null),
+               null,
                (userId.isPresent() ? Long.parseLong(userId.get()) : null),
                (title.isPresent() ? title.get() : null), (price.isPresent() ? Double.parseDouble(price.get()) : null),
                (stock.isPresent() ? Integer.parseInt(stock.get()) : null),
@@ -72,8 +77,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                (manufacturingTime.isPresent() ? Integer.parseInt(manufacturingTime.get()) : null),
                (segmentTitle.isPresent() ? segmentTitle.get() : null),
                (segmentDescription.isPresent() ? segmentDescription.get() : null),
-               (segmentMedia.isPresent() ? firebaseStorageService.uploadFile(segmentMedia.get(), "productDetails")
-                     : null),
+               null,
                (invenstmentNote.isPresent() ? invenstmentNote.get() : null),
                (invenstmentAmount.isPresent() ? Double.parseDouble(invenstmentAmount.get()) : null),
                (invenstmentTitle.isPresent() ? invenstmentTitle.get() : null),
@@ -83,15 +87,18 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                (sellerQuestionRequired.isPresent() ? Integer.parseInt(sellerQuestionRequired.get()) : null),
                (categoryTitle.isPresent() ? categoryTitle.get() : null),
                (typeOfPrice.isPresent() ? typeOfPrice.get() : null))).getAuxProductId();
-         medias.ifPresent(mediasList -> {
-            mediasList.stream()
-                  .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.
-                  .forEach(media -> {
-                     var auxiliarProductMedia = new AuxiliarProductMedia(null, auxProductId,
-                           firebaseStorageService.uploadFile(media, "imageProducts"));
-                     auxiliarProductMediaRepository.save(auxiliarProductMedia);
-                  });
-         });
+         ArticleImageDTO frontPage = null;
+         if (medias.isPresent()) {
+            frontPage = (new ArticleImageDTO(
+                  firebaseStorageService.uploadFile(medias.get().get(0),
+                        "front-page-product-" + auxProductId.toString(),
+                        "frontPages"),
+                  "IMAGE"));
+         }
+         if (segmentMedia.isPresent()) {
+            firebaseStorageService.uploadFile(segmentMedia.get(), "product-detail" + auxProductId.toString(),
+                  "productDetails");
+         }
          if (keywords.isPresent()) {
             auxiliarProductKeyWordJpaRepository.saveAll(keywords.get().stream()
                   .map(keyword -> new AuxiliarProductKeyWord(null, auxProductId, keyword))
@@ -106,17 +113,45 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                });
             });
          }
-         return auxProductId;
+
+         return new NewArticleDTO(auxProductId,
+               uploadProductMedias(medias, auxProductId, frontPage.getUrl(), frontPage.getType()));
       } else {
          // ! En caso de que se pase el userId por parámetro recurrimos a crear
          // ! directamente el articulo.
-         return productService.createProduct((medias.isPresent() ? Optional.of(medias.get().get(0)) : Optional.empty()),
+         ProductDTO newProductDTO = productService.createProduct(
+               (medias.isPresent() ? Optional.of(medias.get().get(0)) : Optional.empty()),
                title,
                typeOfSale, price, stock, status,
                userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
                segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
                sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
                sellerQuestionOptions);
+         return new NewArticleDTO(newProductDTO.getId(),
+               medias.isPresent()
+                     ? uploadProductMedias(medias, newProductDTO.getId(), newProductDTO.getFrontPage(), "IMAGE")
+                     : null);
       }
+   }
+
+   private List<ArticleImageDTO> uploadProductMedias(Optional<List<MultipartFile>> medias, Long auxProductId,
+         String frontPageUrl, String frontPageType) {
+      List<ArticleImageDTO> auxiliarProductMedias = new ArrayList<ArticleImageDTO>();
+      auxiliarProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
+      medias.ifPresent(mediasList -> {
+         mediasList.stream()
+               .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.
+               .forEach(media -> {
+                  var auxiliarProductMedia = new AuxiliarProductMedia(null, auxProductId,
+                        firebaseStorageService.uploadFile(media, "image-product-" + auxProductId.toString(),
+                              "imageProducts"),
+                        "IMAGE");
+                  // ! Por ahora todas las medias son de tipo image.
+                  auxiliarProductMedia = auxiliarProductMediaRepository.save(auxiliarProductMedia);
+                  auxiliarProductMedias.add(new ArticleImageDTO(auxiliarProductMedia.getUrl(),
+                        auxiliarProductMedia.getType()));
+               });
+      });
+      return auxiliarProductMedias;
    }
 }

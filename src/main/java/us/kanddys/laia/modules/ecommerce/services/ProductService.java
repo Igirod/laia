@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -129,7 +130,7 @@ public interface ProductService {
     * @param sellerQuestionOptions
     * @return Long
     */
-   public Long createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
+   public ProductDTO createProduct(Optional<MultipartFile> frontPage, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId, Optional<String> manufacturingTime, Optional<String> invenstmentNote,
          Optional<String> invenstmentAmount, Optional<String> invenstmentTitle, Optional<String> manufacturingType,

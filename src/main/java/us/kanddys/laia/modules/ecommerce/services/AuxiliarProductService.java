@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
+
 public interface AuxiliarProductService {
 
    /**
@@ -35,7 +37,7 @@ public interface AuxiliarProductService {
     * @param typeOfPrice
     * @return Integer
     */
-   public Long createAuxiliarProduct(Optional<List<MultipartFile>> medias, Optional<String> title,
+   public NewArticleDTO createAuxiliarProduct(Optional<List<MultipartFile>> medias, Optional<String> title,
          Optional<String> typeOfSale, Optional<String> price, Optional<String> stock, Optional<String> status,
          Optional<String> userId,
          Optional<String> manufacturingTime, Optional<String> invenstmentNote, Optional<String> invenstmentAmount,

@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
    @Override
    public Integer updateProfileImage(Long userId, MultipartFile image) {
       if (userJpaRepository.existsById(userId)) {
-         userJpaRepository.updateUserImage(userId, firebaseStorageService.uploadFile(image, "userImages"));
+         userJpaRepository.updateUserImage(userId,
+               firebaseStorageService.uploadFile(image, "user-image-" + userId.toString(), "userImages"));
          return 1;
       } else
          return 0;

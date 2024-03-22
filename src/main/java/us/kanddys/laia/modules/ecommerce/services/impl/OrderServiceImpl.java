@@ -176,17 +176,16 @@ public class OrderServiceImpl implements OrderService {
             (String) userData.get("last_name"), (String) userData.get("email"),
             (String) batchData.get("CAST(to_time AS CHAR)"), (String) batchData.get("CAST(from_time AS CHAR)"));
       invoice.setCode(invoiceCodeService.generateInvoiceCode(merchantId, orderId));
-      invoice.setVoucher(firebaseStorageService.uploadFile(voucher, "vouchers"));
       invoice.setAddressDirection(addressDirection);
       invoice.setAddressLat(addressLat);
       invoice.setAddressLng(addressLng);
       invoice.setMerchantId(merchantId);
-      updateOrderPayment(orderId, paymentId, date, batchId, merchantId, userId, invoice);
+      updateOrderPayment(orderId, paymentId, date, batchId, merchantId, userId, voucher, invoice);
       return new InvoicePaymentDTO(invoice.getVoucher(), invoice.getCode(), invoice.getId());
    }
 
    private void updateOrderPayment(Long orderId, Long paymentId, String date, Long batchId, Long merchantId,
-         Long userId, Invoice invoice) {
+         Long userId, MultipartFile voucher, Invoice invoice) {
       invoice.setStatus(Status.PENDING);
       try {
          invoice.setReservation(DateUtils.convertStringToDate(date + " " + DateUtils.getCurrentTime()));
@@ -199,7 +198,9 @@ public class OrderServiceImpl implements OrderService {
       }
       var orderProductsIds = new ArrayList<OrderProductId>();
       var newInvoice = invoiceJpaRepository.save(invoice);
-
+      invoiceJpaRepository.updateVoucherByInvoiceId(
+            firebaseStorageService.uploadFile(voucher, "invoice-voucher-" + newInvoice.getId(), "vouchers"),
+            newInvoice.getId());
       List<InvoiceProduct> listInvoiceProducts = orderProductCriteriaRepository.findOrderProductsByOrderId(orderId)
             .stream().map(t -> {
                orderProductsIds.add(new OrderProductId(t.getProduct().getId(), orderId));

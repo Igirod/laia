@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 
@@ -72,7 +74,7 @@ public class ProductRestController {
    @ApiResponse(responseCode = "1", description = "Devuelve el id del nuevo producto si se creó correctamente.")
    @RequestMapping(method = { RequestMethod.POST }, value = "/create", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public Long createProduct(@RequestPart Optional<MultipartFile> frontPage, @RequestPart Optional<String> userId,
+   public ProductDTO createProduct(@RequestPart Optional<MultipartFile> frontPage, @RequestPart Optional<String> userId,
          @RequestPart Optional<String> title, @RequestPart Optional<String> typeOfSale,
          @RequestPart Optional<String> price, @RequestPart Optional<String> stock, @RequestPart Optional<String> status,
          @RequestPart Optional<String> manufacturingTime, @RequestPart Optional<String> invenstmentNote,
@@ -120,7 +122,7 @@ public class ProductRestController {
    @ApiResponse(responseCode = "1", description = "Devuelve el id del producto auxiliar si se creó correctamente.")
    @RequestMapping(method = { RequestMethod.POST }, value = "/create-aux", produces = {
          "application/json" }, consumes = { "multipart/form-data" })
-   public Long createAuxiliarProduct(@RequestPart Optional<List<MultipartFile>> medias,
+   public NewArticleDTO createAuxiliarProduct(@RequestPart Optional<List<MultipartFile>> medias,
          @RequestPart Optional<String> userId,
          @RequestPart Optional<String> title, @RequestPart Optional<String> typeOfSale,
          @RequestPart Optional<String> price, @RequestPart Optional<String> stock, @RequestPart Optional<String> status,
