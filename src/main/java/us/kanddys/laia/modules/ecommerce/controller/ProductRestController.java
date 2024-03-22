@@ -132,11 +132,12 @@ public class ProductRestController {
          @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
          @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
          @RequestPart Optional<String> categoryTitle, @RequestPart Optional<String> typeOfPrice,
-         @RequestPart Optional<List<String>> sellerQuestionOptions) {
+         @RequestPart Optional<String> sellerQuestionOptions) {
       return auxiliarProductService.createAuxiliarProduct(medias, title, typeOfSale, price, stock, status,
             userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
             segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
             sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
-            sellerQuestionOptions);
+            (sellerQuestionOptions.isPresent()) ? Optional.of(List.of(sellerQuestionOptions.get().split("♀")))
+                  : Optional.empty());
    }
 }
