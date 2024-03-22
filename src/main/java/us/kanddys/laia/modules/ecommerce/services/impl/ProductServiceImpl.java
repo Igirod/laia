@@ -34,8 +34,6 @@ import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
-import us.kanddys.laia.modules.ecommerce.services.CategoryProductService;
-import us.kanddys.laia.modules.ecommerce.services.CategoryService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
@@ -82,12 +80,6 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private KeyWordService keyWordService;
-
-   @Autowired
-   private CategoryService categoryService;
-
-   @Autowired
-   private CategoryProductService categoryProductService;
 
    @Autowired
    private ImageProductService imageProductService;
@@ -205,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<List<String>> keywords, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<String> sellerQuestionRequired, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions) {
       var userid = Long.valueOf(userId.get());
       var merchantId = userJpaRepository.existByUserId(userid);
@@ -227,8 +219,7 @@ public class ProductServiceImpl implements ProductService {
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
                   segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
-                  sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
-                  sellerQuestionOptions, userid);
+                  sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, sellerQuestionOptions, userid);
          } catch (ParseException e) {
             throw new RuntimeException("Error al convertir la fecha");
          }
@@ -242,8 +233,7 @@ public class ProductServiceImpl implements ProductService {
          Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue, Optional<List<String>> keywords,
          Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle,
-         Optional<List<String>> sellerQuestionOptions, Long userId) {
+         Optional<String> sellerQuestionRequired, Optional<List<String>> sellerQuestionOptions, Long userId) {
       if (manufacturingTime.isPresent() && manufacturingType.isPresent()) {
          manufacturingProductService.createManufacturingProduct(Long.valueOf(productId.get()),
                manufacturingType, Optional.of(Integer.valueOf(manufacturingTime.get())));
@@ -299,15 +289,16 @@ public class ProductServiceImpl implements ProductService {
                Long.valueOf(productId.get()),
                sellerQuestionOptions);
       }
-      if (categoryTitle.isPresent()) {
-         var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
-         if (categoryId == null) {
-            categoryProductService.createCategoryProduct(categoryService.createCategory(categoryTitle.get()),
-                  Long.valueOf(productId.get()));
-         } else {
-            categoryProductService.createCategoryProduct(categoryId, Long.valueOf(productId.get()));
-         }
-      }
+      // if (categoryTitle.isPresent()) {
+      // var categoryId = categoryService.getCategoryIdByTitle(categoryTitle.get());
+      // if (categoryId == null) {
+      // categoryProductService.createCategoryProduct(categoryService.createCategory(categoryTitle.get()),
+      // Long.valueOf(productId.get()));
+      // } else {
+      // categoryProductService.createCategoryProduct(categoryId,
+      // Long.valueOf(productId.get()));
+      // }
+      // }
    }
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
@@ -393,9 +384,6 @@ public class ProductServiceImpl implements ProductService {
                      : Optional.empty()),
                (auxiliarProduct.get().getQuestionRequired() != null
                      ? Optional.of(auxiliarProduct.get().getQuestionRequired().toString())
-                     : Optional.empty()),
-               (auxiliarProduct.get().getCategoryTitle() != null
-                     ? Optional.of(auxiliarProduct.get().getCategoryTitle().toString())
                      : Optional.empty()),
                Optional.of(auxiliarMultipleQuestionRepository.findOptionsByProductId(productId)), userId);
          productDetailService.createProductDetailFrontPageString((auxiliarProduct.get().getSegmentTitle() != null

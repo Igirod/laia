@@ -67,7 +67,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<List<String>> keywords, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<String> sellerQuestionRequired, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions) {
       if (userId.isEmpty()) {
          var auxProductId = auxiliarProductJpaRepository.save(new AuxiliarProduct(null,
@@ -89,7 +89,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                (sellerQuestionType.isPresent() ? sellerQuestionType.get() : null),
                (sellerQuestionLimit.isPresent() ? Integer.parseInt(sellerQuestionLimit.get()) : null),
                (sellerQuestionRequired.isPresent() ? Integer.parseInt(sellerQuestionRequired.get()) : null),
-               (categoryTitle.isPresent() ? categoryTitle.get() : null),
+               null,
                (typeOfPrice.isPresent() ? typeOfPrice.get() : null))).getAuxProductId();
          ArticleImageDTO frontPage = null;
          if (medias.isPresent()) {
@@ -131,7 +131,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                typeOfSale, price, stock, status,
                userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
                segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
-               sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
+               sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, typeOfPrice,
                sellerQuestionOptions);
          return new NewArticleDTO(newProductDTO.getId(),
                medias.isPresent()
