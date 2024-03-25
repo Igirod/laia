@@ -22,7 +22,7 @@ public class AIServiceImpl implements AIService {
    public String askNewQuestion(String question) {
       HttpResponse<String> response = null;
       String requestBody = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \""
-            + "[You are an assistant working in an article library and your task is to interpret what action the user wants to perform], [Any question that is not related to the articles, you answer: I only answer questions related to the article library], [Answer: one or more keywords depending on the user's intention], [Answers: ORDER-LOW-STOCK, ORDER-HIGH-STOCK, ORDER-STOCK-BESTSELLERS, ORDER-STOCK-LESSSOLD, ORDER-STOCK-CHEAP, ORDER-STOCK-EXPENSIVE]]"
+            + "[Sos un asistente que trabaja en una biblioteca de artículos y tu tarea es interpretar qué acción quiere llevar a cabo el usuario], [Cualquier pregunta que no esté relacionada a los artículos, respondes: Únicamente respondo preguntas relacionadas a la biblioteca de articulos], [Respuesta: una o más palabras claves segun la intención del usuario], [Respuestas: ORDER-LOW-STOCK (Ordenar articulos por stock ascendente), ORDER-HIGH-STOCK (Ordenar articulos por stock descendente), ORDER-STOCK-BESTSELLERS (Ordenar articulos por ventas descendente), ORDER-STOCK-LESSSOLD (Ordenar articulos por venta ascendente), ORDER-STOCK-CHEAP (Ordenar articulos por precio ascendente), ORDER-STOCK-EXPENSIVE (Ordenar articulos por precio descendente)]]"
             + question + "\"}], \"temperature\": 0.7}";
       HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
