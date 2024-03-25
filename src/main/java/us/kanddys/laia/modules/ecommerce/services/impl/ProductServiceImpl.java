@@ -208,14 +208,14 @@ public class ProductServiceImpl implements ProductService {
          // * Se crea el producto asociado a un merchant.
          try {
             newProductDTO = createProductAndDTO(
-                  new Product(null, (title.isPresent() ? title.get() : null),
-                        (price.isPresent() ? Double.valueOf(price.get()) : null),
-                        (stock.isPresent() ? Integer.valueOf(stock.get()) : null), null,
-                        merchantId, (status.isPresent() ? Integer.valueOf(status.get()) : null),
-                        DateUtils.getCurrentDate(), (typeOfSale.isPresent() ? typeOfSale.get() : null),
-                        (typeOfPrice.isPresent() ? typeOfPrice.get() : null),
+                  new Product(null, (!title.isEmpty() ? title.get() : null),
+                        (!price.isEmpty() ? Double.valueOf(price.get()) : null),
+                        (!stock.isEmpty() ? Integer.valueOf(stock.get()) : null), null,
+                        merchantId, (!status.isEmpty() ? Integer.valueOf(status.get()) : null),
+                        DateUtils.getCurrentDate(), (!typeOfSale.isEmpty() ? typeOfSale.get() : null),
+                        (!typeOfPrice.isEmpty() ? typeOfPrice.get() : null),
                         new ArrayList<>()),
-                  (frontPage.isPresent() ? frontPage.get() : null));
+                  (!frontPage.isEmpty() ? frontPage.get() : null));
             createProductExtraAtributes(Optional.of(newProductDTO.getId().toString()), manufacturingTime,
                   invenstmentAmount, invenstmentNote, invenstmentTitle, manufacturingType, segmentTitle,
                   segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,

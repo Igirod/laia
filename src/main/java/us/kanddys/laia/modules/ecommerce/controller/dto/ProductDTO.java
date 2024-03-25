@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.controller.dto;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -62,6 +63,7 @@ public class ProductDTO {
             ? product.getFrontPage()
             : null;
       this.merchantId = (product.getMerchantId() != null) ? product.getMerchantId() : null;
+      Optional<Integer> stock = (product.getStock() != null) ? Optional.of(product.getStock()) : Optional.empty();
       this.status = (product.getStatus() != null) ? ProductCheckStock.returnStatusByStock(stock) : null;
       this.createAt = (product.getCreatedAt() != null) ? DateUtils.convertDateToString(product.getCreatedAt()) : null;
       this.typeOfSale = (product.getTypeOfSale() != null) ? product.getTypeOfSale() : null;

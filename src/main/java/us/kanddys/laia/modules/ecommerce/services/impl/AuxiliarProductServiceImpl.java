@@ -121,18 +121,35 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
             });
          }
          return new NewArticleDTO(auxProductId,
-               uploadProductMedias(medias, auxProductId, frontPage.getUrl(), frontPage.getType(), 0));
+               uploadProductMedias(medias, auxProductId, (frontPage != null ? frontPage.getUrl() : null),
+                     (frontPage != null ? frontPage.getType() : null), 0));
       } else {
          // ! En caso de que se pase el userId por parámetro recurrimos a crear
          // ! directamente el articulo.
          ProductDTO newProductDTO = productService.createProduct(
-               (medias.isPresent() ? Optional.of(medias.get().get(0)) : Optional.empty()),
-               title,
-               typeOfSale, price, stock, status,
-               userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
-               segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
-               sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, typeOfPrice,
-               sellerQuestionOptions);
+               (!medias.isEmpty() ? Optional.of(medias.get().get(0)) : Optional.empty()),
+               (!title.isEmpty() ? title : Optional.empty()),
+               (!typeOfSale.isEmpty() ? typeOfSale : Optional.empty()), (!price.isEmpty() ? price : Optional.empty()),
+               (!stock.isEmpty() ? stock : Optional.empty()), (!status.isEmpty() ? status : Optional.empty()),
+               (!userId.isEmpty() ? userId : Optional.empty()),
+               (!manufacturingTime.isEmpty() ? manufacturingTime : Optional.empty()),
+               (!invenstmentNote.isEmpty() ? invenstmentNote : Optional.empty()),
+               (!invenstmentAmount.isEmpty() ? invenstmentAmount : Optional.empty()),
+               (!invenstmentTitle.isEmpty() ? invenstmentTitle : Optional.empty()),
+               (!manufacturingType.isEmpty() ? manufacturingType : Optional.empty()),
+               (!segmentTitle.isEmpty() ? segmentTitle : Optional.empty()),
+               (!segmentDescription.isEmpty() ? segmentDescription : Optional.empty()),
+               (!segmentMedia.isEmpty() ? segmentMedia : Optional.empty()),
+               (!hashtagValue.isEmpty() ? hashtagValue : Optional.empty()),
+               (!keywords.isEmpty() ? keywords : Optional.empty()),
+               (!sellerQuestionValue.isEmpty() ? sellerQuestionValue : Optional.empty()),
+               (!sellerQuestionType.isEmpty() ? sellerQuestionType : Optional.empty()), (!sellerQuestionLimit.isEmpty()
+                     ? sellerQuestionLimit
+                     : Optional.empty()),
+               (!sellerQuestionRequired.isEmpty() ? sellerQuestionRequired : Optional.empty()), (!typeOfPrice.isEmpty()
+                     ? typeOfPrice
+                     : Optional.empty()),
+               (!sellerQuestionOptions.isEmpty() ? sellerQuestionOptions : Optional.empty()));
          return new NewArticleDTO(newProductDTO.getId(),
                medias.isPresent()
                      ? uploadProductMedias(medias, newProductDTO.getId(), newProductDTO.getFrontPage(), "IMAGE", 1)
