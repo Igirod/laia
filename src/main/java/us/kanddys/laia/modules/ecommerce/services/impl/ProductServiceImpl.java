@@ -416,7 +416,7 @@ public class ProductServiceImpl implements ProductService {
                (auxiliarProduct.get().getSegmentMedia() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentMedia().toString())
                      : Optional.empty()),
-               productId, (auxiliarProduct.get().getSegmentDescription() != null
+               product.getId(), (auxiliarProduct.get().getSegmentDescription() != null
                      ? Optional.of(auxiliarProduct.get().getSegmentDescription().toString())
                      : Optional.empty()));
       } else {
