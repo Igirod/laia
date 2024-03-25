@@ -132,7 +132,8 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                uploadProductMedias(medias, auxProductId, (frontPage != null ? frontPage.getUrl() : null),
                      (frontPage != null ? frontPage.getType() : null), 0,
                      (segmentMediaArticle != null ? segmentMediaArticle.getUrl() : null),
-                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)));
+                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)),
+               (segmentMediaArticle != null ? segmentMediaArticle : null));
       } else {
          // ! En caso de que se pase el userId por parámetro recurrimos a crear
          // ! directamente el articulo.
@@ -171,7 +172,8 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          return new NewArticleDTO(newProductDTO.getId(),
                uploadProductMedias(medias, newProductDTO.getId(), newProductDTO.getFrontPage(), "IMAGE", 1,
                      (segmentMediaArticle != null ? segmentMediaArticle.getUrl() : null),
-                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)));
+                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)),
+               (segmentMediaArticle != null ? segmentMediaArticle : null));
       }
    }
 
@@ -183,9 +185,6 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          List<AuxiliarProductMedia> auxiliarProductMedias = new ArrayList<AuxiliarProductMedia>();
          if (frontPageUrl != null && frontPageType != null) {
             articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
-         }
-         if (segmentMediaType != null && segmentMediaUrl != null) {
-            articleProductMedias.add(new ArticleImageDTO(segmentMediaUrl, segmentMediaType));
          }
          medias.ifPresent(mediasList -> {
             mediasList.stream()
@@ -208,9 +207,6 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          List<ImageProduct> imageProducts = new ArrayList<ImageProduct>();
          if (frontPageUrl != null && frontPageType != null) {
             articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
-         }
-         if (segmentMediaType != null && segmentMediaUrl != null) {
-            articleProductMedias.add(new ArticleImageDTO(segmentMediaUrl, segmentMediaType));
          }
          medias.ifPresent(mediasList -> {
             mediasList.stream()

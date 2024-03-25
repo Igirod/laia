@@ -14,6 +14,8 @@ public class NewArticleDTO {
    private Long productId;
    @JsonProperty
    private List<ArticleImageDTO> medias;
+   @JsonProperty
+   private ArticleImageDTO segmentMedia;
 
    public NewArticleDTO() {
    }
