@@ -16,7 +16,7 @@ import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
  * clase ProductServiceImpl.
  * 
  * @author Igirod0
- * @version 1.0.4
+ * @version 1.0.5
  */
 public interface ProductService {
 
@@ -145,12 +145,12 @@ public interface ProductService {
     * Método que tiene la obligación de asociar un producto a un comerciante.
     *
     * @author Igirod0
-    * @version 1.0.0
+    * @version 1.0.1
     * @param productId
     * @param userId
-    * @return Integer
+    * @return Long
     */
-   public Integer updateAdminSellAssociation(Long productId, Long userId);
+   public Long updateAdminSellAssociation(Long productId, Long userId);
 
    /**
     * Método que tiene la obligación de obtener un producto por su id.
