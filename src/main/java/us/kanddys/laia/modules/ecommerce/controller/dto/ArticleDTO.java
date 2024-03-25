@@ -20,7 +20,7 @@ public class ArticleDTO {
    @JsonProperty
    private Long productId;
    @JsonProperty
-   private List<ImageProductDTO> medias;
+   private List<String> medias;
    @JsonProperty
    private String title;
    @JsonProperty
@@ -30,17 +30,17 @@ public class ArticleDTO {
    @JsonProperty
    private Integer stock;
    @JsonProperty
-   private List<InvenstmentDTO> invenstments;
+   private Integer invenstmentsCount;
    @JsonProperty
    private HashtagDTO hashtag;
    @JsonProperty
-   private List<ProductDetailDTO> segments;
+   private Integer segments;
    @JsonProperty
    private ManufacturingProductDTO manufacturingProduct;
    @JsonProperty
-   private List<KeyWordDTO> keywords;
+   private Integer keywords;
    @JsonProperty
-   private List<SellerQuestionDTO> questions;
+   private Integer questions;
 
    public ArticleDTO() {
    }

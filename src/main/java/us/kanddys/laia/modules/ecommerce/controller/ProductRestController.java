@@ -69,7 +69,6 @@ public class ProductRestController {
          @Parameter(name = "sellerQuestionType", description = "Tipo de pregunta del vendedor", required = true, example = "MULTIPLE"),
          @Parameter(name = "sellerQuestionLimit", description = "Límite de la pregunta del vendedor", required = true, example = "10"),
          @Parameter(name = "sellerQuestionRequired", description = "Requerido de la pregunta del vendedor", required = true, example = "1"),
-         @Parameter(name = "categoryTitle", description = "Título de la categoría", required = true, example = "Categoría"),
          @Parameter(name = "typeOfPrice", description = "Tipo de precio", required = true, example = "USD"),
          @Parameter(name = "sellerQuestionOptions", description = "Opciones de la pregunta del vendedor", required = true, example = "Opción 1, Opción 2") })
    @ApiResponse(responseCode = "1", description = "Devuelve el id del nuevo producto si se creó correctamente.")
@@ -85,12 +84,12 @@ public class ProductRestController {
          @RequestPart Optional<String> hashtagValue, @RequestPart Optional<List<String>> keywordValue,
          @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
          @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
-         @RequestPart Optional<String> categoryTitle, @RequestPart Optional<String> typeOfPrice,
+         @RequestPart Optional<String> typeOfPrice,
          @RequestPart Optional<List<String>> sellerQuestionOptions) {
       return productService.createProduct(frontPage, title, typeOfSale, price, stock, status,
             userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
             segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywordValue, sellerQuestionValue,
-            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
+            sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, typeOfPrice,
             sellerQuestionOptions);
    }
 
@@ -118,7 +117,6 @@ public class ProductRestController {
          @Parameter(name = "sellerQuestionType", description = "Tipo de pregunta del vendedor", required = true, example = "MULTIPLE"),
          @Parameter(name = "sellerQuestionLimit", description = "Límite de la pregunta del vendedor", required = true, example = "10"),
          @Parameter(name = "sellerQuestionRequired", description = "Requerido de la pregunta del vendedor", required = true, example = "1"),
-         @Parameter(name = "categoryTitle", description = "Título de la categoría", required = true, example = "Categoría"),
          @Parameter(name = "typeOfPrice", description = "Tipo de precio", required = true, example = "USD") })
    @ApiResponse(responseCode = "1", description = "Devuelve el id del producto auxiliar si se creó correctamente.")
    @RequestMapping(method = { RequestMethod.POST }, value = "/create-aux", produces = {
@@ -134,15 +132,14 @@ public class ProductRestController {
          @RequestPart Optional<String> hashtagValue, @RequestPart Optional<String> keywords,
          @RequestPart Optional<String> sellerQuestionValue, @RequestPart Optional<String> sellerQuestionType,
          @RequestPart Optional<String> sellerQuestionLimit, @RequestPart Optional<String> sellerQuestionRequired,
-         @RequestPart Optional<String> categoryTitle, @RequestPart Optional<String> typeOfPrice,
+         @RequestPart Optional<String> typeOfPrice,
          @RequestPart Optional<String> sellerQuestionOptions) {
       return auxiliarProductService.createAuxiliarProduct(medias, title, typeOfSale, price, stock, status,
             userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
             segmentTitle, segmentDescription, segmentMedia, hashtagValue,
             (keywords.isPresent()) ? Optional.of(List.of(keywords.get().split("♀")))
                   : Optional.empty(),
-            sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle,
-            typeOfPrice,
+            sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, typeOfPrice,
             (sellerQuestionOptions.isPresent()) ? Optional.of(List.of(sellerQuestionOptions.get().split("♀")))
                   : Optional.empty());
    }

@@ -44,6 +44,6 @@ public interface AuxiliarProductService {
          Optional<String> invenstmentTitle, Optional<String> manufacturingType, Optional<String> segmentTitle,
          Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia, Optional<String> hashtagValue,
          Optional<List<String>> keywordValue, Optional<String> sellerQuestionValue, Optional<String> sellerQuestionType,
-         Optional<String> sellerQuestionLimit, Optional<String> sellerQuestionRequired, Optional<String> categoryTitle,
+         Optional<String> sellerQuestionLimit, Optional<String> sellerQuestionRequired,
          Optional<String> typeOfPrice, Optional<List<String>> sellerQuestionOptions);
 }

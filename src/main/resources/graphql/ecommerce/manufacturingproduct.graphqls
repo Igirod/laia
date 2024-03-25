@@ -1,5 +1,5 @@
 type ManufacturingProductDTO {
-   id: Int!
+   id: Int
    productId: Int
    type: String
    time: Int

@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ImageProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductDetailJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
 import us.kanddys.laia.modules.ecommerce.services.storage.FirebaseStorageService;
@@ -58,6 +60,9 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
    @Autowired
    private ProductService productService;
 
+   @Autowired
+   private ProductDetailJpaRepository productDetailJpaRepository;
+
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
    public NewArticleDTO createAuxiliarProduct(Optional<List<MultipartFile>> medias, Optional<String> title,
@@ -67,7 +72,7 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<List<String>> keywords, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<String> sellerQuestionRequired, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions) {
       if (userId.isEmpty()) {
          var auxProductId = auxiliarProductJpaRepository.save(new AuxiliarProduct(null,
@@ -89,9 +94,10 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                (sellerQuestionType.isPresent() ? sellerQuestionType.get() : null),
                (sellerQuestionLimit.isPresent() ? Integer.parseInt(sellerQuestionLimit.get()) : null),
                (sellerQuestionRequired.isPresent() ? Integer.parseInt(sellerQuestionRequired.get()) : null),
-               (categoryTitle.isPresent() ? categoryTitle.get() : null),
+               null,
                (typeOfPrice.isPresent() ? typeOfPrice.get() : null))).getAuxProductId();
          ArticleImageDTO frontPage = null;
+         ArticleImageDTO segmentMediaArticle = null;
          if (medias.isPresent()) {
             frontPage = (new ArticleImageDTO(
                   firebaseStorageService.uploadFile(medias.get().get(0),
@@ -101,9 +107,11 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
             auxiliarProductJpaRepository.updateFrontPage(frontPage.getUrl(), auxProductId);
          }
          if (segmentMedia.isPresent()) {
-            auxiliarProductJpaRepository.updateSegmentMedia(
+            segmentMediaArticle = new ArticleImageDTO(
                   firebaseStorageService.uploadFile(segmentMedia.get(), "product-detail" + auxProductId.toString(),
                         "productDetails"),
+                  "IMAGE");
+            auxiliarProductJpaRepository.updateSegmentMedia(segmentMediaArticle.getUrl(),
                   auxProductId);
          }
          if (keywords.isPresent()) {
@@ -121,31 +129,63 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
             });
          }
          return new NewArticleDTO(auxProductId,
-               uploadProductMedias(medias, auxProductId, frontPage.getUrl(), frontPage.getType(), 0));
+               uploadProductMedias(medias, auxProductId, (frontPage != null ? frontPage.getUrl() : null),
+                     (frontPage != null ? frontPage.getType() : null), 0,
+                     (segmentMediaArticle != null ? segmentMediaArticle.getUrl() : null),
+                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)),
+               (segmentMediaArticle != null ? segmentMediaArticle : null));
       } else {
          // ! En caso de que se pase el userId por parámetro recurrimos a crear
          // ! directamente el articulo.
          ProductDTO newProductDTO = productService.createProduct(
-               (medias.isPresent() ? Optional.of(medias.get().get(0)) : Optional.empty()),
-               title,
-               typeOfSale, price, stock, status,
-               userId, manufacturingTime, invenstmentNote, invenstmentAmount, invenstmentTitle, manufacturingType,
-               segmentTitle, segmentDescription, segmentMedia, hashtagValue, keywords, sellerQuestionValue,
-               sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, categoryTitle, typeOfPrice,
-               sellerQuestionOptions);
+               (!medias.isEmpty() ? Optional.of(medias.get().get(0)) : Optional.empty()),
+               (!title.isEmpty() ? title : Optional.empty()),
+               (!typeOfSale.isEmpty() ? typeOfSale : Optional.empty()), (!price.isEmpty() ? price : Optional.empty()),
+               (!stock.isEmpty() ? stock : Optional.empty()), (!status.isEmpty() ? status : Optional.empty()),
+               (!userId.isEmpty() ? userId : Optional.empty()),
+               (!manufacturingTime.isEmpty() ? manufacturingTime : Optional.empty()),
+               (!invenstmentNote.isEmpty() ? invenstmentNote : Optional.empty()),
+               (!invenstmentAmount.isEmpty() ? invenstmentAmount : Optional.empty()),
+               (!invenstmentTitle.isEmpty() ? invenstmentTitle : Optional.empty()),
+               (!manufacturingType.isEmpty() ? manufacturingType : Optional.empty()),
+               (!segmentTitle.isEmpty() ? segmentTitle : Optional.empty()),
+               (!segmentDescription.isEmpty() ? segmentDescription : Optional.empty()),
+               (!segmentMedia.isEmpty() ? segmentMedia : Optional.empty()),
+               (!hashtagValue.isEmpty() ? hashtagValue : Optional.empty()),
+               (!keywords.isEmpty() ? keywords : Optional.empty()),
+               (!sellerQuestionValue.isEmpty() ? sellerQuestionValue : Optional.empty()),
+               (!sellerQuestionType.isEmpty() ? sellerQuestionType : Optional.empty()), (!sellerQuestionLimit.isEmpty()
+                     ? sellerQuestionLimit
+                     : Optional.empty()),
+               (!sellerQuestionRequired.isEmpty() ? sellerQuestionRequired : Optional.empty()), (!typeOfPrice.isEmpty()
+                     ? typeOfPrice
+                     : Optional.empty()),
+               (!sellerQuestionOptions.isEmpty() ? sellerQuestionOptions : Optional.empty()));
+         Map<String, Object> segmentAtributtes = null;
+         ArticleImageDTO segmentMediaArticle = null;
+         if (!segmentMedia.isEmpty()) {
+            segmentAtributtes = productDetailJpaRepository
+                  .findLastProductDetailByProductId(newProductDTO.getId());
+            segmentMediaArticle = new ArticleImageDTO((segmentAtributtes.get("url").toString()),
+                  (segmentAtributtes.get("type").toString()));
+         }
          return new NewArticleDTO(newProductDTO.getId(),
-               medias.isPresent()
-                     ? uploadProductMedias(medias, newProductDTO.getId(), newProductDTO.getFrontPage(), "IMAGE", 1)
-                     : null);
+               uploadProductMedias(medias, newProductDTO.getId(), newProductDTO.getFrontPage(), "IMAGE", 1,
+                     (segmentMediaArticle != null ? segmentMediaArticle.getUrl() : null),
+                     (segmentMediaArticle != null ? segmentMediaArticle.getType() : null)),
+               (segmentMediaArticle != null ? segmentMediaArticle : null));
       }
    }
 
    private List<ArticleImageDTO> uploadProductMedias(Optional<List<MultipartFile>> medias, Long auxProductId,
-         String frontPageUrl, String frontPageType, Integer operationType) {
+         String frontPageUrl, String frontPageType, Integer operationType, String segmentMediaUrl,
+         String segmentMediaType) {
       if (operationType == 0) {
          List<ArticleImageDTO> articleProductMedias = new ArrayList<ArticleImageDTO>();
          List<AuxiliarProductMedia> auxiliarProductMedias = new ArrayList<AuxiliarProductMedia>();
-         articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
+         if (frontPageUrl != null && frontPageType != null) {
+            articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
+         }
          medias.ifPresent(mediasList -> {
             mediasList.stream()
                   .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.
@@ -165,7 +205,9 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
       } else {
          List<ArticleImageDTO> articleProductMedias = new ArrayList<ArticleImageDTO>();
          List<ImageProduct> imageProducts = new ArrayList<ImageProduct>();
-         articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
+         if (frontPageUrl != null && frontPageType != null) {
+            articleProductMedias.add(new ArticleImageDTO(frontPageUrl, frontPageType));
+         }
          medias.ifPresent(mediasList -> {
             mediasList.stream()
                   .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.

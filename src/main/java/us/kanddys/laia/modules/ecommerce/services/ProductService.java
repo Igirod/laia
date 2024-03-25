@@ -124,7 +124,6 @@ public interface ProductService {
     * @param sellerQuestionType
     * @param sellerQuestionLimit
     * @param sellerQuestionRequired
-    * @param categoryTitle
     * @param typeOfPrice
     * @param sellerQuestionOptions
     * @return Long
@@ -136,7 +135,7 @@ public interface ProductService {
          Optional<String> segmentTitle, Optional<String> segmentDescription, Optional<MultipartFile> segmentMedia,
          Optional<String> hashtagValue, Optional<List<String>> keywordValue, Optional<String> sellerQuestionValue,
          Optional<String> sellerQuestionType, Optional<String> sellerQuestionLimit,
-         Optional<String> sellerQuestionRequired, Optional<String> categoryTitle, Optional<String> typeOfPrice,
+         Optional<String> sellerQuestionRequired, Optional<String> typeOfPrice,
          Optional<List<String>> sellerQuestionOptions);
 
    public Long createProduct(Optional<Long> userId, Optional<Long> productId, String title, String tStock, Double price,

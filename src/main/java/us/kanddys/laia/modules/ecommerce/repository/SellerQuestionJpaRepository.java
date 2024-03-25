@@ -19,4 +19,7 @@ public interface SellerQuestionJpaRepository extends JpaRepository<SellerQuestio
 
    @Query(value = "SELECT * FROM sellers_questions WHERE product_id = ?1", nativeQuery = true)
    public List<SellerQuestion> findQuestionByProductId(Long productId);
+
+   @Query(value = "SELECT COUNT(*) FROM sellers_questions WHERE product_id = ?1", nativeQuery = true)
+   public Integer countQuestionsByProductId(Long productId);
 }
