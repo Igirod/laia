@@ -26,6 +26,8 @@ public class ProductDetail {
    private String description;
    @Column(name = "url")
    private String url;
+   @Column(name = "type")
+   private String type;
 
    public ProductDetail() {
    }

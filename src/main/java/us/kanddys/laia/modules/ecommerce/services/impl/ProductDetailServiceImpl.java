@@ -68,7 +68,8 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                (frontPage.isPresent())
                      ? firebaseStorageService.uploadFile(frontPage.get(), "product-detail-" + productId.toString(),
                            "imageProducts")
-                     : null)));
+                     : null,
+               "IMAGE")));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }
@@ -86,7 +87,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
       try {
          return new ProductDetailDTO(
                productDetailJpaRepository.save(new ProductDetail(null, productId, title.orElse(null),
-                     description.orElse(null), frontPage.orElse(null))));
+                     description.orElse(null), frontPage.orElse(null), "IMAGE")));
       } catch (IOException e) {
          throw new IOJavaException(e.getMessage());
       }

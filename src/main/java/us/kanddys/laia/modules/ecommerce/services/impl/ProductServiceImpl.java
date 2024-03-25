@@ -13,15 +13,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.HashtagDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ManufacturingProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.IOJavaException;
 import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
+import us.kanddys.laia.modules.ecommerce.model.Hashtag;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProduct;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProductId;
+import us.kanddys.laia.modules.ecommerce.model.ManufacturingProduct;
 import us.kanddys.laia.modules.ecommerce.model.Product;
 import us.kanddys.laia.modules.ecommerce.model.Utils.DateUtils;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -29,16 +33,21 @@ import us.kanddys.laia.modules.ecommerce.repository.AuxiliarMultipleQuestionJpaR
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.HashtagJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.HashtagProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.InvenstmentJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ManufacturingProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductCriteriaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ProductDetailJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.ProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.SellerQuestionJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.UserJpaRepository;
 import us.kanddys.laia.modules.ecommerce.services.HashtagProductService;
 import us.kanddys.laia.modules.ecommerce.services.HashtagService;
 import us.kanddys.laia.modules.ecommerce.services.ImageProductService;
 import us.kanddys.laia.modules.ecommerce.services.InvenstmentService;
-import us.kanddys.laia.modules.ecommerce.services.KeyWordService;
 import us.kanddys.laia.modules.ecommerce.services.ManufacturingProductService;
 import us.kanddys.laia.modules.ecommerce.services.ProductDetailService;
 import us.kanddys.laia.modules.ecommerce.services.ProductService;
@@ -79,9 +88,6 @@ public class ProductServiceImpl implements ProductService {
    private HashtagProductService hashtagProductService;
 
    @Autowired
-   private KeyWordService keyWordService;
-
-   @Autowired
    private ImageProductService imageProductService;
 
    @Autowired
@@ -107,6 +113,24 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private KeyWordProductJpaRepository keyWordProductJpaRepository;
+
+   @Autowired
+   private InvenstmentJpaRepository invenstmentJpaRepository;
+
+   @Autowired
+   private ProductDetailJpaRepository productDetailJpaRepository;
+
+   @Autowired
+   private SellerQuestionJpaRepository sellerQuestionJpaRepository;
+
+   @Autowired
+   private ManufacturingProductJpaRepository manufacturingProductJpaRepository;
+
+   @Autowired
+   private HashtagJpaRepository hashtagJpaRepository;
+
+   @Autowired
+   private HashtagProductJpaRepository hashtagProductJpaRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -413,17 +437,30 @@ public class ProductServiceImpl implements ProductService {
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       ArticleDTO articleDTO = new ArticleDTO();
       articleDTO.setProductId(id);
-      articleDTO.setMedias(imageProductService.getImagesProductByProductId(id));
-      articleDTO.setInvenstments(invenstmentService.getAdminSellInvenstments(id));
-      articleDTO.setManufacturingProduct(manufacturingProductService.getManufacturingByProductId(id));
+      List<String> medias = new ArrayList<String>();
+      String frontPage = productJpaRepository.findFrontPageByProductId(id);
+      if (frontPage != null)
+         medias.add(frontPage);
+      medias.addAll(imageProductService.getImagesProductByProductId(id).stream().map(t -> t.getUrl())
+            .collect(Collectors.toList()));
+      articleDTO.setMedias(medias);
+      articleDTO.setInvenstmentsCount(invenstmentJpaRepository.countInvenstmentsByProductId(id));
+      ManufacturingProduct manufacturingProduct = manufacturingProductJpaRepository.findByProductId(id);
+      articleDTO.setManufacturingProduct(
+            ((manufacturingProduct != null ? new ManufacturingProductDTO(manufacturingProduct) : null)));
       articleDTO.setTitle(productDTO.getTitle());
       articleDTO.setPrice(productDTO.getPrice());
       articleDTO.setTypeOfPrice(productDTO.getTypeOfPrice());
       articleDTO.setStock(productDTO.getStock());
-      articleDTO.setSegments(productDetailService.getProductDetailsByProductId(id));
-      articleDTO.setHashtag(hashtagService.getHashtagsByProductId(id));
-      articleDTO.setKeywords(keyWordService.getKeywordsByProductId(id));
-      articleDTO.setQuestions(sellerQuestionService.getAdminSellQuestions(id));
+      articleDTO.setSegments(productDetailJpaRepository.countProductDetailsByProductId(id));
+      Long hashtagId = hashtagProductJpaRepository.findByProductId(id);
+      if (hashtagId != null)
+         articleDTO.setHashtag(new HashtagDTO(hashtagJpaRepository.findById(hashtagId).get()));
+      else {
+         articleDTO.setHashtag(null);
+      }
+      articleDTO.setKeywords(keyWordProductJpaRepository.countKeyWordProductByProductId(id));
+      articleDTO.setQuestions(sellerQuestionJpaRepository.countQuestionsByProductId(id));
       return articleDTO;
    }
 }

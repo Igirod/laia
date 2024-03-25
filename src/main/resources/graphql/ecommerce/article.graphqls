@@ -7,15 +7,15 @@
 
 type ArticleDTO {
    productId: Int!
-   medias: [ImageProductDTO]
+   medias: [String]
    title: String
    price: Float
    typeOfPrice: String
    stock: Int
-   invenstments: [InvenstmentDTO]
+   invenstmentsCount: Int
    hashtag: HashtagDTO
-   segments: [ProductDetailDTO]
+   segments: Int
    manufacturingProduct: ManufacturingProductDTO
-   keywords: [KeyWordDTO]
-   questions: [SellerQuestionDTO]
+   keywords: Int
+   questions: Int
 }

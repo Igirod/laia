@@ -15,4 +15,7 @@ public interface KeyWordProductJpaRepository extends JpaRepository<KeyWordProduc
 
    @Query(value = "SELECT COUNT(*) FROM keywords_products WHERE key_word_id IN (:wordIds)", nativeQuery = true)
    public List<Integer> countKeyWordProductByWordIds(@Param("wordIds") List<Long> wordIds);
+
+   @Query(value = "SELECT COUNT(*) FROM keywords_products WHERE product_id = ?1", nativeQuery = true)
+   public Integer countKeyWordProductByProductId(Long productId);
 }
