@@ -21,7 +21,6 @@ import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
-import us.kanddys.laia.modules.ecommerce.model.Hashtag;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProduct;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProductId;
@@ -350,10 +349,11 @@ public class ProductServiceImpl implements ProductService {
 
    @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
    @Override
-   public Integer updateAdminSellAssociation(Long productId, Long userId) {
+   public Long updateAdminSellAssociation(Long productId, Long userId) {
       Optional<AuxiliarProduct> auxiliarProduct = auxiliarProductJpaRepository.findById(productId);
+      Product product = null;
       if (auxiliarProduct.isPresent()) {
-         Product product = null;
+         product = null;
          try {
             product = new Product(null,
                   (auxiliarProduct.get().getTitle() != null ? auxiliarProduct.get().getTitle() : null),
@@ -427,7 +427,7 @@ public class ProductServiceImpl implements ProductService {
       auxiliarProductMediaRepository.deleteByAuxiliarProductId(productId);
       auxiliarProductKeyWordJpaRepository.deleteWordsByProductId(productId);
       auxiliarProductJpaRepository.deleteById(productId);
-      return 1;
+      return product.getId();
    }
 
    @Override

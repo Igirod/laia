@@ -51,7 +51,7 @@ public class ProductController {
    }
 
    @MutationMapping("uAdminSellAssociation")
-   public Integer updateAdminSellAssociation(@Argument Long productId, @Argument Long userId) {
+   public Long updateAdminSellAssociation(@Argument Long productId, @Argument Long userId) {
       return productService.updateAdminSellAssociation(productId, userId);
    }
 
