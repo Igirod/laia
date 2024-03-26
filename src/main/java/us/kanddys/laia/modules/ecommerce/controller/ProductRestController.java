@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleImageDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.NewArticleDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.services.AuxiliarProductService;
@@ -142,5 +144,27 @@ public class ProductRestController {
             sellerQuestionValue, sellerQuestionType, sellerQuestionLimit, sellerQuestionRequired, typeOfPrice,
             (sellerQuestionOptions.isPresent()) ? Optional.of(List.of(sellerQuestionOptions.get().split("♀")))
                   : Optional.empty());
+   }
+
+   @Operation(description = "Servicio que tiene la obligación de actualizar las medias asociadas a un producto.")
+   @Parameters({
+         @Parameter(name = "productId", description = "Identificador del producto", required = true, example = "1"),
+         @Parameter(name = "index", description = "Índice de la media", required = true, example = "N | E"),
+         @Parameter(name = "title", description = "Título de la media", required = true, example = "Título de producto"),
+         @Parameter(name = "price", description = "Precio del producto", required = true, example = "100.0"),
+         @Parameter(name = "tPrice", description = "Precio de la media", required = true, example = "100.0"),
+         @Parameter(name = "stock", description = "Stock de la media", required = true, example = "10"),
+         @Parameter(name = "tStock", description = "Stock de la media", required = true, example = "10"),
+         @Parameter(name = "existImages", description = "Imágenes existentes", required = true),
+         @Parameter(name = "newImages", description = "Nuevas imágenes", required = true) })
+   @RequestMapping(method = { RequestMethod.PUT }, value = "/update-medias", produces = {
+         "application/json" }, consumes = { "multipart/form-data" })
+   public List<ArticleImageDTO> updateAdminSellProductMedia(@Argument String productId,
+         @RequestPart String index, @RequestPart Optional<String> title, @RequestPart Optional<String> price,
+         @RequestPart Optional<String> tPrice, @RequestPart Optional<String> stock,
+         @RequestPart Optional<String> tStock, @RequestPart List<MultipartFile> newImages,
+         @RequestPart List<String> existImages) {
+      return productService.updateAdminSellProductMedia(Long.valueOf(productId), index, title, price, tPrice, stock,
+            tStock, existImages, newImages);
    }
 }

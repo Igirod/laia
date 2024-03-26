@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +109,8 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
          }
          if (segmentMedia.isPresent()) {
             segmentMediaArticle = new ArticleImageDTO(
-                  firebaseStorageService.uploadFile(segmentMedia.get(), "product-detail" + auxProductId.toString(),
+                  firebaseStorageService.uploadFile(segmentMedia.get(),
+                        "product-detail" + auxProductId.toString() + "-" + UUID.randomUUID().toString(),
                         "productDetails"),
                   "IMAGE");
             auxiliarProductJpaRepository.updateSegmentMedia(segmentMediaArticle.getUrl(),
@@ -191,7 +193,8 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                   .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.
                   .forEach(media -> {
                      var auxiliarProductMedia = new AuxiliarProductMedia(null, auxProductId,
-                           firebaseStorageService.uploadFile(media, "image-product-" + auxProductId.toString(),
+                           firebaseStorageService.uploadFile(media,
+                                 "image-product-" + auxProductId.toString() + "-" + UUID.randomUUID().toString(),
                                  "imageProducts"),
                            "IMAGE");
                      // ! Por ahora todas las medias son de tipo image.
@@ -213,7 +216,8 @@ public class AuxiliarProductServiceImpl implements AuxiliarProductService {
                   .skip(1) // ! Se salta la primera imagen ya que esta se guarda en el frontPage.
                   .forEach(media -> {
                      var imageProduct = new ImageProduct(null, auxProductId,
-                           firebaseStorageService.uploadFile(media, "image-product-" + auxProductId.toString(),
+                           firebaseStorageService.uploadFile(media,
+                                 "image-product-" + auxProductId.toString() + "-" + UUID.randomUUID().toString(),
                                  "imageProducts"),
                            "IMAGE");
                      // ! Por ahora todas las medias son de tipo image.

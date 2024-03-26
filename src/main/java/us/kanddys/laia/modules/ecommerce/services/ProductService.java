@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleImageDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.model.Utils.TypeFilter;
@@ -161,4 +162,24 @@ public interface ProductService {
     * @return ArticleDTO
     */
    public ArticleDTO getAdminSellProduct(Long productId);
+
+   /**
+    * Método que tiene la obligación de actualizar las medias de un producto.
+    *
+    * @author Igirod0
+    * @version 1.0.0
+    * @param productId
+    * @param index
+    * @param title
+    * @param price
+    * @param tPrice
+    * @param stock
+    * @param tStock
+    * @param existImages
+    * @param newImages
+    * @return List<ArticleImageDTO>
+    */
+   public List<ArticleImageDTO> updateAdminSellProductMedia(Long productId, String index, Optional<String> title,
+         Optional<String> price, Optional<String> tPrice, Optional<String> stock, Optional<String> tStock,
+         List<String> existImages, List<MultipartFile> newImages);
 }

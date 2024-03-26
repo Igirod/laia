@@ -2,6 +2,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,9 +44,10 @@ public class ImageProductServiceImpl implements ImageProductService {
          throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
       return new ImageProductDTO(imageProductJpaRepository
             .save(new ImageProduct(null, productId,
-                  firebaseStorageService.uploadFile(multipartFile, "image-product-" + productId.toString(),
+                  firebaseStorageService.uploadFile(multipartFile,
+                        "image-product-" + productId.toString() + "-" + UUID.randomUUID().toString(),
                         "imageProducts"),
-                  null)));
+                  "IMAGE")));
    }
 
    @Override
@@ -60,7 +62,8 @@ public class ImageProductServiceImpl implements ImageProductService {
          if (productJpaRepository.existsById(Long.valueOf(productId.get()))) {
             medias.stream().map(image -> imageProductJpaRepository
                   .save(new ImageProduct(null, Long.valueOf(productId.get()),
-                        firebaseStorageService.uploadFile(image, "image-product-" + productId.get(), "imageProducts"),
+                        firebaseStorageService.uploadFile(image, "image-product-" + productId.get(), "imageProducts")
+                              + "-" + UUID.randomUUID().toString(),
                         "IMAGE")))
                   .toList();
             return Long.valueOf(productId.get());
@@ -69,7 +72,8 @@ public class ImageProductServiceImpl implements ImageProductService {
          Long newProductId = productJpaRepository.save(new Product()).getId();
          medias.stream().map(image -> imageProductJpaRepository
                .save(new ImageProduct(null, newProductId,
-                     firebaseStorageService.uploadFile(image, "image-product-" + newProductId.toString(),
+                     firebaseStorageService.uploadFile(image,
+                           "image-product-" + newProductId.toString() + "-" + UUID.randomUUID().toString(),
                            "imageProducts"),
                      "IMAGE")))
                .toList();

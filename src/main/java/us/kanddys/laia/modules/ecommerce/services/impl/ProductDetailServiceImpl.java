@@ -3,6 +3,7 @@ package us.kanddys.laia.modules.ecommerce.services.impl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,8 @@ public class ProductDetailServiceImpl implements ProductDetailService {
          return new ProductDetailDTO(productDetailJpaRepository.save(new ProductDetail(null, productId,
                title.orElse(null), description.orElse(null),
                (frontPage.isPresent())
-                     ? firebaseStorageService.uploadFile(frontPage.get(), "product-detail-" + productId.toString(),
+                     ? firebaseStorageService.uploadFile(frontPage.get(),
+                           "product-detail-" + productId.toString() + "-" + UUID.randomUUID().toString(),
                            "imageProducts")
                      : null,
                "IMAGE")));
