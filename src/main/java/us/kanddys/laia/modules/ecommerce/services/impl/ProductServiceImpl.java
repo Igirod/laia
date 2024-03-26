@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleDTO;
+import us.kanddys.laia.modules.ecommerce.controller.dto.ArticleImageDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.HashtagDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ManufacturingProductDTO;
 import us.kanddys.laia.modules.ecommerce.controller.dto.ProductDTO;
@@ -21,6 +23,7 @@ import us.kanddys.laia.modules.ecommerce.exception.MerchantNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.ProductNotFoundException;
 import us.kanddys.laia.modules.ecommerce.exception.utils.ExceptionMessage;
 import us.kanddys.laia.modules.ecommerce.model.AuxiliarProduct;
+import us.kanddys.laia.modules.ecommerce.model.ImageProduct;
 import us.kanddys.laia.modules.ecommerce.model.KeyWord;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProduct;
 import us.kanddys.laia.modules.ecommerce.model.KeyWordProductId;
@@ -34,6 +37,7 @@ import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductKeyWordJpaRep
 import us.kanddys.laia.modules.ecommerce.repository.AuxiliarProductMediaJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.HashtagProductJpaRepository;
+import us.kanddys.laia.modules.ecommerce.repository.ImageProductJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.InvenstmentJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordJpaRepository;
 import us.kanddys.laia.modules.ecommerce.repository.KeyWordProductJpaRepository;
@@ -130,6 +134,9 @@ public class ProductServiceImpl implements ProductService {
 
    @Autowired
    private HashtagProductJpaRepository hashtagProductJpaRepository;
+
+   @Autowired
+   private ImageProductJpaRepository imageProductJpaRepository;
 
    @Override
    public ProductDTO getProductById(Long productId) {
@@ -462,5 +469,78 @@ public class ProductServiceImpl implements ProductService {
       articleDTO.setKeywords(keyWordProductJpaRepository.countKeyWordProductByProductId(id));
       articleDTO.setQuestions(sellerQuestionJpaRepository.countQuestionsByProductId(id));
       return articleDTO;
+   }
+
+   @Transactional(rollbackOn = { Exception.class, RuntimeException.class })
+   @Override
+   public List<ArticleImageDTO> updateAdminSellProductMedia(Long productId, String index, Optional<String> title,
+         Optional<String> price,
+         Optional<String> tPrice, Optional<String> stock, Optional<String> tStock,
+         List<String> existImages,
+         List<MultipartFile> newImages) {
+      String[] indexArray = index.split(" ");
+      Optional<Product> product = productJpaRepository.findById(productId);
+      if (product.isEmpty())
+         throw new ProductNotFoundException(ExceptionMessage.PRODUCT_NOT_FOUND);
+      List<ArticleImageDTO> newArticleImagesDTOs = new ArrayList<ArticleImageDTO>();
+      List<ImageProduct> newImageProducts = new ArrayList<ImageProduct>();
+      var productToUpdate = product.get();
+      if (indexArray[0].equals("E")) {
+         newImages.forEach(t -> {
+            ArticleImageDTO articleImageDTO = new ArticleImageDTO(
+                  firebaseStorageService.uploadFile(t,
+                        "image-product-" + productToUpdate.getId().toString() + "-" + UUID.randomUUID().toString(),
+                        "imageProducts"),
+                  "IMAGE");
+            newArticleImagesDTOs.add(articleImageDTO);
+            newImageProducts
+                  .add(
+                        new ImageProduct(null, productToUpdate.getId(), articleImageDTO.getUrl(), "IMAGE"));
+         });
+      }
+      if (indexArray[0].equals("N")) {
+         // * Se sube a Firebase la nueva portada del producto.
+         newArticleImagesDTOs.add(new ArticleImageDTO(
+               firebaseStorageService.uploadFile(newImages.get(0),
+                     "front-page-product-" + productToUpdate.getId().toString(),
+                     "frontPages"),
+               "IMAGE"));
+         productJpaRepository.updateFrontPage(productId, newArticleImagesDTOs.get(0).getUrl());
+         newImages.stream().skip(1).forEach(t -> {
+            ArticleImageDTO articleImageDTO = new ArticleImageDTO(
+                  firebaseStorageService.uploadFile(t,
+                        "image-product-" + productToUpdate.getId().toString() + "-" + UUID.randomUUID().toString(),
+                        "imageProducts"),
+                  "IMAGE");
+            newArticleImagesDTOs.add(articleImageDTO);
+            newImageProducts
+                  .add(
+                        new ImageProduct(null, productToUpdate.getId(), articleImageDTO.getUrl(), "IMAGE"));
+         });
+      }
+      // * Se guardan las nuevas imagenes.
+      imageProductJpaRepository.saveAll(newImageProducts);
+      List<ArticleImageDTO> responseArticleMedias = new ArrayList<>();
+      var indexE = 0;
+      var indexN = 0;
+      for (String existIndex : indexArray) {
+         if (existIndex.equals("E")) {
+            responseArticleMedias
+                  .add(new ArticleImageDTO(existImages.get(indexE), "IMAGE"));
+            indexE = indexE + 1;
+         }
+         if (existIndex.equals("N")) {
+            responseArticleMedias.add(new ArticleImageDTO(
+                  newArticleImagesDTOs.get(indexN).getUrl(), newArticleImagesDTOs.get(indexN).getType()));
+            indexN = indexN + 1;
+         }
+      }
+      title.ifPresent(productToUpdate::setTitle);
+      price.ifPresent(t -> productToUpdate.setPrice(Double.valueOf(t)));
+      tPrice.ifPresent(productToUpdate::setTypeOfPrice);
+      stock.ifPresent(t -> productToUpdate.setStock(Integer.valueOf(t)));
+      tStock.ifPresent(productToUpdate::setTypeOfSale);
+      productJpaRepository.save(productToUpdate);
+      return responseArticleMedias;
    }
 }

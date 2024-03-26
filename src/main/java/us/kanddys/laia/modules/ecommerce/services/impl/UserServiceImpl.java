@@ -1,6 +1,7 @@
 package us.kanddys.laia.modules.ecommerce.services.impl;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
    public Integer updateProfileImage(Long userId, MultipartFile image) {
       if (userJpaRepository.existsById(userId)) {
          userJpaRepository.updateUserImage(userId,
-               firebaseStorageService.uploadFile(image, "user-image-" + userId.toString(), "userImages"));
+               firebaseStorageService.uploadFile(image, "user-image-" + userId.toString() + "-" + UUID.randomUUID(),
+                     "userImages"));
          return 1;
       } else
          return 0;

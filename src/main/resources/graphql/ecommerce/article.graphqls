@@ -19,3 +19,4 @@ type ArticleDTO {
    keywords: Int
    questions: Int
 }
+
